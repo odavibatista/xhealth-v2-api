@@ -5,7 +5,7 @@ declare namespace Express {
       plan: string;
     };
     administrator: {
-      id: number
-    }
+      id: number;
+    };
   }
 }

@@ -3,32 +3,29 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
-  RequestMethod
-} from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
-import { APP_PIPE } from '@nestjs/core'
-import { ZodValidationPipe } from 'nestjs-zod'
+  RequestMethod,
+} from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_PIPE } from '@nestjs/core';
+import { ZodValidationPipe } from 'nestjs-zod';
 
 @Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
-      isGlobal: true
-    })
+      isGlobal: true,
+    }),
   ],
-  controllers: [
-  ],
+  controllers: [],
   providers: [
     {
       provide: APP_PIPE,
-      useClass: ZodValidationPipe
+      useClass: ZodValidationPipe,
     },
   ],
-  exports: [
-  ]
+  exports: [],
 })
 export class SharedModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-  }
+  configure(consumer: MiddlewareConsumer) {}
 }

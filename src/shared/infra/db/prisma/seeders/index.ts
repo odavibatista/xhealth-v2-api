@@ -1,20 +1,20 @@
-import 'dotenv/config'
+import 'dotenv/config';
 
-import { appConfigurations } from '../../../../config/app.config'
-import { mainSeeder } from './main.seed'
+import { appConfigurations } from '../../../../config/app.config';
+import { mainSeeder } from './main.seed';
 
 const seed = async () => {
-  console.log('Running seed: ')
-}
+  console.log('Running seed: ');
+};
 
 const seedTest = async () => {
-  console.log('Running test seed: ')
-}
+  console.log('Running test seed: ');
+};
 
 if (appConfigurations.NODE_ENV === 'development') {
-  seedTest()
+  seedTest();
 }
 
 if (appConfigurations.NODE_ENV === 'local') {
-  mainSeeder()
+  mainSeeder();
 }

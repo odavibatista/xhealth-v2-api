@@ -1,7 +1,10 @@
 import { createCipheriv, createDecipheriv } from 'crypto';
 import { EncrypterProviderInterface } from '../../domain/providers/Encrypter.provider';
 import { appConfigurations } from '../../config/app.config';
-import { EncrypterDecryptDTO, EncrypterEncryptDTO } from '../../domain/dtos/providers/Encrypter.provider.dto';
+import {
+  EncrypterDecryptDTO,
+  EncrypterEncryptDTO,
+} from '../../domain/dtos/providers/Encrypter.provider.dto';
 
 export class EncrypterProvider implements EncrypterProviderInterface {
   private readonly algorithm: string;
@@ -71,7 +74,7 @@ export class EncrypterProvider implements EncrypterProviderInterface {
     if (!data || typeof data !== 'object') {
       return data;
     }
-    
+
     const objectToArray = Object.entries(data);
 
     const response: Partial<T> = {};

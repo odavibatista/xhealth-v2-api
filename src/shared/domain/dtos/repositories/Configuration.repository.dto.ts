@@ -1,7 +1,7 @@
 export interface GetConfigurationValueParamsDTO {
-  name: string
+  name: string;
 }
 
 export interface GetConfigurationValueResponseDTO {
-  value: string
+  value: string;
 }

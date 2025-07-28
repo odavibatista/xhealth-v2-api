@@ -1,6 +1,6 @@
-import { prisma } from '..'
-import { hash } from 'bcryptjs'
+import { prisma } from '..';
+import { hash } from 'bcryptjs';
 
 export const mainSeeder = async () => {
-  console.log('Running main seeder...')
-}
+  console.log('Running main seeder...');
+};

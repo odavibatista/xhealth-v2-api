@@ -10,7 +10,7 @@ const appConfigurationsSchema = z.object({
   DATABASE_URL: z.string().min(1),
 
   PORT: z.number(),
-  
+
   NODE_ENV: z.string(),
 
   CRYPTO_SECRET: z.string().min(1),
@@ -30,16 +30,16 @@ try {
     PORT: Number(process.env.PORT),
 
     NODE_ENV: process.env.NODE_ENV,
-    
+
     CRYPTO_SECRET: process.env.CRYPTO_SECRET,
     CRYPTO_IV: process.env.CRYPTO_IV,
-    
+
     APP_SECRET: process.env.APP_SECRET,
-  })
+  });
 } catch (error) {
   if (error instanceof ZodError) {
-    throw new EnvironmentException(error)
+    throw new EnvironmentException(error);
   }
 }
 
-export { appConfigurations }
+export { appConfigurations };
