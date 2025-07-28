@@ -16,9 +16,76 @@ datasource db {
 
 model User {
   id String @id @default(cuid())
+  name           String   @db.LongText
+  password       String   @db.LongText
+  birth_date     String   @db.LongText
+  email          String   @unique @db.Char(255)
+  phone_number   String   @unique @db.Char(255)
+  createdAt     DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@map("users")
+}
+
+model GymPlans {
+  id String @id @default(cuid())
   name String
-  email String @unique
-  password String
+  description String
+  price Float
+  duration Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("gym_plans")
+}
+
+model SportModalities {
+  id String @id @default(cuid())
+  name String
+  description String
+  imageUrl String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sport_modalities")
+}
+
+model Testimonies {
+  id String @id @default(cuid())
+  personName String
+  stars Int
+  comment String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("testimonies")
+}
+
+model Trainers {
+  id String @id @default(cuid())
+  name String
+  instagram String?
+  twitter String?
+  youtube String?
+  imageUrl String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("trainers")
+}
+
+model Administrator {
+  id         Int           @id @default(autoincrement())
+  email      String        @unique
+  name       String        @db.LongText
+  password   String        @db.LongText
+  role       AdministratorRole
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
+
+  @@map("administrators")
+}
+
+enum AdministratorRole {
+  ADMIN
 }
