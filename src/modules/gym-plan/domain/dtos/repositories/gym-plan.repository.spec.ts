@@ -1,7 +1,21 @@
 import { GymPlanRepository } from './gym-plan.repository';
 
-describe('GymPlanRepository', () => {
-  it('should be defined', () => {
-    expect(new GymPlanRepository()).toBeDefined();
+describe('Gym Plan Repository Interface Test Suites', () => {
+  const mockGymPlanRepositoryInterface: GymPlanRepository = {
+    encryptedFields: [],
+    findById: jest.fn(),
+    findByName: jest.fn(),
+  };
+
+  it('should have encryptedFields as an array of keys from GymPlan', () => {
+    expect(Array.isArray(mockGymPlanRepositoryInterface.encryptedFields)).toBe(true);
   });
-});
+
+  it('should have findById method', () => {
+    expect(typeof mockGymPlanRepositoryInterface.findById).toBe('function');
+  });
+
+  it('should have findByName method', () => {
+    expect(typeof mockGymPlanRepositoryInterface.findByName).toBe('function');
+  });
+})
