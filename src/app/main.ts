@@ -1,31 +1,28 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import * as cors from 'cors'
 import { patchNestJsSwagger } from 'nestjs-zod';
 import { SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from './app.module';
 import { sharedSwaggerConfig } from '../shared/config/swagger.config';
 import { appConfigurations } from '../shared/config/app.config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: ['error', 'warn', 'log', 'debug', 'verbose']
-  
-  })
-  
-  app.use(cors({
-    origin: '*'
-  }))
+    logger: ['error', 'warn', 'log', 'debug', 'verbose'],
+  });
 
-  
-  patchNestJsSwagger()
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
 
-  const sharedDocument = SwaggerModule.createDocument(
-    app,
-    sharedSwaggerConfig
-  )
-  SwaggerModule.setup('swagger', app, sharedDocument)
+  patchNestJsSwagger();
 
-  await app.listen(appConfigurations.PORT)
+  const sharedDocument = SwaggerModule.createDocument(app, sharedSwaggerConfig);
+
+  SwaggerModule.setup('swagger', app, sharedDocument);
+
+  await app.listen(appConfigurations.PORT);
 }
 bootstrap();

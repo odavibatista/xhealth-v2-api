@@ -11,7 +11,7 @@ export class ZodValidationExceptionFilter implements ExceptionFilter {
   catch(exception: ZodValidationException, host: ArgumentsHost) {
     const errorMessage = exception
       .getZodError()
-      .errors.map((error) => `${error.path} ${error.message}`)
+      .issues.map((error) => `${error.path} ${error.message}`)
       .join('\n')
       
     const zodException = new HttpException(errorMessage, 422)
