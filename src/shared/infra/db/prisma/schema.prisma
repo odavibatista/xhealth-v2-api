@@ -27,7 +27,7 @@ model User {
   @@map("users")
 }
 
-model GymPlans {
+model GymPlan {
   id String @id @default(cuid())
   name String
   description String
@@ -39,7 +39,7 @@ model GymPlans {
   @@map("gym_plans")
 }
 
-model SportModalities {
+model SportModality {
   id String @id @default(cuid())
   name String
   description String
@@ -50,7 +50,7 @@ model SportModalities {
   @@map("sport_modalities")
 }
 
-model Testimonies {
+model Testimony {
   id String @id @default(cuid())
   personName String
   stars Int
@@ -61,7 +61,7 @@ model Testimonies {
   @@map("testimonies")
 }
 
-model Trainers {
+model Trainer {
   id String @id @default(cuid())
   name String
   instagram String?
