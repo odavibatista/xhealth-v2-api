@@ -1,7 +1,7 @@
-import { GymPlanRepository } from './gym-plan.repository';
+import { GymPlanRepositoryInterface } from './gym-plan.repository';
 
 describe('Gym Plan Repository Interface Test Suites', () => {
-  const mockGymPlanRepositoryInterface: GymPlanRepository = {
+  const mockGymPlanRepositoryInterface: GymPlanRepositoryInterface = {
     encryptedFields: [],
     findById: jest.fn(),
     findByName: jest.fn(),
