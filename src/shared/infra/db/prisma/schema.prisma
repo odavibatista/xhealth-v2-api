@@ -74,6 +74,18 @@ model Trainer {
   @@map("trainers")
 }
 
+model ExtraService {
+  id_extra_service String @id @default(cuid())
+  name String
+  description String
+  price Float
+  imageUrl String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("extra_services")
+}
+
 model Administrator {
   id_administrator         String @id @default(cuid())
   email      String        @unique
