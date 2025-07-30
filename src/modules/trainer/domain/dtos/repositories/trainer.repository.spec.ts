@@ -5,7 +5,7 @@ describe('Trainer Repository Interface Test Suites', () => {
     encryptedFields: [],
     findById: jest.fn(),
     findByName: jest.fn(),
-  }
+  };
 
   it('should have encryptedFields as an array of keys from User', () => {
     expect(Array.isArray(mockTrainerRepository.encryptedFields)).toBe(true);
@@ -18,4 +18,4 @@ describe('Trainer Repository Interface Test Suites', () => {
   it('should have findByName method', () => {
     expect(typeof mockTrainerRepository.findByName).toBe('function');
   });
-})
+});

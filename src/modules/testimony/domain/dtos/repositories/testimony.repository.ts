@@ -1,7 +1,7 @@
-import { Testimony } from "../../../../../shared/infra/db/generated/prisma";
+import { Testimony } from '../../../../../shared/infra/db/generated/prisma';
 
 export interface TestimonyRepositoryInterface {
-    encryptedFields: (keyof Testimony)[];
-    findById(id: string): Promise<Partial<Testimony>>;
-    findByName(name: string): Promise<Partial<Testimony>>;
+  encryptedFields: (keyof Testimony)[];
+  findById(id: string): Promise<Partial<Testimony>>;
+  findByName(name: string): Promise<Partial<Testimony>>;
 }

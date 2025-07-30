@@ -8,7 +8,9 @@ describe('Gym Plan Repository Interface Test Suites', () => {
   };
 
   it('should have encryptedFields as an array of keys from GymPlan', () => {
-    expect(Array.isArray(mockGymPlanRepositoryInterface.encryptedFields)).toBe(true);
+    expect(Array.isArray(mockGymPlanRepositoryInterface.encryptedFields)).toBe(
+      true,
+    );
   });
 
   it('should have findById method', () => {
@@ -18,4 +20,4 @@ describe('Gym Plan Repository Interface Test Suites', () => {
   it('should have findByName method', () => {
     expect(typeof mockGymPlanRepositoryInterface.findByName).toBe('function');
   });
-})
+});

@@ -9,9 +9,11 @@ describe('User Repository Interface Test Suites', () => {
     findByUsername: jest.fn(),
     setPassword: jest.fn(),
   };
-  
+
   it('should have encryptedFields as an array of keys from User', () => {
-    expect(Array.isArray(mockUserRepositoryInterface.encryptedFields)).toBe(true);
+    expect(Array.isArray(mockUserRepositoryInterface.encryptedFields)).toBe(
+      true,
+    );
   });
 
   it('should have findById method', () => {
@@ -23,7 +25,9 @@ describe('User Repository Interface Test Suites', () => {
   });
 
   it('should have findByPhoneNumber method', () => {
-    expect(typeof mockUserRepositoryInterface.findByPhoneNumber).toBe('function');
+    expect(typeof mockUserRepositoryInterface.findByPhoneNumber).toBe(
+      'function',
+    );
   });
 
   it('should have findByUsername method', () => {
