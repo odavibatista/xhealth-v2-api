@@ -5,7 +5,7 @@ import { PhoneNumberAlreadyRegisteredException } from '../../domain/dtos/errors/
 import { UserRepository } from '../db/repositories/User.repository';
 import { HashProvider } from '../providers/hash.provider';
 import { JWTProvider } from '../providers/jwt.provider';
-import { CreateUserBodyDTO } from '../../domain/dtos/requests/CreateUser.request.dto';
+import { CreateUserBodyDTO, CreateUserResponseDTO } from '../../domain/dtos/requests/CreateUser.request.dto';
 import { validateAddress, validateAge, validateEmail, validateName, validatePassword, validatePhone } from '../../../../shared/infra/utils/functions/validators';
 
 export class CreateUserUseCase implements UseCaseInterface {
@@ -18,12 +18,18 @@ export class CreateUserUseCase implements UseCaseInterface {
   async execute(
     data: CreateUserBodyDTO,
   ): Promise<
-    | { token: string; id: string }
+    | CreateUserResponseDTO
     | PhoneNumberAlreadyRegisteredException
     | EmailAlreadyRegisteredException
     | UnprocessableEntityException
   > {
-    validateAddress(data.address);
+    validateAddress({
+      cep: data.address.cep,
+      street: data.address.street,
+      number: data.address.number,
+      city: data.address.city,
+      uf: data.address.uf_id,
+    });
 
     const isNameValid = validateName(data.name);
 
@@ -43,7 +49,7 @@ export class CreateUserUseCase implements UseCaseInterface {
       throw new UnprocessableEntityException('Número de telefone inválido');
     }
 
-    const isAgeValid = validateAge(data.birth_date);
+    const isAgeValid = validateAge(new Date(data.birth_date));
 
     if (!isAgeValid) {
       throw new UnprocessableEntityException('Idade inválida');
@@ -96,10 +102,6 @@ export class CreateUserUseCase implements UseCaseInterface {
         plan_id: user.gym_plan_id,
       },
     });
-
-    if (!token) {
-      throw new UnprocessableEntityException('Error generating token');
-    }
 
     return {
       token,

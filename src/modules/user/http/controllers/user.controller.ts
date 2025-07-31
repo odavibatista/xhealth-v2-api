@@ -7,11 +7,11 @@ import {
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserControllerInterface } from '../../domain/dtos/controllers/user.controller.dto';
 import { CreateUserUseCase } from '../../infra/usecases/create-user.usecase';
 import { AllExceptionsFilterDTO } from '../../../../shared/domain/dtos/errors/AllException.filter.dto';
-import { CreateUserBodyDTO } from '../../domain/dtos/requests/CreateUser.request.dto';
+import { CreateUserBodyDTO, CreateUserResponseDTO } from '../../domain/dtos/requests/CreateUser.request.dto';
 import { Request, Response } from 'express';
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
 import { PhoneNumberAlreadyRegisteredException } from '../../domain/dtos/errors/PhoneNumberAlreadyRegistered.exception';
@@ -19,13 +19,13 @@ import { EmailAlreadyRegisteredException } from '../../domain/dtos/errors/EmailA
 
 @Controller('user')
 @ApiTags('Usuário')
-export class UserController implements UserControllerInterface {
+export class UserController {
   constructor(private readonly createUserUseCase: CreateUserUseCase) {}
 
   @Post('create')
-    @ApiResponse({
-    status: 201,
+    @ApiCreatedResponse({
     description: 'Usuário cadastrado com sucesso!',
+    type: CreateUserResponseDTO,
   })
   @ApiResponse({
     status: new UnauthorizedException().getStatus(),
@@ -48,12 +48,9 @@ export class UserController implements UserControllerInterface {
     type: AllExceptionsFilterDTO,
   })
   async createUser(
-    @Req() req: Request,
     @Res() res: Response,
     @Body() createUserBody: CreateUserBodyDTO,
-  ): Promise<{ token: string; id: string } | AllExceptionsFilterDTO> {
-    if (req.user) throw new UnauthorizedException();
-
+  ): Promise<Response | AllExceptionsFilterDTO> {
     const result = await this.createUserUseCase.execute(createUserBody);
 
     if (result instanceof HttpException) {
@@ -64,5 +61,6 @@ export class UserController implements UserControllerInterface {
     } else {
       return res.status(201).json(result);
     }
+    
   }
 }

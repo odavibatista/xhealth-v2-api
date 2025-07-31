@@ -357,6 +357,7 @@ export class UserRepository implements UserRepositoryInterface {
             city: addressEncryptedData.city,
             uf: {
               connect: {
+                //@ts-ignore
                 id: uf_id,
               },
             },
