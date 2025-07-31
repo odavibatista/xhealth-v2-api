@@ -3,6 +3,9 @@ import { UserRepositoryInterface } from '../../../domain/dtos/repositories/User.
 import { User } from '../../../../../shared/infra/db/generated/prisma';
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 import { prisma } from '../../../../../shared/infra/db/prisma';
+import { AddressRepository } from '../../../../address/infra/db/repositories/address.repository';
+import { CreateUserBodyDTO } from '../../../domain/dtos/requests/CreateUser.request.dto';
+import { create } from 'domain';
 
 @Injectable()
 export class UserRepository implements UserRepositoryInterface {
@@ -12,7 +15,10 @@ export class UserRepository implements UserRepositoryInterface {
     'phone_number',
   ];
 
-  constructor(private encrypterProvider: EncrypterProvider) {}
+  constructor(private encrypterProvider: EncrypterProvider,
+    private addressRepository: AddressRepository
+
+  ) {}
 
   /* This method will find a single user using a given id */
   async findById(id: string): Promise<Partial<User> | null> {
@@ -309,5 +315,63 @@ export class UserRepository implements UserRepositoryInterface {
     }
 
     return null;
+  }
+
+  /* This method will create a new user */
+  async create(data: CreateUserBodyDTO): Promise<Partial<User>> {
+    const {
+      check_privacy,
+      address,
+      ...userData
+    } = data
+
+    const userEncryptedData = this.encrypterProvider.encryptData(
+      userData,
+      this.encryptedFields as (keyof typeof userData)[]
+    )
+
+    const { uf_id, ...addressToEncrypt } = address
+
+    const addressEncryptedData = this.encrypterProvider.encryptData(
+      addressToEncrypt,
+      this.addressRepository.encryptedFields as (keyof typeof addressToEncrypt)[]
+    )
+
+    const user = await prisma.user.create({
+      data: {
+        name: userEncryptedData.name,
+        email: userEncryptedData.email,
+        phone_number: userEncryptedData.phone_number,
+        password: userEncryptedData.password,
+        birth_date: userEncryptedData.birth_date,
+        check_privacy: data.check_privacy,
+        gym_plan_id: data.gym_plan_id,
+        user_gym_plan: {
+          connect: {
+            id_gym_plan: data.gym_plan_id,
+          }
+        },
+        address: {
+          create: {
+            cep: addressEncryptedData.cep,
+            street: addressEncryptedData.street,
+            number: addressEncryptedData.number,
+            complement: addressEncryptedData.complement,
+            city: addressEncryptedData.city,
+            uf: {
+              connect: {
+                id: uf_id
+              }
+            }
+          }
+        },
+
+      }
+    })
+
+    return this.encrypterProvider.decryptData(
+      user,
+      this.encryptedFields
+    )
   }
 }

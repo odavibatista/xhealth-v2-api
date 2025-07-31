@@ -15,7 +15,7 @@ describe('JWT Provider Test Suites', () => {
   it('should generate a JWT given the proper data', async () => {
     const token = jwtProvider.generate({
       payload: {
-        id: 1,
+        id_user: 1,
         role: 'admin',
       },
     });
@@ -28,7 +28,7 @@ describe('JWT Provider Test Suites', () => {
   it('should return the decoded JWT given the proper data', async () => {
     const token = jwtProvider.generate({
       payload: {
-        id: 1,
+        id_user: 1,
         role: 'admin',
       },
     });

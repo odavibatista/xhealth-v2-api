@@ -21,6 +21,7 @@ model User {
   email          String   @unique @db.Char(255)
   phone_number   String   @unique @db.Char(255)
   gym_plan_id   String
+  check_privacy  Boolean
   address_id     String @unique
   createdAt     DateTime @default(now())
   updatedAt    DateTime @updatedAt
