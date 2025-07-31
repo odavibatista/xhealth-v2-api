@@ -6,8 +6,8 @@ import { JWTProviderInterface } from '../../domain/providers/JWT.provider';
 @Injectable()
 export class JWTProvider implements JWTProviderInterface {
   public generate({ payload }: JWTProviderDTO): string {
-    const token = sign(payload, String(process.env.JWT_KEY), {
-      expiresIn: '1d',
+    const token = sign(payload, String(process.env.APP_SECRET), {
+      expiresIn: '30d',
     });
 
     return token;
