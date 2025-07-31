@@ -27,8 +27,35 @@ model User {
 
   user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
   user_extra_services UserExtraService[]
+  login_logs     LoginLogs[]
+  passwordHistories   PasswordHistory[]
 
   @@map("users")
+}
+
+model LoginLogs {
+  id            String   @id @default(cuid())
+  user_id       String
+  ip            String
+  login_attempt Int
+  is_blocked    Boolean
+  updated_at    DateTime @default(now()) @updatedAt
+  created_at    DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id_user])
+
+  @@map("login_logs")
+}
+model PasswordHistory {
+  id         String @id @default(cuid())
+  user_id    String
+  password   String   @db.LongText
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id_user])
+
+  @@index([user_id])
+  @@map("password_histories")
 }
 
 model GymPlan {
