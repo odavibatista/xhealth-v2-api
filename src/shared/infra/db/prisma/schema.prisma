@@ -21,9 +21,13 @@ model User {
   birth_date     String   @db.LongText
   email          String   @unique @db.Char(255)
   phone_number   String   @unique @db.Char(255)
+  gym_plan_id   String
   createdAt     DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  
+
+  user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
+  user_extra_services UserExtraService[]
+
   @@map("users")
 }
 
@@ -35,6 +39,8 @@ model GymPlan {
   duration Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  users User[]
 
   @@map("gym_plans")
 }
@@ -83,7 +89,22 @@ model ExtraService {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  user_extra_services UserExtraService[]
+
   @@map("extra_services")
+}
+
+model UserExtraService {
+  id_user_extra_service String @id @default(cuid())
+  user_id String
+  extra_service_id String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id_user])
+  extra_service ExtraService @relation(fields: [extra_service_id], references: [id_extra_service])
+
+  @@map("user_extra_services")
 }
 
 model Administrator {
