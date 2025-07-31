@@ -1,7 +1,7 @@
-import { TrainerRepository } from './trainer.repository';
+import { TrainerRepositoryInterface } from './trainer.repository';
 
 describe('Trainer Repository Interface Test Suites', () => {
-  const mockTrainerRepository: TrainerRepository = {
+  const mockTrainerRepository: TrainerRepositoryInterface = {
     encryptedFields: [],
     findById: jest.fn(),
     findByName: jest.fn(),

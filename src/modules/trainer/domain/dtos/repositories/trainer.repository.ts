@@ -1,7 +1,7 @@
 import { Trainer } from '../../../../../shared/infra/db/generated/prisma';
 
-export interface TrainerRepository {
+export interface TrainerRepositoryInterface {
   encryptedFields: (keyof Trainer)[];
-  findById(id: string): Promise<Partial<Trainer>>;
-  findByName(name: string): Promise<Partial<Trainer>>;
+  findById(id: string): Promise<Partial<Trainer> | null>;
+  findByName(name: string): Promise<Partial<Trainer>[] | null>;
 }
