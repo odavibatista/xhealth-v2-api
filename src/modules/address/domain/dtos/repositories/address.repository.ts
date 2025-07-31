@@ -1,6 +1,5 @@
-import { Address } from "@prisma/client";
+import { Address } from '@prisma/client';
 
 export interface AddressRepositoryInterface {
-  encryptedFields: (keyof Address)[]
+  encryptedFields: (keyof Address)[];
 }
-    

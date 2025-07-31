@@ -9,7 +9,14 @@ import { PasswordRepository } from '../db/repositories/Password.repository';
 @Module({
   imports: [],
   controllers: [],
-  providers: [JWTProvider, HashProvider, EncrypterProvider, UserRepository, LoginLogsRepository, PasswordRepository],
+  providers: [
+    JWTProvider,
+    HashProvider,
+    EncrypterProvider,
+    UserRepository,
+    LoginLogsRepository,
+    PasswordRepository,
+  ],
   exports: [JWTProvider, HashProvider],
 })
 export class UserModule implements NestModule {

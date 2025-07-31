@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
-import { AddressRepositoryInterface } from "../../../domain/dtos/repositories/address.repository";
-import { Address } from "@prisma/client";
+import { Injectable } from '@nestjs/common';
+import { AddressRepositoryInterface } from '../../../domain/dtos/repositories/address.repository';
+import { Address } from '@prisma/client';
 
 @Injectable()
 export class AddressRepository implements AddressRepositoryInterface {
@@ -9,6 +9,6 @@ export class AddressRepository implements AddressRepositoryInterface {
     'street',
     'number',
     'complement',
-    'city'
-  ]
+    'city',
+  ];
 }

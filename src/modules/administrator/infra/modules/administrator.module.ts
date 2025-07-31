@@ -4,9 +4,9 @@ import { HashProvider } from '../../../user/infra/providers/hash.provider';
 import { JWTProvider } from '../../../user/infra/providers/jwt.provider';
 
 @Module({
-            imports: [],
-        controllers: [],
-        providers: [EncrypterProvider, HashProvider, JWTProvider],
-        exports: [],
+  imports: [],
+  controllers: [],
+  providers: [EncrypterProvider, HashProvider, JWTProvider],
+  exports: [],
 })
 export class AdministratorModule {}

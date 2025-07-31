@@ -1,4 +1,4 @@
-import { User } from "../../../../../shared/infra/db/generated/prisma";
+import { User } from '../../../../../shared/infra/db/generated/prisma';
 
 export interface UserRepositoryInterface {
   encryptedFields: (keyof User)[];

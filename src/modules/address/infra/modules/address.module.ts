@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
 
 @Module({
-        imports: [],
-    controllers: [],
-    providers: [EncrypterProvider],
-    exports: [],
+  imports: [],
+  controllers: [],
+  providers: [EncrypterProvider],
+  exports: [],
 })
 export class AddressModule {}
