@@ -29,13 +29,13 @@ model User {
   address             Address              @relation(fields: [address_id], references: [id_address])
   user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
   user_extra_services UserExtraService[]
-  login_logs     LoginLogs[]
+  login_logs     LoginLog[]
   passwordHistories   PasswordHistory[]
 
   @@map("users")
 }
 
-model LoginLogs {
+model LoginLog {
   id            String   @id @default(cuid())
   user_id       String
   ip            String

@@ -6,7 +6,7 @@ import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.
 @Module({
   imports: [],
   controllers: [],
-  providers: [JWTProvider, HashProvider, EncrypterProvider],
+  providers: [JWTProvider, HashProvider, EncrypterProvider, ],
   exports: [JWTProvider, HashProvider],
 })
 export class UserModule implements NestModule {

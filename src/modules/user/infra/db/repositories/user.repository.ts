@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepositoryInterface } from '../../../domain/dtos/repositories/user.repository';
+import { UserRepositoryInterface } from '../../../domain/dtos/repositories/User.repository';
 import { User } from '../../../../../shared/infra/db/generated/prisma';
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 import { prisma } from '../../../../../shared/infra/db/prisma';

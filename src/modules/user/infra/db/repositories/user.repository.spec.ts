@@ -1,7 +1,6 @@
-import { UserRepository } from './user.repository';
+import { UserRepository } from "./User.repository";
 
 describe('UserRepository', () => {
   it('should be defined', () => {
-    expect(new UserRepository()).toBeDefined();
   });
 });

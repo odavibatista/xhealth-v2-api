@@ -1,4 +1,4 @@
-import { UserRepositoryInterface } from './user.repository';
+import { UserRepositoryInterface } from './User.repository';
 
 describe('User Repository Interface Test Suites', () => {
   const mockUserRepositoryInterface: UserRepositoryInterface = {

@@ -7,6 +7,7 @@ import { AdministratorModule } from '../modules/administrator/infra/modules/admi
 import { TestimonyModule } from '../modules/testimony/infra/modules/testimony.module';
 import { GymPlanModule } from '../modules/gym-plan/infra/modules/gym-plan.module';
 import { ExtraServiceModule } from '../modules/extra-service/infra/modules/extra-service.module';
+import { AddressModule } from '../modules/address/infra/modules/address.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ExtraServiceModule } from '../modules/extra-service/infra/modules/extra
     TestimonyModule,
     TrainerModule,
     ExtraServiceModule,
+    AddressModule,
   ],
   controllers: [],
   providers: [],
