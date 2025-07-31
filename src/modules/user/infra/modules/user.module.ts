@@ -5,6 +5,8 @@ import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.
 import { UserRepository } from '../db/repositories/User.repository';
 import { LoginLogsRepository } from '../db/repositories/LoginLog.repository';
 import { PasswordRepository } from '../db/repositories/Password.repository';
+import { AddressRepository } from '../../../address/infra/db/repositories/address.repository';
+import { AuthenticationMiddleware } from '../../http/middlewares/Auth.middleware';
 
 @Module({
   imports: [],
@@ -16,9 +18,12 @@ import { PasswordRepository } from '../db/repositories/Password.repository';
     UserRepository,
     LoginLogsRepository,
     PasswordRepository,
+    AddressRepository,
   ],
   exports: [JWTProvider, HashProvider],
 })
 export class UserModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {}
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthenticationMiddleware)
+  }
 }
