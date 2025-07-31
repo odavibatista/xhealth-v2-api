@@ -15,9 +15,9 @@ export class UserRepository implements UserRepositoryInterface {
     'phone_number',
   ];
 
-  constructor(private encrypterProvider: EncrypterProvider,
-    private addressRepository: AddressRepository
-
+  constructor(
+    private encrypterProvider: EncrypterProvider,
+    private addressRepository: AddressRepository,
   ) {}
 
   /* This method will find a single user using a given id */
@@ -319,23 +319,20 @@ export class UserRepository implements UserRepositoryInterface {
 
   /* This method will create a new user */
   async create(data: CreateUserBodyDTO): Promise<Partial<User>> {
-    const {
-      check_privacy,
-      address,
-      ...userData
-    } = data
+    const { check_privacy, address, ...userData } = data;
 
     const userEncryptedData = this.encrypterProvider.encryptData(
       userData,
-      this.encryptedFields as (keyof typeof userData)[]
-    )
+      this.encryptedFields as (keyof typeof userData)[],
+    );
 
-    const { uf_id, ...addressToEncrypt } = address
+    const { uf_id, ...addressToEncrypt } = address;
 
     const addressEncryptedData = this.encrypterProvider.encryptData(
       addressToEncrypt,
-      this.addressRepository.encryptedFields as (keyof typeof addressToEncrypt)[]
-    )
+      this.addressRepository
+        .encryptedFields as (keyof typeof addressToEncrypt)[],
+    );
 
     const user = await prisma.user.create({
       data: {
@@ -349,7 +346,7 @@ export class UserRepository implements UserRepositoryInterface {
         user_gym_plan: {
           connect: {
             id_gym_plan: data.gym_plan_id,
-          }
+          },
         },
         address: {
           create: {
@@ -360,18 +357,14 @@ export class UserRepository implements UserRepositoryInterface {
             city: addressEncryptedData.city,
             uf: {
               connect: {
-                id: uf_id
-              }
-            }
-          }
+                id: uf_id,
+              },
+            },
+          },
         },
+      },
+    });
 
-      }
-    })
-
-    return this.encrypterProvider.decryptData(
-      user,
-      this.encryptedFields
-    )
+    return this.encrypterProvider.decryptData(user, this.encryptedFields);
   }
 }

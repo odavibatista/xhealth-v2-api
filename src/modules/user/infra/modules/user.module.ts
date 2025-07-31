@@ -7,10 +7,12 @@ import { LoginLogsRepository } from '../db/repositories/LoginLog.repository';
 import { PasswordRepository } from '../db/repositories/Password.repository';
 import { AddressRepository } from '../../../address/infra/db/repositories/address.repository';
 import { AuthenticationMiddleware } from '../../http/middlewares/Auth.middleware';
+import { UserController } from '../../http/controllers/user.controller';
+import { CreateUserUseCase } from '../usecases/create-user.usecase';
 
 @Module({
   imports: [],
-  controllers: [],
+  controllers: [UserController],
   providers: [
     JWTProvider,
     HashProvider,
@@ -19,11 +21,12 @@ import { AuthenticationMiddleware } from '../../http/middlewares/Auth.middleware
     LoginLogsRepository,
     PasswordRepository,
     AddressRepository,
+    CreateUserUseCase,
   ],
   exports: [JWTProvider, HashProvider],
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticationMiddleware)
+    consumer.apply(AuthenticationMiddleware);
   }
 }

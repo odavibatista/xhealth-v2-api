@@ -8,5 +8,5 @@ export interface UserRepositoryInterface {
   findByPhoneNumber(phoneNumber: string): Promise<Partial<User> | null>;
   findByUsername(username: string): Promise<Partial<User>[] | null>;
   setPassword(id: string, password: string): Promise<Partial<User> | null>;
-  create(data: CreateUserBodyDTO): Promise<Partial<User>>
+  create(data: CreateUserBodyDTO): Promise<Partial<User>>;
 }
