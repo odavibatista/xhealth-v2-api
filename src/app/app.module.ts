@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, ValidationPipe } from '@nestjs/common';
 import { SharedModule } from '../shared/infra/modules/Shared.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from '../modules/user/infra/modules/user.module';
@@ -8,6 +8,7 @@ import { TestimonyModule } from '../modules/testimony/infra/modules/testimony.mo
 import { GymPlanModule } from '../modules/gym-plan/infra/modules/gym-plan.module';
 import { ExtraServiceModule } from '../modules/extra-service/infra/modules/extra-service.module';
 import { AddressModule } from '../modules/address/infra/modules/address.module';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -23,7 +24,12 @@ import { AddressModule } from '../modules/address/infra/modules/address.module';
     AddressModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    }
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {}
