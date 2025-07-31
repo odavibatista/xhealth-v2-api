@@ -22,9 +22,11 @@ model User {
   email          String   @unique @db.Char(255)
   phone_number   String   @unique @db.Char(255)
   gym_plan_id   String
+  address_id     String @unique
   createdAt     DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  address             Address              @relation(fields: [address_id], references: [id_address])
   user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
   user_extra_services UserExtraService[]
   login_logs     LoginLogs[]
@@ -56,6 +58,60 @@ model PasswordHistory {
 
   @@index([user_id])
   @@map("password_histories")
+}
+
+model UF {
+  id      String @id @default(cuid())
+  name    String
+  acronym String
+  ibge_id Int    @unique
+
+  addresses    Address[]
+
+  @@unique([name, acronym])
+  @@map("ufs")
+}
+
+model IbgeCity {
+  id            String @id @default(cuid())
+  ibge_id       Int
+  name          String
+  ibge_state_id Int
+
+  @@map("ibge_cities")
+}
+
+model Address {
+  id_address String @id @default(cuid())
+  cep        String?  @db.Char(255)
+  street     String?  @db.Char(255)
+  number     String?  @db.Char(255)
+  complement String?  @db.Char(255)
+  city       String?  @db.Char(255)
+  uf_id      String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("addresses")
+
+  uf      UF?      @relation(fields: [uf_id], references: [id])
+  user    User?
+  gym     Gym?
+}
+
+model Gym {
+  id_gym String @id @default(cuid())
+  name String
+  address_id String @unique
+  phone_number String @unique
+  imageUrl String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  address Address @relation(fields: [address_id], references: [id_address])
+
+  @@map("gyms")
+  @@unique([name, address_id])
 }
 
 model GymPlan {
