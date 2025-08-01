@@ -1,0 +1,14 @@
+name: "Bug Fixing"
+description: Issues to fix a determinated bug in the system.
+title: "`[BUG]` - Title"
+projects: ["odavibatista/14"]
+assignees: "odavibatista"
+labels: ["bug"]
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the feature
+    validations:
+      required: true
