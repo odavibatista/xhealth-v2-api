@@ -1,0 +1,1 @@
+Abertura padrão de issues. Nada de incomum por aqui.
