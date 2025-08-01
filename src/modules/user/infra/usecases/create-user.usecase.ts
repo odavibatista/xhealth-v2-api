@@ -28,7 +28,7 @@ export class CreateUserUseCase implements UseCaseInterface {
       street: data.address.street,
       number: data.address.number,
       city: data.address.city,
-      uf: data.address.uf_id,
+      uf: Number(data.address.uf_id),
     });
 
     const isNameValid = validateName(data.name);

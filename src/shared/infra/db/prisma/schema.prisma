@@ -26,8 +26,8 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  address             Address              @relation(fields: [address_id], references: [id_address])
-  user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
+  //address             Address              @relation(fields: [address_id], references: [id_address])
+  //user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
   user_extra_services UserExtraService[]
   login_logs     LoginLog[]
   passwordHistories   PasswordHistory[]
@@ -61,7 +61,7 @@ model PasswordHistory {
 }
 
 model UF {
-  id      String @id @default(cuid())
+  id_uf      String @id @default(cuid()) @map("id")
   name    String
   acronym String
   ibge_id Int    @unique
@@ -94,8 +94,8 @@ model Address {
 
   @@map("addresses")
 
-  uf      UF?      @relation(fields: [uf_id], references: [id])
-  user    User?
+  uf      UF?      @relation(fields: [uf_id], references: [id_uf])
+  //user    User?
   gym     Gym?
 }
 
@@ -123,7 +123,7 @@ model GymPlan {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users User[]
+  //users User[]
 
   @@map("gym_plans")
 }

@@ -7,7 +7,7 @@ import {
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserControllerInterface } from '../../domain/dtos/controllers/user.controller.dto';
 import { CreateUserUseCase } from '../../infra/usecases/create-user.usecase';
 import { AllExceptionsFilterDTO } from '../../../../shared/domain/dtos/errors/AllException.filter.dto';
@@ -19,7 +19,7 @@ import { EmailAlreadyRegisteredException } from '../../domain/dtos/errors/EmailA
 
 @Controller('user')
 @ApiTags('Usuário')
-export class UserController {
+export class UserController implements UserControllerInterface {
   constructor(private readonly createUserUseCase: CreateUserUseCase) {}
 
   @Post('create')
@@ -48,9 +48,14 @@ export class UserController {
     type: AllExceptionsFilterDTO,
   })
   async createUser(
+    @Req() req: Request,
     @Res() res: Response,
     @Body() createUserBody: CreateUserBodyDTO,
   ): Promise<Response | AllExceptionsFilterDTO> {
+    if (req.user) {
+      throw new UnauthorizedException('Usuário já autenticado.');
+    }
+
     const result = await this.createUserUseCase.execute(createUserBody);
 
     if (result instanceof HttpException) {

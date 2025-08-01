@@ -33,7 +33,7 @@ export const CreateUserBodySchema = z.object({
         .max(255)
         .optional()
         .describe('Complemento do usuário'),
-      uf_id: z.number().describe('UF ID relacionado ao endereço do usuário'),
+      uf_id: z.string().describe('UF ID relacionado ao endereço do usuário'),
       city: z.string().min(1).max(255).describe('Cidade do usuário'),
     })
     .required()

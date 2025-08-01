@@ -7,5 +7,5 @@ export interface UserControllerInterface {
     req: Request,
     res: Response,
     createUserBody: CreateUserBodyDTO,
-  ): Promise<{ token: string; id: string } | AllExceptionsFilterDTO>;
+  ): Promise<Response | AllExceptionsFilterDTO>;
 }

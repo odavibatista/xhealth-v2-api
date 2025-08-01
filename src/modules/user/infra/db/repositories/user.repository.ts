@@ -32,15 +32,7 @@ export class UserRepository implements UserRepositoryInterface {
         phone_number: true,
         name: true,
         createdAt: true,
-        user_gym_plan: {
-          select: {
-            id_gym_plan: true,
-            name: true,
-            description: true,
-            price: true,
-            duration: true,
-          },
-        },
+        /*
         address: {
           select: {
             id_address: true,
@@ -51,7 +43,7 @@ export class UserRepository implements UserRepositoryInterface {
             city: true,
             uf: {
               select: {
-                id: true,
+                id_uf: true,
                 name: true,
                 acronym: true,
                 ibge_id: true,
@@ -59,6 +51,8 @@ export class UserRepository implements UserRepositoryInterface {
             },
           },
         },
+        */
+        
       },
     });
 
@@ -70,13 +64,6 @@ export class UserRepository implements UserRepositoryInterface {
       user,
       this.encryptedFields as (keyof typeof user)[],
     );
-
-    decryptedUser.address = this.encrypterProvider.decryptData(user.address, [
-      'cep',
-      'street',
-      'number',
-      'complement',
-    ] as (keyof typeof user.address)[]);
 
     return decryptedUser;
   }
@@ -97,15 +84,7 @@ export class UserRepository implements UserRepositoryInterface {
         phone_number: true,
         name: true,
         createdAt: true,
-        user_gym_plan: {
-          select: {
-            id_gym_plan: true,
-            name: true,
-            description: true,
-            price: true,
-            duration: true,
-          },
-        },
+        /*
         address: {
           select: {
             id_address: true,
@@ -116,7 +95,7 @@ export class UserRepository implements UserRepositoryInterface {
             city: true,
             uf: {
               select: {
-                id: true,
+                id_uf: true,
                 name: true,
                 acronym: true,
                 ibge_id: true,
@@ -124,6 +103,7 @@ export class UserRepository implements UserRepositoryInterface {
             },
           },
         },
+        */
       },
     });
 
@@ -135,13 +115,6 @@ export class UserRepository implements UserRepositoryInterface {
       user,
       this.encryptedFields as (keyof typeof user)[],
     );
-
-    decryptedUser.address = this.encrypterProvider.decryptData(user.address, [
-      'cep',
-      'street',
-      'number',
-      'complement',
-    ] as (keyof typeof user.address)[]);
 
     return decryptedUser;
   }
@@ -162,15 +135,7 @@ export class UserRepository implements UserRepositoryInterface {
         phone_number: true,
         name: true,
         createdAt: true,
-        user_gym_plan: {
-          select: {
-            id_gym_plan: true,
-            name: true,
-            description: true,
-            price: true,
-            duration: true,
-          },
-        },
+        /*
         address: {
           select: {
             id_address: true,
@@ -181,7 +146,7 @@ export class UserRepository implements UserRepositoryInterface {
             city: true,
             uf: {
               select: {
-                id: true,
+                id_uf: true,
                 name: true,
                 acronym: true,
                 ibge_id: true,
@@ -189,6 +154,7 @@ export class UserRepository implements UserRepositoryInterface {
             },
           },
         },
+        */
       },
     });
 
@@ -200,13 +166,6 @@ export class UserRepository implements UserRepositoryInterface {
       user,
       this.encryptedFields as (keyof typeof user)[],
     );
-
-    decryptedUser.address = this.encrypterProvider.decryptData(user.address, [
-      'cep',
-      'street',
-      'number',
-      'complement',
-    ] as (keyof typeof user.address)[]);
 
     return decryptedUser;
   }
@@ -224,16 +183,8 @@ export class UserRepository implements UserRepositoryInterface {
         email: true,
         phone_number: true,
         name: true,
-        createdAt: true,
-        user_gym_plan: {
-          select: {
-            id_gym_plan: true,
-            name: true,
-            description: true,
-            price: true,
-            duration: true,
-          },
-        },
+        createdAt: true,        
+        /*
         address: {
           select: {
             id_address: true,
@@ -244,7 +195,7 @@ export class UserRepository implements UserRepositoryInterface {
             city: true,
             uf: {
               select: {
-                id: true,
+                id_uf: true,
                 name: true,
                 acronym: true,
                 ibge_id: true,
@@ -252,6 +203,7 @@ export class UserRepository implements UserRepositoryInterface {
             },
           },
         },
+        */
       },
     });
 
@@ -265,17 +217,6 @@ export class UserRepository implements UserRepositoryInterface {
         this.encryptedFields as (keyof typeof user)[],
       ),
     );
-
-    decryptedUsers.forEach((user) => {
-      if (user.address) {
-        user.address = this.encrypterProvider.decryptData(user.address, [
-          'cep',
-          'street',
-          'number',
-          'complement',
-        ] as (keyof typeof user.address)[]);
-      }
-    });
 
     return decryptedUsers;
   }
@@ -343,26 +284,27 @@ export class UserRepository implements UserRepositoryInterface {
         birth_date: userEncryptedData.birth_date,
         check_privacy: data.check_privacy,
         gym_plan_id: data.gym_plan_id,
-        user_gym_plan: {
-          connect: {
-            id_gym_plan: data.gym_plan_id,
-          },
-        },
+        address_id: ''
+        /*
         address: {
-          create: {
-            cep: addressEncryptedData.cep,
-            street: addressEncryptedData.street,
-            number: addressEncryptedData.number,
-            complement: addressEncryptedData.complement,
-            city: addressEncryptedData.city,
+          select: {
+            id_address: true,
+            cep: true,
+            street: true,
+            number: true,
+            complement: true,
+            city: true,
             uf: {
-              connect: {
-                //@ts-ignore
-                id: uf_id,
+              select: {
+                id_uf: true,
+                name: true,
+                acronym: true,
+                ibge_id: true,
               },
             },
           },
         },
+        */
       },
     });
 
