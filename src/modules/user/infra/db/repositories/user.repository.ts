@@ -32,7 +32,6 @@ export class UserRepository implements UserRepositoryInterface {
         phone_number: true,
         name: true,
         createdAt: true,
-        /*
         address: {
           select: {
             id_address: true,
@@ -51,7 +50,6 @@ export class UserRepository implements UserRepositoryInterface {
             },
           },
         },
-        */
         
       },
     });
@@ -64,6 +62,13 @@ export class UserRepository implements UserRepositoryInterface {
       user,
       this.encryptedFields as (keyof typeof user)[],
     );
+
+    const decryptedAddress = this.encrypterProvider.decryptData(
+      user.address,
+      this.addressRepository.encryptedFields as (keyof typeof user.address)[],
+    );
+
+    decryptedUser.address = decryptedAddress;
 
     return decryptedUser;
   }
@@ -84,7 +89,6 @@ export class UserRepository implements UserRepositoryInterface {
         phone_number: true,
         name: true,
         createdAt: true,
-        /*
         address: {
           select: {
             id_address: true,
@@ -103,7 +107,6 @@ export class UserRepository implements UserRepositoryInterface {
             },
           },
         },
-        */
       },
     });
 
@@ -115,6 +118,13 @@ export class UserRepository implements UserRepositoryInterface {
       user,
       this.encryptedFields as (keyof typeof user)[],
     );
+
+    const decryptedAddress = this.encrypterProvider.decryptData(
+      user.address,
+      this.addressRepository.encryptedFields as (keyof typeof user.address)[],
+    );
+
+    decryptedUser.address = decryptedAddress;
 
     return decryptedUser;
   }
@@ -135,7 +145,6 @@ export class UserRepository implements UserRepositoryInterface {
         phone_number: true,
         name: true,
         createdAt: true,
-        /*
         address: {
           select: {
             id_address: true,
@@ -154,7 +163,6 @@ export class UserRepository implements UserRepositoryInterface {
             },
           },
         },
-        */
       },
     });
 
@@ -166,6 +174,13 @@ export class UserRepository implements UserRepositoryInterface {
       user,
       this.encryptedFields as (keyof typeof user)[],
     );
+
+        const decryptedAddress = this.encrypterProvider.decryptData(
+      user.address,
+      this.addressRepository.encryptedFields as (keyof typeof user.address)[],
+    );
+
+    decryptedUser.address = decryptedAddress;
 
     return decryptedUser;
   }
@@ -184,7 +199,6 @@ export class UserRepository implements UserRepositoryInterface {
         phone_number: true,
         name: true,
         createdAt: true,        
-        /*
         address: {
           select: {
             id_address: true,
@@ -203,7 +217,6 @@ export class UserRepository implements UserRepositoryInterface {
             },
           },
         },
-        */
       },
     });
 
@@ -217,6 +230,17 @@ export class UserRepository implements UserRepositoryInterface {
         this.encryptedFields as (keyof typeof user)[],
       ),
     );
+
+    const decryptedAddresses = users.map((user) =>
+      this.encrypterProvider.decryptData(
+        user.address,
+        this.addressRepository.encryptedFields as (keyof typeof user.address)[],
+      ),
+    );
+
+    decryptedUsers.forEach((user, index) => {
+      user.address = decryptedAddresses[index];
+    });
 
     return decryptedUsers;
   }
@@ -284,27 +308,20 @@ export class UserRepository implements UserRepositoryInterface {
         birth_date: userEncryptedData.birth_date,
         check_privacy: data.check_privacy,
         gym_plan_id: data.gym_plan_id,
-        address_id: ''
-        /*
         address: {
-          select: {
-            id_address: true,
-            cep: true,
-            street: true,
-            number: true,
-            complement: true,
-            city: true,
+          create: {
+            cep: addressEncryptedData.cep,
+            street: addressEncryptedData.street,
+            number: addressEncryptedData.number,
+            complement: addressEncryptedData.complement,
+            city: addressEncryptedData.city,
             uf: {
-              select: {
-                id_uf: true,
-                name: true,
-                acronym: true,
-                ibge_id: true,
-              },
+              connect: {
+                id_uf: address.uf_id,
+              }
             },
           },
         },
-        */
       },
     });
 

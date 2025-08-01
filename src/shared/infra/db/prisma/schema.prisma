@@ -26,7 +26,7 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  //address             Address              @relation(fields: [address_id], references: [id_address])
+  address             Address              @relation(fields: [address_id], references: [id_address])
   //user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
   user_extra_services UserExtraService[]
   login_logs     LoginLog[]
@@ -95,7 +95,7 @@ model Address {
   @@map("addresses")
 
   uf      UF?      @relation(fields: [uf_id], references: [id_uf])
-  //user    User?
+  user    User?
   gym     Gym?
 }
 
