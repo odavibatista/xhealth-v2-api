@@ -284,7 +284,7 @@ export class UserRepository implements UserRepositoryInterface {
 
   /* This method will create a new user */
   async create(data: CreateUserBodyDTO): Promise<Partial<User>> {
-    const { check_privacy, address, ...userData } = data;
+    const { check_privacy, address, gym_plan_id, ...userData } = data;
 
     const userEncryptedData = this.encrypterProvider.encryptData(
       userData,
@@ -292,6 +292,7 @@ export class UserRepository implements UserRepositoryInterface {
     );
 
     const { uf_id, ...addressToEncrypt } = address;
+
 
     const addressEncryptedData = this.encrypterProvider.encryptData(
       addressToEncrypt,
@@ -307,7 +308,6 @@ export class UserRepository implements UserRepositoryInterface {
         password: userEncryptedData.password,
         birth_date: userEncryptedData.birth_date,
         check_privacy: data.check_privacy,
-        gym_plan_id: data.gym_plan_id,
         address: {
           create: {
             cep: addressEncryptedData.cep,
@@ -320,6 +320,11 @@ export class UserRepository implements UserRepositoryInterface {
                 id_uf: address.uf_id,
               }
             },
+          },
+        },
+        user_gym_plan: {
+          connect: {
+            id_gym_plan: gym_plan_id
           },
         },
       },

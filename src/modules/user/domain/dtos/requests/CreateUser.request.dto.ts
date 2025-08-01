@@ -18,11 +18,6 @@ export const CreateUserBodySchema = z.object({
     .max(255)
     .describe('Data de nascimento do usuário'),
   check_privacy: z.boolean().describe('Aceite da política de privacidade'),
-  gym_plan_id: z
-    .string()
-    .min(1)
-    .max(255)
-    .describe('ID do plano de academia do usuário'),
   address: z
     .object({
       cep: z.string().min(1).max(255).describe('CEP do usuário'),
@@ -38,6 +33,11 @@ export const CreateUserBodySchema = z.object({
     })
     .required()
     .describe('Endereço do usuário'),
+    gym_plan_id: z
+    .string()
+    .min(1)
+    .max(255)
+    .describe('ID do plano de academia do usuário'),
 });
 
 export class CreateUserBodyDTO extends createZodDto(CreateUserBodySchema) {}

@@ -27,7 +27,7 @@ model User {
   updatedAt    DateTime @updatedAt
 
   address             Address              @relation(fields: [address_id], references: [id_address])
-  //user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
+  user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
   user_extra_services UserExtraService[]
   login_logs     LoginLog[]
   passwordHistories   PasswordHistory[]
@@ -123,7 +123,7 @@ model GymPlan {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  //users User[]
+  users User[]
 
   @@map("gym_plans")
 }
