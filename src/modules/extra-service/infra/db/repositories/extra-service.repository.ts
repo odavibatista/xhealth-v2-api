@@ -10,9 +10,12 @@ export class ExtraServiceRepository implements ExtraServiceRepositoryInterface {
 
   constructor(public encrypterProvider: EncrypterProvider) {}
 
-  async findById(id: string): Promise<ExtraService | null> {
+  async findById(id: string): Promise<Partial<ExtraService> | null> {
     const extraService = await prisma.extraService.findUnique({
       where: { id_extra_service: id },
+      omit: {
+        created_by: true,
+      }
     });
 
     const decryptedExtraService = this.encrypterProvider.decryptData(
