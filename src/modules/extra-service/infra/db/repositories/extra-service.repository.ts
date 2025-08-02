@@ -2,7 +2,9 @@ import { ExtraService } from '@prisma/client';
 import { ExtraServiceRepositoryInterface } from '../../../domain/dtos/repositories/extra-service.repository';
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class ExtraServiceRepository implements ExtraServiceRepositoryInterface {
   public encryptedFields: (keyof ExtraService)[] = ['price'];
 
