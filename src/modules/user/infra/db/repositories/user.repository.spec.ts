@@ -1,5 +1,6 @@
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 import { AddressRepository } from '../../../../address/infra/db/repositories/address.repository';
+import { CreateUserBodyDTO } from '../../../domain/dtos/requests/CreateUser.request.dto';
 import { UserRepository } from './user.repository';
 
 describe('User Repository Test Suites', () => {
@@ -176,6 +177,37 @@ describe('User Repository Test Suites', () => {
       expect(result).toEqual(mockUser);
       expect(repository.setPassword).toHaveBeenCalledWith(validId, password);
       expect(repository.setPassword).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('create method tests', () => {
+    it('should create a new user with valid data', async () => {
+      const createUserDTO: CreateUserBodyDTO = {
+        birth_date: String(new Date('2000-01-01')),
+        check_privacy: true,
+        gym_plan_id: 'valid-gym-plan-id',
+        password: 'new-password',
+        password_confirmation: 'new-password',
+        email: 'new-email',
+        phone_number: 'new-phone',
+        name: 'New User',
+        address: {
+          cep: 'new-cep',
+          street: 'new-street',
+          number: 'new-number',
+          complement: 'new-complement',
+          city: 'new-city',
+          uf_id: 'valid-uf-id',
+        },
+      };
+
+      jest.spyOn(repository, 'create').mockResolvedValueOnce(mockUser);
+
+      const result = await repository.create(createUserDTO);
+
+      expect(result).toEqual(mockUser);
+      expect(repository.create).toHaveBeenCalledWith(createUserDTO);
+      expect(repository.create).toHaveBeenCalledTimes(1);
     });
   });
 });
