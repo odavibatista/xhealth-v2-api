@@ -5,8 +5,18 @@ import { PhoneNumberAlreadyRegisteredException } from '../../domain/dtos/errors/
 import { UserRepository } from '../db/repositories/user.repository';
 import { HashProvider } from '../providers/hash.provider';
 import { JWTProvider } from '../providers/jwt.provider';
-import { CreateUserBodyDTO, CreateUserResponseDTO } from '../../domain/dtos/requests/CreateUser.request.dto';
-import { validateAddress, validateAge, validateEmail, validateName, validatePassword, validatePhone } from '../../../../shared/infra/utils/functions/validators';
+import {
+  CreateUserBodyDTO,
+  CreateUserResponseDTO,
+} from '../../domain/dtos/requests/CreateUser.request.dto';
+import {
+  validateAddress,
+  validateAge,
+  validateEmail,
+  validateName,
+  validatePassword,
+  validatePhone,
+} from '../../../../shared/infra/utils/functions/validators';
 
 export class CreateUserUseCase implements UseCaseInterface {
   constructor(

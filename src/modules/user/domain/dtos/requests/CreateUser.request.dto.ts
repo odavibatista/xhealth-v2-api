@@ -33,7 +33,7 @@ export const CreateUserBodySchema = z.object({
     })
     .required()
     .describe('Endereço do usuário'),
-    gym_plan_id: z
+  gym_plan_id: z
     .string()
     .min(1)
     .max(255)
@@ -47,4 +47,6 @@ export const CreateUserResponseSchema = z.object({
   id: z.string().describe('ID do usuário criado'),
 });
 
-export class CreateUserResponseDTO extends createZodDto(CreateUserResponseSchema) {}
+export class CreateUserResponseDTO extends createZodDto(
+  CreateUserResponseSchema,
+) {}

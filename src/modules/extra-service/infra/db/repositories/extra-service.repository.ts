@@ -6,9 +6,7 @@ import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypt
 export class ExtraServiceRepository implements ExtraServiceRepositoryInterface {
   public encryptedFields: (keyof ExtraService)[] = ['price'];
 
-  constructor(
-    public encrypterProvider: EncrypterProvider
-  ) {}
+  constructor(public encrypterProvider: EncrypterProvider) {}
 
   async findById(id: string): Promise<ExtraService | null> {
     const extraService = await prisma.extraService.findUnique({

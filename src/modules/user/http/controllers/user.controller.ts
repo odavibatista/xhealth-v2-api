@@ -7,11 +7,22 @@ import {
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiConflictResponse, ApiCreatedResponse, ApiInternalServerErrorResponse, ApiResponse, ApiTags, ApiUnauthorizedResponse, ApiUnprocessableEntityResponse } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+  ApiUnprocessableEntityResponse,
+} from '@nestjs/swagger';
 import { UserControllerInterface } from '../../domain/dtos/controllers/user.controller.dto';
 import { CreateUserUseCase } from '../../infra/usecases/create-user.usecase';
 import { AllExceptionsFilterDTO } from '../../../../shared/domain/dtos/errors/AllException.filter.dto';
-import { CreateUserBodyDTO, CreateUserResponseDTO } from '../../domain/dtos/requests/CreateUser.request.dto';
+import {
+  CreateUserBodyDTO,
+  CreateUserResponseDTO,
+} from '../../domain/dtos/requests/CreateUser.request.dto';
 import { Request, Response } from 'express';
 
 @Controller('user')
@@ -20,7 +31,7 @@ export class UserController implements UserControllerInterface {
   constructor(private readonly createUserUseCase: CreateUserUseCase) {}
 
   @Post('create')
-    @ApiCreatedResponse({
+  @ApiCreatedResponse({
     description: 'Usuário cadastrado com sucesso!',
     type: CreateUserResponseDTO,
   })
@@ -63,6 +74,5 @@ export class UserController implements UserControllerInterface {
     } else {
       return res.status(201).json(result);
     }
-    
   }
 }
