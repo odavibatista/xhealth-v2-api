@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule, ValidationPipe } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  ValidationPipe,
+} from '@nestjs/common';
 import { SharedModule } from '../shared/infra/modules/Shared.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from '../modules/user/infra/modules/user.module';
@@ -28,7 +33,7 @@ import { APP_PIPE } from '@nestjs/core';
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
-    }
+    },
   ],
 })
 export class AppModule implements NestModule {

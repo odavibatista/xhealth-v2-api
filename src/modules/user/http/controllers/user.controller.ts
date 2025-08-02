@@ -7,15 +7,23 @@ import {
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+  ApiUnprocessableEntityResponse,
+} from '@nestjs/swagger';
 import { UserControllerInterface } from '../../domain/dtos/controllers/user.controller.dto';
 import { CreateUserUseCase } from '../../infra/usecases/create-user.usecase';
 import { AllExceptionsFilterDTO } from '../../../../shared/domain/dtos/errors/AllException.filter.dto';
-import { CreateUserBodyDTO, CreateUserResponseDTO } from '../../domain/dtos/requests/CreateUser.request.dto';
+import {
+  CreateUserBodyDTO,
+  CreateUserResponseDTO,
+} from '../../domain/dtos/requests/CreateUser.request.dto';
 import { Request, Response } from 'express';
-import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
-import { PhoneNumberAlreadyRegisteredException } from '../../domain/dtos/errors/PhoneNumberAlreadyRegistered.exception';
-import { EmailAlreadyRegisteredException } from '../../domain/dtos/errors/EmailAlreadyRegistered.exception';
 
 @Controller('user')
 @ApiTags('Usuário')
@@ -23,28 +31,28 @@ export class UserController implements UserControllerInterface {
   constructor(private readonly createUserUseCase: CreateUserUseCase) {}
 
   @Post('create')
-    @ApiCreatedResponse({
+  @ApiCreatedResponse({
     description: 'Usuário cadastrado com sucesso!',
     type: CreateUserResponseDTO,
   })
-  @ApiResponse({
-    status: new UnauthorizedException().getStatus(),
+  @ApiUnauthorizedResponse({
     description: 'Usuário não autorizado.',
     type: AllExceptionsFilterDTO,
   })
-  @ApiResponse({
-    status: new UnprocessableDataException().getStatus(),
+  @ApiUnprocessableEntityResponse({
     description: 'Dados não processáveis.',
     type: AllExceptionsFilterDTO,
   })
-  @ApiResponse({
-    status: new PhoneNumberAlreadyRegisteredException().getStatus(),
+  @ApiConflictResponse({
     description: 'Número de telefone já cadastrado.',
     type: AllExceptionsFilterDTO,
   })
-  @ApiResponse({
-    status: new EmailAlreadyRegisteredException().getStatus(),
+  @ApiConflictResponse({
     description: 'E-mail já cadastrado.',
+    type: AllExceptionsFilterDTO,
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Erro interno do servidor.',
     type: AllExceptionsFilterDTO,
   })
   async createUser(
@@ -66,6 +74,5 @@ export class UserController implements UserControllerInterface {
     } else {
       return res.status(201).json(result);
     }
-    
   }
 }
