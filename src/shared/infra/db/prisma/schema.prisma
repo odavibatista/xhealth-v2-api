@@ -25,6 +25,7 @@ model User {
   address_id     String @unique
   createdAt     DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  deleted_at DateTime?
 
   address             Address              @relation(fields: [address_id], references: [id_address])
   user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
@@ -77,6 +78,7 @@ model IbgeCity {
   ibge_id       Int
   name          String
   ibge_state_id Int
+  deleted_at DateTime?
 
   @@map("ibge_cities")
 }
@@ -91,6 +93,7 @@ model Address {
   uf_id      String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  deleted_at DateTime?
 
   @@map("addresses")
 
@@ -105,10 +108,13 @@ model Gym {
   address_id String @unique
   phone_number String @unique
   imageUrl String
+  created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deleted_at DateTime?
 
   address Address @relation(fields: [address_id], references: [id_address])
+  createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
 
   @@map("gyms")
   @@unique([name, address_id])
@@ -120,10 +126,13 @@ model GymPlan {
   description String
   price Float
   duration Int
+  created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deleted_at DateTime?
 
   users User[]
+  createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
 
   @@map("gym_plans")
 }
@@ -133,8 +142,12 @@ model SportModality {
   name String
   description String
   imageUrl String
+  created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deleted_at DateTime?
+
+  createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
 
   @@map("sport_modalities")
 }
@@ -144,8 +157,12 @@ model Testimony {
   personName String
   stars Int
   comment String
+  created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deleted_at DateTime?
+
+  createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
 
   @@map("testimonies")
 }
@@ -157,8 +174,12 @@ model Trainer {
   twitter String?
   youtube String?
   imageUrl String
+  created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deleted_at DateTime?
+
+  createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
 
   @@map("trainers")
 }
@@ -172,6 +193,7 @@ model ExtraService {
   created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deleted_at DateTime?
 
   user_extra_services UserExtraService[]
   createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
@@ -200,8 +222,14 @@ model Administrator {
   role       AdministratorRole
   created_at DateTime      @default(now())
   updated_at DateTime      @updatedAt
+  deleted_at DateTime?
 
-  ExtraService ExtraService[]
+  SportModalities SportModality[]
+  Gyms Gym[]
+  GymPlans GymPlan[]
+  Testimonies Testimony[]
+  Trainers Trainer[]
+  ExtraServices ExtraService[]
 
   @@map("administrators")
 }
