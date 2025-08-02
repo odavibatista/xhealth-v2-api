@@ -1,4 +1,3 @@
-
 import { UnprocessableDataException } from '../../../../domain/errors/UnprocessableData.exception';
 import { validateCep } from './validateCep';
 import { validateComplement } from './validateComplement';

@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JWTProvider } from '../providers/jwt.provider';
 import { HashProvider } from '../providers/hash.provider';
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
-import { UserRepository } from '../db/repositories/User.repository';
+import { UserRepository } from '../db/repositories/user.repository';
 import { LoginLogsRepository } from '../db/repositories/LoginLog.repository';
 import { PasswordRepository } from '../db/repositories/Password.repository';
 import { AddressRepository } from '../../../address/infra/db/repositories/address.repository';

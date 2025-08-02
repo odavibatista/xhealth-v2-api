@@ -5,7 +5,6 @@ import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypt
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { AddressRepository } from '../../../../address/infra/db/repositories/address.repository';
 import { CreateUserBodyDTO } from '../../../domain/dtos/requests/CreateUser.request.dto';
-import { create } from 'domain';
 
 @Injectable()
 export class UserRepository implements UserRepositoryInterface {
@@ -50,7 +49,6 @@ export class UserRepository implements UserRepositoryInterface {
             },
           },
         },
-        
       },
     });
 
@@ -175,7 +173,7 @@ export class UserRepository implements UserRepositoryInterface {
       this.encryptedFields as (keyof typeof user)[],
     );
 
-        const decryptedAddress = this.encrypterProvider.decryptData(
+    const decryptedAddress = this.encrypterProvider.decryptData(
       user.address,
       this.addressRepository.encryptedFields as (keyof typeof user.address)[],
     );
@@ -198,7 +196,7 @@ export class UserRepository implements UserRepositoryInterface {
         email: true,
         phone_number: true,
         name: true,
-        createdAt: true,        
+        createdAt: true,
         address: {
           select: {
             id_address: true,
@@ -293,7 +291,6 @@ export class UserRepository implements UserRepositoryInterface {
 
     const { uf_id, ...addressToEncrypt } = address;
 
-
     const addressEncryptedData = this.encrypterProvider.encryptData(
       addressToEncrypt,
       this.addressRepository
@@ -318,13 +315,13 @@ export class UserRepository implements UserRepositoryInterface {
             uf: {
               connect: {
                 id_uf: address.uf_id,
-              }
+              },
             },
           },
         },
         user_gym_plan: {
           connect: {
-            id_gym_plan: gym_plan_id
+            id_gym_plan: gym_plan_id,
           },
         },
       },

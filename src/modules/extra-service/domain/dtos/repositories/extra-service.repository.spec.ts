@@ -1,7 +1,16 @@
-import { ExtraServiceRepository } from './extra-service.repository';
+import { ExtraServiceRepositoryInterface } from './extra-service.repository';
 
-describe('ExtraServiceRepository', () => {
-  it('should be defined', () => {
-    expect(new ExtraServiceRepository()).toBeDefined();
+describe('Extra Service Repository Interface Test Suites', () => {
+  const mockInterface: ExtraServiceRepositoryInterface = {
+    encryptedFields: [],
+    findById: jest.fn(),
+  };
+
+  it('should have an encryptedFields property', () => {
+    expect(mockInterface.encryptedFields).toBeDefined();
+  });
+
+  it('should have a findById method', () => {
+    expect(typeof mockInterface.findById).toBe('function');
   });
 });
