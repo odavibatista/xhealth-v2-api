@@ -17,7 +17,7 @@ export class PasswordRepository implements PasswordRepositoryInterface {
   async create({
     user_id,
     password,
-  }: CreatePasswordHistoryDTO): Promise<PasswordHistory> {
+  }: CreatePasswordHistoryDTO): Promise<PasswordHistory | null> {
     const dataToEncrypt = {
       user_id,
       password,
