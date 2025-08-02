@@ -6,6 +6,6 @@ import {
 
 export interface PasswordRepositoryInterface {
   encryptedFields: (keyof PasswordHistory)[];
-  create(data: CreatePasswordHistoryDTO): Promise<PasswordHistory>;
+  create(data: CreatePasswordHistoryDTO): Promise<PasswordHistory | null>;
   getByUserId(data: GetLastPasswordHashDTO): Promise<PasswordHistory[]>;
 }
