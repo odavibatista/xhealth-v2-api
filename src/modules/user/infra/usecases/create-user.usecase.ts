@@ -2,7 +2,7 @@ import { UnprocessableEntityException } from '@nestjs/common';
 import { UseCaseInterface } from '../../../../shared/domain/protocols/UseCase.protocol';
 import { EmailAlreadyRegisteredException } from '../../domain/dtos/errors/EmailAlreadyRegistered.exception';
 import { PhoneNumberAlreadyRegisteredException } from '../../domain/dtos/errors/PhoneNumberAlreadyRegistered.exception';
-import { UserRepository } from '../db/repositories/User.repository';
+import { UserRepository } from '../db/repositories/user.repository';
 import { HashProvider } from '../providers/hash.provider';
 import { JWTProvider } from '../providers/jwt.provider';
 import { CreateUserBodyDTO, CreateUserResponseDTO } from '../../domain/dtos/requests/CreateUser.request.dto';

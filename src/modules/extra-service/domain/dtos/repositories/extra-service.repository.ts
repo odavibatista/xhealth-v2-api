@@ -1,5 +1,7 @@
 import { ExtraService } from '@prisma/client';
 
 export interface ExtraServiceRepositoryInterface {
-  encryptedFields: (keyof ExtraService)[]; // Add the appropriate type for ExtraService
+  encryptedFields: (keyof ExtraService)[];
+
+  findById(id: string): Promise<ExtraService | null>;
 }
