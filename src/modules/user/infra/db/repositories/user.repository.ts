@@ -5,7 +5,6 @@ import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypt
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { AddressRepository } from '../../../../address/infra/db/repositories/address.repository';
 import { CreateUserBodyDTO } from '../../../domain/dtos/requests/CreateUser.request.dto';
-import { create } from 'domain';
 
 @Injectable()
 export class UserRepository implements UserRepositoryInterface {
