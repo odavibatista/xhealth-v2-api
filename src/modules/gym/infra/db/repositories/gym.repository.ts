@@ -7,10 +7,7 @@ import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypt
 
 @Injectable()
 export class GymRepository implements GymRepositoryInterface {
-  public encryptedFields: (keyof Gym)[] = [
-    'phone_number',
-    'imageUrl'
-  ];
+  public encryptedFields: (keyof Gym)[] = ['phone_number', 'imageUrl'];
 
   constructor(private encrypterProvider: EncrypterProvider) {}
 
@@ -36,7 +33,7 @@ export class GymRepository implements GymRepositoryInterface {
     return gyms?.map((gym) => {
       const decryptedGym = this.encrypterProvider.decryptData(
         gym,
-        this.encryptedFields as (keyof typeof gym)[]
+        this.encryptedFields as (keyof typeof gym)[],
       );
       return {
         id_gym: decryptedGym.id_gym,
@@ -82,7 +79,7 @@ export class GymRepository implements GymRepositoryInterface {
 
     const decryptedGym = this.encrypterProvider.decryptData(
       gym,
-      this.encryptedFields as (keyof typeof gym)[]
+      this.encryptedFields as (keyof typeof gym)[],
     );
 
     return {

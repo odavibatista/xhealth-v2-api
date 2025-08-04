@@ -35,7 +35,7 @@ describe('Gym Repository Test Suites', () => {
     phone_number: faker.phone.number(),
     imageUrl: faker.image.url(),
     created_at: new Date().toISOString(),
-  }
+  };
 
   describe('findAll method test suites', () => {
     it('should return an empty array when no gyms are found', async () => {
@@ -55,7 +55,7 @@ describe('Gym Repository Test Suites', () => {
       expect(result).toEqual([mockGym]);
       expect(repository.findAll).toHaveBeenCalledTimes(1);
     });
-  })
+  });
 
   describe('findById method test suites', () => {
     it('should return null when no gym is found for the given ID', async () => {
