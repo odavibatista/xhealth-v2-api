@@ -2,7 +2,7 @@ import { ExtraServiceRepository } from '../db/repositories/extra-service.reposit
 import { FindExtraServiceUsecase } from './find-extra-service.usecase';
 import { ServiceNotFoundException } from '../../domain/dtos/errors/ServiceNotFound.exception';
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
 describe('Find Extra Service By ID Usecase', () => {
   let usecase: FindExtraServiceUsecase;

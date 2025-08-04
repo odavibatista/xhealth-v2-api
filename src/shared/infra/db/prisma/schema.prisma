@@ -25,6 +25,8 @@ model User {
   address_id     String @unique
   createdAt     DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  
+  deletedAt DateTime? @map("deleted_at")
 
   address             Address              @relation(fields: [address_id], references: [id_address])
   user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
@@ -92,6 +94,8 @@ model Address {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
+  deletedAt DateTime? @map("deleted_at")
+
   @@map("addresses")
 
   uf      UF?      @relation(fields: [uf_id], references: [id_uf])
@@ -108,6 +112,8 @@ model Gym {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  deletedAt DateTime? @map("deleted_at")
+
   address Address @relation(fields: [address_id], references: [id_address])
 
   @@map("gyms")
@@ -123,6 +129,8 @@ model GymPlan {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  deletedAt DateTime? @map("deleted_at")
+
   users User[]
 
   @@map("gym_plans")
@@ -136,6 +144,8 @@ model SportModality {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  deletedAt DateTime? @map("deleted_at")
+
   @@map("sport_modalities")
 }
 
@@ -146,6 +156,8 @@ model Testimony {
   comment String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  deletedAt DateTime? @map("deleted_at")
 
   @@map("testimonies")
 }
@@ -160,6 +172,8 @@ model Trainer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  deletedAt DateTime? @map("deleted_at")
+
   @@map("trainers")
 }
 
@@ -173,6 +187,8 @@ model ExtraService {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  deletedAt DateTime? @map("deleted_at")
+
   user_extra_services UserExtraService[]
   createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
 
@@ -185,6 +201,8 @@ model UserExtraService {
   extra_service_id String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  deletedAt DateTime? @map("deleted_at")
 
   user User @relation(fields: [user_id], references: [id_user])
   extra_service ExtraService @relation(fields: [extra_service_id], references: [id_extra_service])
@@ -200,6 +218,8 @@ model Administrator {
   role       AdministratorRole
   created_at DateTime      @default(now())
   updated_at DateTime      @updatedAt
+
+  deletedAt DateTime? @map("deleted_at")
 
   ExtraService ExtraService[]
 

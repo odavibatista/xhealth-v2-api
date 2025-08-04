@@ -1,11 +1,11 @@
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
-import { ExtraServiceRepository } from '../db/repositories/extra-service.repository';
-import { BrowseExtraServicesUsecase } from './browse-extra-services.usecase';
+import { GymPlanRepository } from '../db/repositories/gym-plan.repository';
+import { BrowseGymPlansUsecase } from './browse-gym-plans.usecase';
 import { faker } from '@faker-js/faker';
 
-describe('Browse Extra Services Use Case', () => {
-  let usecase: BrowseExtraServicesUsecase;
-  let mockRepository: ExtraServiceRepository;
+describe('Browse Gym Plans Use Case', () => {
+  let usecase: BrowseGymPlansUsecase;
+  let mockRepository: GymPlanRepository;
   let encrypterProvider: EncrypterProvider;
 
   beforeEach(() => {
@@ -14,8 +14,8 @@ describe('Browse Extra Services Use Case', () => {
 
   beforeEach(async () => {
     encrypterProvider = new EncrypterProvider();
-    mockRepository = new ExtraServiceRepository(encrypterProvider);
-    usecase = new BrowseExtraServicesUsecase(mockRepository);
+    mockRepository = new GymPlanRepository(encrypterProvider);
+    usecase = new BrowseGymPlansUsecase(mockRepository);
     jest.clearAllMocks();
   });
 
@@ -23,7 +23,7 @@ describe('Browse Extra Services Use Case', () => {
     jest.useRealTimers();
   });
 
-  it('should return an empty array when no extra services are found', async () => {
+  it('should return an empty array when no gym plans are found', async () => {
     jest.spyOn(mockRepository, 'findAll').mockResolvedValueOnce([]);
 
     const result = await usecase.execute();
@@ -31,37 +31,38 @@ describe('Browse Extra Services Use Case', () => {
     expect(result).toEqual([]);
   });
 
-  it('should return a list of extra services', async () => {
-    const mockServices = [
+  it('should return a list of gym plans', async () => {
+    const mockPlans = [
       {
-        id_extra_service: faker.string.uuid(),
+        id_gym_plan: faker.string.uuid(),
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         price: faker.commerce.price(),
-        imageUrl: faker.image.url(),
+        duration: '3 months',
       },
       {
-        id_extra_service: faker.string.uuid(),
+        id_gym_plan: faker.string.uuid(),
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         price: faker.commerce.price(),
-        imageUrl: faker.image.url(),
+        duration: '6 months',
       },
       {
-        id_extra_service: faker.string.uuid(),
+        id_gym_plan: faker.string.uuid(),
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         price: faker.commerce.price(),
-        imageUrl: faker.image.url(),
+        duration: '12 months',
       },
     ];
 
     jest
       .spyOn(mockRepository, 'findAll')
-      .mockResolvedValueOnce(mockServices as any);
+      .mockResolvedValueOnce(mockPlans as any);
 
     const result = await usecase.execute();
 
-    expect(result).toEqual(mockServices);
+    expect(result).toEqual(mockPlans);
+    expect(mockRepository.findAll).toHaveBeenCalledTimes(1);
   });
 });
