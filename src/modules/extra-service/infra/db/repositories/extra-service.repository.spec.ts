@@ -9,9 +9,7 @@ describe('Extra Service Repository Test Suites', () => {
   });
 
   beforeEach(() => {
-    repository = new ExtraServiceRepository(
-      new EncrypterProvider(),
-    );
+    repository = new ExtraServiceRepository(new EncrypterProvider());
   });
 
   afterEach(() => {
@@ -21,7 +19,7 @@ describe('Extra Service Repository Test Suites', () => {
   afterAll(() => {
     jest.useRealTimers();
   });
-  
+
   const mockExtraService = {
     id_extra_service: 'valid-id',
     name: 'Test Service',
@@ -46,7 +44,9 @@ describe('Extra Service Repository Test Suites', () => {
     it('should find a service by ID', async () => {
       const validId = 'valid-id';
 
-      jest.spyOn(repository, 'findById').mockResolvedValueOnce(mockExtraService as any);
+      jest
+        .spyOn(repository, 'findById')
+        .mockResolvedValueOnce(mockExtraService as any);
 
       const result = await repository.findById(validId);
 
@@ -54,5 +54,5 @@ describe('Extra Service Repository Test Suites', () => {
       expect(repository.findById).toHaveBeenCalledWith(validId);
       expect(repository.findById).toHaveBeenCalledTimes(1);
     });
-  })
+  });
 });

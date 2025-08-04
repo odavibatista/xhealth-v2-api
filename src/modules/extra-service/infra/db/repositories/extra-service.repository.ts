@@ -15,8 +15,12 @@ export class ExtraServiceRepository implements ExtraServiceRepositoryInterface {
       where: { id_extra_service: id },
       omit: {
         created_by: true,
-      }
+      },
     });
+
+    if (!extraService) 
+      return null;
+    
 
     const decryptedExtraService = this.encrypterProvider.decryptData(
       extraService,
