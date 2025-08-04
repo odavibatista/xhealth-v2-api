@@ -1,4 +1,4 @@
-import { UnprocessableEntityException } from '@nestjs/common';
+import { Inject, UnprocessableEntityException } from '@nestjs/common';
 import { UseCaseInterface } from '../../../../shared/domain/protocols/UseCase.protocol';
 import { EmailAlreadyRegisteredException } from '../../domain/dtos/errors/EmailAlreadyRegistered.exception';
 import { PhoneNumberAlreadyRegisteredException } from '../../domain/dtos/errors/PhoneNumberAlreadyRegistered.exception';
@@ -21,8 +21,9 @@ import {
 export class CreateUserUseCase implements UseCaseInterface {
   constructor(
     private hashProvider: HashProvider,
-    private userRepository: UserRepository,
     private jwtProvider: JWTProvider,
+    @Inject()
+    private userRepository: UserRepository,
   ) {}
 
   async execute(
