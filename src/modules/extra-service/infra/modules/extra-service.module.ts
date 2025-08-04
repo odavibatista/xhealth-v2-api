@@ -3,6 +3,7 @@ import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.
 import { ExtraServiceRepository } from '../db/repositories/extra-service.repository';
 import { ExtraServiceController } from '../../http/controllers/extra-service.controller';
 import { FindExtraServiceUsecase } from '../usecases/find-extra-service.usecase';
+import { BrowseExtraServicesUsecase } from '../usecases/browse-extra-services.usecase';
 
 @Module({
   imports: [],
@@ -10,6 +11,7 @@ import { FindExtraServiceUsecase } from '../usecases/find-extra-service.usecase'
   providers: [
     EncrypterProvider,
     ExtraServiceRepository,
+    BrowseExtraServicesUsecase,
     FindExtraServiceUsecase,
   ],
   exports: [],

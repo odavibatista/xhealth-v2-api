@@ -12,10 +12,7 @@ describe('User Repository Test Suites', () => {
   });
 
   beforeEach(() => {
-    repository = new UserRepository(
-      new EncrypterProvider(),
-      addressRepository
-    );
+    repository = new UserRepository(new EncrypterProvider(), addressRepository);
   });
 
   afterEach(() => {
@@ -46,7 +43,7 @@ describe('User Repository Test Suites', () => {
         ibge_id: 'valid-ibge-id',
       },
     },
-  }
+  };
 
   describe('findById method tests', () => {
     it('should not find a user given an invalid ID', async () => {
@@ -72,7 +69,7 @@ describe('User Repository Test Suites', () => {
       expect(repository.findById).toHaveBeenCalledWith(validId);
       expect(repository.findById).toHaveBeenCalledTimes(1);
     });
-  })
+  });
 
   describe('findByEmail method tests', () => {
     it('should not find a user given an invalid email', async () => {
@@ -98,7 +95,7 @@ describe('User Repository Test Suites', () => {
       expect(repository.findByEmail).toHaveBeenCalledWith(validEmail);
       expect(repository.findByEmail).toHaveBeenCalledTimes(1);
     });
-  })
+  });
 
   describe('findByPhoneNumber method tests', () => {
     it('should not find a user given an invalid phone number', async () => {
@@ -109,22 +106,28 @@ describe('User Repository Test Suites', () => {
       const result = await repository.findByPhoneNumber(invalidPhoneNumber);
 
       expect(result).toBeNull();
-      expect(repository.findByPhoneNumber).toHaveBeenCalledWith(invalidPhoneNumber);
+      expect(repository.findByPhoneNumber).toHaveBeenCalledWith(
+        invalidPhoneNumber,
+      );
       expect(repository.findByPhoneNumber).toHaveBeenCalledTimes(1);
     });
 
     it('should find a user by phone number', async () => {
       const validPhoneNumber = 'valid-phone';
 
-      jest.spyOn(repository, 'findByPhoneNumber').mockResolvedValueOnce(mockUser);
+      jest
+        .spyOn(repository, 'findByPhoneNumber')
+        .mockResolvedValueOnce(mockUser);
 
       const result = await repository.findByPhoneNumber(validPhoneNumber);
 
       expect(result).toEqual(mockUser);
-      expect(repository.findByPhoneNumber).toHaveBeenCalledWith(validPhoneNumber);
+      expect(repository.findByPhoneNumber).toHaveBeenCalledWith(
+        validPhoneNumber,
+      );
       expect(repository.findByPhoneNumber).toHaveBeenCalledTimes(1);
     });
-  })
+  });
 
   describe('findByUsername method tests', () => {
     it('should not find a user given an invalid username', async () => {
@@ -142,7 +145,9 @@ describe('User Repository Test Suites', () => {
     it('should find a user by username', async () => {
       const validUsername = 'valid-username';
 
-      jest.spyOn(repository, 'findByUsername').mockResolvedValueOnce([mockUser]);
+      jest
+        .spyOn(repository, 'findByUsername')
+        .mockResolvedValueOnce([mockUser]);
 
       const result = await repository.findByUsername(validUsername);
 
@@ -150,7 +155,7 @@ describe('User Repository Test Suites', () => {
       expect(repository.findByUsername).toHaveBeenCalledWith(validUsername);
       expect(repository.findByUsername).toHaveBeenCalledTimes(1);
     });
-  })
+  });
 
   describe('setPassword method tests', () => {
     it('should not set a password for an invalid user ID', async () => {
