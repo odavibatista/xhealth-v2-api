@@ -59,7 +59,9 @@ describe('Gym Plan Repository Test Suites', () => {
 
   describe('findAll method tests', () => {
     it('should return an array of all plans', async () => {
-      jest.spyOn(repository, 'findAll').mockResolvedValueOnce([mockGymPlan] as any);
+      jest
+        .spyOn(repository, 'findAll')
+        .mockResolvedValueOnce([mockGymPlan] as any);
 
       const result = await repository.findAll();
 
