@@ -46,7 +46,9 @@ describe('Find Gym Plan By ID Use Case', () => {
   it('should return the gym plan when found by ID', async () => {
     const validId = 'valid-id';
 
-    jest.spyOn(mockRepository, 'findById').mockResolvedValueOnce(mockGymPlan as any);
+    jest
+      .spyOn(mockRepository, 'findById')
+      .mockResolvedValueOnce(mockGymPlan as any);
 
     const result = await usecase.execute(validId);
 

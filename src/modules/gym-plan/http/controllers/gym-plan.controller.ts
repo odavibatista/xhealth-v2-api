@@ -1,7 +1,15 @@
-import { Controller, Get, Param, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  Param,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { GymPlanControllerInterface } from '../../domain/dtos/controllers/gym-plan-controller.dto';
 import {
   ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -10,6 +18,7 @@ import { BrowseGymPlansUsecase } from '../../infra/usecases/browse-gym-plans.use
 import { FindGymPlanByIdUsecase } from '../../infra/usecases/find-gym-plan-by-id.usecase';
 import { FindGymPlanByIDDto } from '../../domain/dtos/requests/FindGymPlanByID.request.dto';
 import { AllExceptionsFilterDTO } from '../../../../shared/domain/dtos/errors/AllException.filter.dto';
+import { GymPlanNotFoundException } from '../../domain/dtos/errors/GymPlanNotFound.exception';
 
 @ApiTags('Planos de Academia')
 @Controller('gym-plans')
@@ -41,6 +50,10 @@ export class GymPlanController implements GymPlanControllerInterface {
     description: 'Plano encontrado com sucesso.',
     type: FindGymPlanByIDDto,
   })
+  @ApiNotFoundResponse({
+    description: new GymPlanNotFoundException().message,
+    type: AllExceptionsFilterDTO,
+  })
   @ApiInternalServerErrorResponse({
     description: 'Erro interno do servidor.',
     type: AllExceptionsFilterDTO,
@@ -51,6 +64,9 @@ export class GymPlanController implements GymPlanControllerInterface {
     @Res() res: Response,
   ): Promise<Response> {
     const result = await this.findGymPlanByIdUsecase.execute(cuid);
+    if (result instanceof HttpException) {
+      return res.status(404).json(result);
+    }
     return res.status(200).json(result);
   }
 }
