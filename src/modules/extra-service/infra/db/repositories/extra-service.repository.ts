@@ -23,7 +23,11 @@ export class ExtraServiceRepository implements ExtraServiceRepositoryInterface {
       },
     });
 
-    return extraServices.map((extraService) =>
+    if (!extraServices || extraServices.length === 0) {
+      return [];
+    }
+
+    return extraServices?.map((extraService) =>
       this.encrypterProvider.decryptData(
         extraService,
         this.encryptedFields as (keyof typeof extraService)[],
@@ -40,8 +44,7 @@ export class ExtraServiceRepository implements ExtraServiceRepositoryInterface {
       },
     });
 
-    if (!extraService) 
-      return null;
+    if (!extraService) return null;
 
     const decryptedExtraService = this.encrypterProvider.decryptData(
       extraService,

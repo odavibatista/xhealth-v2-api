@@ -2,16 +2,20 @@ import { UseCaseInterface } from '../../../../shared/domain/protocols/UseCase.pr
 import { ExtraServiceRepository } from '../db/repositories/extra-service.repository';
 import { ServiceNotFoundException } from '../../domain/dtos/errors/ServiceNotFound.exception';
 import { FindExtraServiceByIdDto } from '../../domain/dtos/requests/FindExtraServiceById.request.dto';
+import { Inject } from '@nestjs/common';
 
 export class FindExtraServiceUsecase implements UseCaseInterface {
-  constructor(private extraServiceRepository: ExtraServiceRepository) {}
+  constructor(
+    @Inject()
+    private extraServiceRepository: ExtraServiceRepository,
+  ) {}
 
   async execute(
     id: string,
   ): Promise<FindExtraServiceByIdDto | ServiceNotFoundException> {
     const extraService = await this.extraServiceRepository.findById(id);
-    
-    if (!extraService) throw new ServiceNotFoundException()
+
+    if (!extraService) throw new ServiceNotFoundException();
 
     return {
       id_extra_service: extraService.id_extra_service,

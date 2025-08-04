@@ -14,18 +14,39 @@ import {
   ApiFoundResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { FindExtraServiceByIdDto } from '../../domain/dtos/requests/FindExtraServiceById.request.dto';
+import { BrowseExtraServicesUsecase } from '../../infra/usecases/browse-extra-services.usecase';
 
 @ApiTags('Serviços Extras')
 @Controller('service')
 export class ExtraServiceController implements ExtraServiceControllerInterface {
   constructor(
+    private readonly browseExtraServicesUsecase: BrowseExtraServicesUsecase,
     private readonly findExtraServiceUsecase: FindExtraServiceUsecase,
   ) {}
 
-  @ApiFoundResponse({
+  @Get('browse')
+  @ApiOkResponse({
+    description: 'Lista de serviços extras obtida com sucesso.',
+    type: [FindExtraServiceByIdDto],
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Erro interno do servidor.',
+    type: AllExceptionsFilterDTO,
+  })
+  async browseExtraServices(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const result = await this.browseExtraServicesUsecase.execute();
+
+    return res.status(200).json(result);
+  }
+
+  @ApiOkResponse({
     description: 'Serviço localizado com sucesso!',
     type: FindExtraServiceByIdDto,
   })

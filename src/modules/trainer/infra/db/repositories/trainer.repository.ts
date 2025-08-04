@@ -11,7 +11,7 @@ export class TrainerRepository implements TrainerRepositoryInterface {
     'instagram',
     'twitter',
     'youtube',
-    'imageUrl'
+    'imageUrl',
   ];
 
   constructor(private encrypterProvider: EncrypterProvider) {}
