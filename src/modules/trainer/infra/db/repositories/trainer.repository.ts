@@ -11,6 +11,7 @@ export class TrainerRepository implements TrainerRepositoryInterface {
     'instagram',
     'twitter',
     'youtube',
+    'imageUrl',
   ];
 
   constructor(private encrypterProvider: EncrypterProvider) {}
@@ -27,6 +28,7 @@ export class TrainerRepository implements TrainerRepositoryInterface {
         instagram: true,
         twitter: true,
         youtube: true,
+        imageUrl: true,
         createdAt: true,
       },
     });
@@ -56,6 +58,7 @@ export class TrainerRepository implements TrainerRepositoryInterface {
         instagram: true,
         twitter: true,
         youtube: true,
+        imageUrl: true,
         createdAt: true,
       },
     });

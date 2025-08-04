@@ -1,11 +1,14 @@
-import { ExtraService } from '@prisma/client';
 import { UseCaseInterface } from '../../../../shared/domain/protocols/UseCase.protocol';
 import { ExtraServiceRepository } from '../db/repositories/extra-service.repository';
 import { ServiceNotFoundException } from '../../domain/dtos/errors/ServiceNotFound.exception';
 import { FindExtraServiceByIdDto } from '../../domain/dtos/requests/FindExtraServiceById.request.dto';
+import { Inject } from '@nestjs/common';
 
 export class FindExtraServiceUsecase implements UseCaseInterface {
-  constructor(private extraServiceRepository: ExtraServiceRepository) {}
+  constructor(
+    @Inject()
+    private extraServiceRepository: ExtraServiceRepository,
+  ) {}
 
   async execute(
     id: string,
@@ -20,6 +23,6 @@ export class FindExtraServiceUsecase implements UseCaseInterface {
       description: extraService.description,
       price: extraService.price,
       imageUrl: extraService.imageUrl,
-    };
+    } as FindExtraServiceByIdDto;
   }
 }
