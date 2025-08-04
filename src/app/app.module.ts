@@ -14,6 +14,7 @@ import { GymPlanModule } from '../modules/gym-plan/infra/modules/gym-plan.module
 import { ExtraServiceModule } from '../modules/extra-service/infra/modules/extra-service.module';
 import { AddressModule } from '../modules/address/infra/modules/address.module';
 import { APP_PIPE } from '@nestjs/core';
+import { GymModule } from '../modules/gym/infra/modules/gym.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { APP_PIPE } from '@nestjs/core';
     TrainerModule,
     ExtraServiceModule,
     AddressModule,
+    GymModule,
   ],
   controllers: [],
   providers: [
