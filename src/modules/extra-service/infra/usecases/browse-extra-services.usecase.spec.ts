@@ -1,7 +1,7 @@
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
 import { ExtraServiceRepository } from '../db/repositories/extra-service.repository';
 import { BrowseExtraServicesUsecase } from './browse-extra-services.usecase';
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
 describe('Browse Extra Services Use Case', () => {
   let usecase: BrowseExtraServicesUsecase;

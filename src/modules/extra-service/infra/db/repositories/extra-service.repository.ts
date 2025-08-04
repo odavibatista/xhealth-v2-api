@@ -13,6 +13,9 @@ export class ExtraServiceRepository implements ExtraServiceRepositoryInterface {
   /* Used to find all the Services */
   async findAll(): Promise<Partial<ExtraService>[]> {
     const extraServices = await prisma.extraService.findMany({
+      where: {
+        deletedAt: null,
+      },
       select: {
         id_extra_service: true,
         name: true,
@@ -38,7 +41,7 @@ export class ExtraServiceRepository implements ExtraServiceRepositoryInterface {
   /* Used to find a single Service */
   async findById(id: string): Promise<Partial<ExtraService> | null> {
     const extraService = await prisma.extraService.findUnique({
-      where: { id_extra_service: id },
+      where: { id_extra_service: id, deletedAt: null },
       omit: {
         created_by: true,
       },

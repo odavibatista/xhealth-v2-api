@@ -8,11 +8,28 @@ export class GymPlanRepository implements GymPlanRepositoryInterface {
 
   constructor(private encrypterProvider: EncrypterProvider) {}
 
+  /* This method will find all gym plans */
+  async findAll(): Promise<Partial<GymPlan>[]> {
+    const gymPlans = await prisma.gymPlan.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
+
+    return gymPlans?.map((plan) =>
+      this.encrypterProvider.decryptData(
+        plan,
+        this.encryptedFields as (keyof typeof plan)[],
+      ),
+    );
+  }
+
   /* This method will find a single gym plan by its id */
   async findById(id: string): Promise<Partial<GymPlan> | null> {
     const gymPlan = await prisma.gymPlan.findUnique({
       where: {
         id_gym_plan: id,
+        deletedAt: null,
       },
       select: {
         id_gym_plan: true,
