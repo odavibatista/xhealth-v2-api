@@ -20,7 +20,6 @@ export class ExtraServiceRepository implements ExtraServiceRepositoryInterface {
 
     if (!extraService) 
       return null;
-    
 
     const decryptedExtraService = this.encrypterProvider.decryptData(
       extraService,

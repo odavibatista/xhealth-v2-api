@@ -1,4 +1,3 @@
-import { ExtraService } from '@prisma/client';
 import { UseCaseInterface } from '../../../../shared/domain/protocols/UseCase.protocol';
 import { ExtraServiceRepository } from '../db/repositories/extra-service.repository';
 import { ServiceNotFoundException } from '../../domain/dtos/errors/ServiceNotFound.exception';
@@ -11,8 +10,8 @@ export class FindExtraServiceUsecase implements UseCaseInterface {
     id: string,
   ): Promise<FindExtraServiceByIdDto | ServiceNotFoundException> {
     const extraService = await this.extraServiceRepository.findById(id);
-
-    if (!extraService) throw new ServiceNotFoundException();
+    
+    if (!extraService) throw new ServiceNotFoundException()
 
     return {
       id_extra_service: extraService.id_extra_service,
@@ -20,6 +19,6 @@ export class FindExtraServiceUsecase implements UseCaseInterface {
       description: extraService.description,
       price: extraService.price,
       imageUrl: extraService.imageUrl,
-    };
+    } as FindExtraServiceByIdDto;
   }
 }

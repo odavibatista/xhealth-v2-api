@@ -8,6 +8,7 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
+import { SharedController } from '../../http/controllers/shared.controller';
 
 @Global()
 @Module({
@@ -17,7 +18,7 @@ import { ZodValidationPipe } from 'nestjs-zod';
       isGlobal: true,
     }),
   ],
-  controllers: [],
+  controllers: [SharedController],
   providers: [
     {
       provide: APP_PIPE,
