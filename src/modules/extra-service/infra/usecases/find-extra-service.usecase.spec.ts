@@ -3,7 +3,7 @@ import { FindExtraServiceUsecase } from './find-extra-service.usecase';
 import { ServiceNotFoundException } from '../../domain/dtos/errors/ServiceNotFound.exception';
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
 
-describe('FindExtraServiceUsecase', () => {
+describe('Find Extra Service By ID Usecase', () => {
   let usecase: FindExtraServiceUsecase;
   let mockRepository: ExtraServiceRepository;
   let encrypterProvider: EncrypterProvider;
