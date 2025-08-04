@@ -1,10 +1,12 @@
+import { Injectable } from '@nestjs/common';
 import { GymPlan } from '../../../../../shared/infra/db/generated/prisma';
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 import { GymPlanRepositoryInterface } from '../../../domain/dtos/repositories/gym-plan.repository';
 
+@Injectable()
 export class GymPlanRepository implements GymPlanRepositoryInterface {
-  public encryptedFields: (keyof GymPlan)[] = [];
+  public encryptedFields: (keyof GymPlan)[] = ['price', 'duration'];
 
   constructor(private encrypterProvider: EncrypterProvider) {}
 
