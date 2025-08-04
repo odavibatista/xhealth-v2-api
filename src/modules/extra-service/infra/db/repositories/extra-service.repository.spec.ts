@@ -1,5 +1,6 @@
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 import { ExtraServiceRepository } from './extra-service.repository';
+import { faker } from '@faker-js/faker';
 
 describe('Extra Service Repository Test Suites', () => {
   let repository: ExtraServiceRepository;
@@ -22,10 +23,10 @@ describe('Extra Service Repository Test Suites', () => {
 
   const mockExtraService = {
     id_extra_service: 'valid-id',
-    name: 'Test Service',
-    description: 'Test Description',
-    price: '100.00',
-    imageUrl: 'http://example.com/image.jpg',
+    name: faker.commerce.productName(),
+    description: faker.commerce.productDescription(),
+    price: faker.commerce.price(),
+    imageUrl: faker.image.url(),
   };
 
   describe('findById method tests', () => {

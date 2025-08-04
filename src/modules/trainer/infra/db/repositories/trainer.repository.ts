@@ -6,6 +6,7 @@ import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypt
 
 @Injectable()
 export class TrainerRepository implements TrainerRepositoryInterface {
+  //@ts-ignore
   public encryptedFields: (keyof Trainer)[] = [
     'name',
     'instagram',
@@ -16,10 +17,12 @@ export class TrainerRepository implements TrainerRepositoryInterface {
 
   constructor(private encrypterProvider: EncrypterProvider) {}
 
+  /* This method will find a single trainer by its id */
   async findById(id: string): Promise<Partial<Trainer> | null> {
     const trainer = await prisma.trainer.findUnique({
       where: {
         id_trainer: id,
+        deletedAt: null,
       },
 
       select: {
@@ -45,12 +48,14 @@ export class TrainerRepository implements TrainerRepositoryInterface {
     return decryptedTrainer;
   }
 
+  /* This method will find trainers by their name */
   async findByName(name: string): Promise<Partial<Trainer>[] | null> {
     const trainers = await prisma.trainer.findMany({
       where: {
         name: {
           contains: name,
         },
+        deletedAt: null,
       },
       select: {
         id_trainer: true,
