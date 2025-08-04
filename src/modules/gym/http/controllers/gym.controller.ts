@@ -1,4 +1,7 @@
 import { Controller } from '@nestjs/common';
+import { GymControllerInterface } from '../../domain/dtos/controllers/gym-controller.interface';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('gym')
-export class GymController {}
+@ApiTags('Academias')
+@Controller('gyms')
+export class GymController implements GymControllerInterface {}

@@ -1,1 +1,1 @@
-export interface GymController {}
+export interface GymControllerInterface {}
