@@ -7,9 +7,7 @@ import { GymPlanController } from '../../http/controllers/gym-plan.controller';
 
 @Module({
   imports: [],
-  controllers: [
-    GymPlanController,
-  ],
+  controllers: [GymPlanController],
   providers: [
     EncrypterProvider,
     GymPlanRepository,

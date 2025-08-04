@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
 export interface GymPlanControllerInterface {
-    browseGymPlans(req: Request, res: Response): Promise<Response>;
-    //findGymPlanById(req: Request, res: Response): Promise<Response>;
+  browseGymPlans(req: Request, res: Response): Promise<Response>;
+  findGymPlanById(cuid: string, req: Request, res: Response): Promise<Response>;
 }
