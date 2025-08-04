@@ -1,6 +1,7 @@
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
 import { ExtraServiceRepository } from '../db/repositories/extra-service.repository';
 import { BrowseExtraServicesUsecase } from './browse-extra-services.usecase';
+import { faker } from '@faker-js/faker'
 
 describe('Browse Extra Services Use Case', () => {
   let usecase: BrowseExtraServicesUsecase;
@@ -33,18 +34,25 @@ describe('Browse Extra Services Use Case', () => {
   it('should return a list of extra services', async () => {
     const mockServices = [
       {
-        id_extra_service: '1',
-        name: 'Service One',
-        description: 'Description One',
-        price: '10.00',
-        imageUrl: 'http://example.com/image1.jpg',
+        id_extra_service: faker.string.uuid(),
+        name: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        price: faker.commerce.price(),
+        imageUrl: faker.image.url(),
       },
       {
-        id_extra_service: '2',
-        name: 'Service Two',
-        description: 'Description Two',
-        price: '20.00',
-        imageUrl: 'http://example.com/image2.jpg',
+        id_extra_service: faker.string.uuid(),
+        name: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        price: faker.commerce.price(),
+        imageUrl: faker.image.url(),
+      },
+      {
+        id_extra_service: faker.string.uuid(),
+        name: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        price: faker.commerce.price(),
+        imageUrl: faker.image.url(),
       },
     ];
 
@@ -54,21 +62,6 @@ describe('Browse Extra Services Use Case', () => {
 
     const result = await usecase.execute();
 
-    expect(result).toEqual([
-      {
-        id_extra_service: '1',
-        name: 'Service One',
-        description: 'Description One',
-        price: '10.00',
-        imageUrl: 'http://example.com/image1.jpg',
-      },
-      {
-        id_extra_service: '2',
-        name: 'Service Two',
-        description: 'Description Two',
-        price: '20.00',
-        imageUrl: 'http://example.com/image2.jpg',
-      },
-    ]);
+    expect(result).toEqual(mockServices);
   });
 });

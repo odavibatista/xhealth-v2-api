@@ -2,6 +2,7 @@ import { ExtraServiceRepository } from '../db/repositories/extra-service.reposit
 import { FindExtraServiceUsecase } from './find-extra-service.usecase';
 import { ServiceNotFoundException } from '../../domain/dtos/errors/ServiceNotFound.exception';
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
+import { faker } from '@faker-js/faker'
 
 describe('Find Extra Service By ID Usecase', () => {
   let usecase: FindExtraServiceUsecase;
@@ -37,10 +38,10 @@ describe('Find Extra Service By ID Usecase', () => {
     const validId = 'valid-id';
     const mockService = {
       id_extra_service: validId,
-      name: 'Test Service',
-      description: 'Test Description',
-      price: '100.00',
-      imageUrl: 'http://example.com/image.jpg',
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      price: faker.commerce.price(),
+      imageUrl: faker.image.url(),
     };
 
     jest
