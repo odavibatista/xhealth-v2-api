@@ -1,4 +1,11 @@
-import { Controller, Get, HttpException, Param, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  Param,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { GymPlanControllerInterface } from '../../domain/dtos/controllers/gym-plan-controller.dto';
 import {
   ApiInternalServerErrorResponse,

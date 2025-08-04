@@ -1,4 +1,11 @@
-import { Controller, Get, HttpException, Param, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  Param,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { GymControllerInterface } from '../../domain/dtos/controllers/gym-controller.interface';
 import {
   ApiInternalServerErrorResponse,
@@ -57,9 +64,12 @@ export class GymController implements GymControllerInterface {
     @Res() res: Response,
   ): Promise<Response> {
     const result = await this.findGymByIdUsecase.execute(cuid);
-    if (result instanceof HttpException) {
-      return res.status(404).json(result);
-    }
+    if (result instanceof HttpException)
+      return res.status(result.getStatus()).json({
+        message: result.message,
+        status: result.getStatus(),
+      });
+
     return res.status(200).json(result);
   }
 }

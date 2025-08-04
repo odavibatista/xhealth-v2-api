@@ -3,9 +3,17 @@ import { GymRepositoryInterface } from '../../../domain/dtos/repositories/gym.re
 import { Injectable } from '@nestjs/common';
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { FindGymByIDDto } from '../../../domain/dtos/requests/FindGymByID.request.dto';
+import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 
 @Injectable()
 export class GymRepository implements GymRepositoryInterface {
+  public encryptedFields: (keyof Gym)[] = [
+    'phone_number',
+    'imageUrl'
+  ];
+
+  constructor(private encrypterProvider: EncrypterProvider) {}
+
   /* This method will be used to find all gyms */
   async findAll(): Promise<FindGymByIDDto[]> {
     const gyms = await prisma.gym.findMany({
@@ -25,21 +33,28 @@ export class GymRepository implements GymRepositoryInterface {
       },
     });
 
-    return gyms?.map((gym) => ({
-      id_gym: gym.id_gym,
-      name: gym.name,
-      address: {
-        id_address: gym.address.id_address,
-        complement: gym.address.complement,
-        city: gym.address.city,
-        cep: gym.address.cep,
-        uf_id: gym.address.uf_id,
-        street: gym.address.street,
-      },
-      phone_number: gym.phone_number,
-      imageUrl: gym.imageUrl,
-      created_at: gym.createdAt.toISOString(),
-    })) as FindGymByIDDto[];
+    return gyms?.map((gym) => {
+      const decryptedGym = this.encrypterProvider.decryptData(
+        gym,
+        this.encryptedFields as (keyof typeof gym)[]
+      );
+      return {
+        id_gym: decryptedGym.id_gym,
+        name: decryptedGym.name,
+        address: {
+          id_address: decryptedGym.address?.id_address,
+          complement: decryptedGym.address?.complement,
+          city: decryptedGym.address?.city,
+          cep: decryptedGym.address?.cep,
+          uf_id: decryptedGym.address?.uf_id,
+          street: decryptedGym.address?.street,
+          number: decryptedGym.address?.number,
+        },
+        phone_number: decryptedGym.phone_number,
+        imageUrl: decryptedGym.imageUrl,
+        created_at: decryptedGym.createdAt?.toISOString(),
+      } as FindGymByIDDto;
+    });
   }
 
   /* This method will be used to find a single gym by its id */
@@ -65,20 +80,26 @@ export class GymRepository implements GymRepositoryInterface {
       return null;
     }
 
+    const decryptedGym = this.encrypterProvider.decryptData(
+      gym,
+      this.encryptedFields as (keyof typeof gym)[]
+    );
+
     return {
-      id_gym: gym?.id_gym,
-      name: gym?.name,
+      id_gym: decryptedGym.id_gym,
+      name: decryptedGym.name,
       address: {
-        id_address: gym?.address?.id_address,
-        complement: gym?.address?.complement,
-        city: gym?.address?.city,
-        cep: gym?.address?.cep,
-        uf_id: gym?.address?.uf_id,
-        street: gym?.address?.street,
+        id_address: decryptedGym.address?.id_address,
+        complement: decryptedGym.address?.complement,
+        city: decryptedGym.address?.city,
+        cep: decryptedGym.address?.cep,
+        uf_id: decryptedGym.address?.uf_id,
+        street: decryptedGym.address?.street,
+        number: decryptedGym.address?.number,
       },
-      phone_number: gym?.phone_number,
-      imageUrl: gym?.imageUrl,
-      created_at: gym?.createdAt.toISOString(),
+      phone_number: decryptedGym.phone_number,
+      imageUrl: decryptedGym.imageUrl,
+      created_at: decryptedGym.createdAt?.toISOString(),
     } as FindGymByIDDto;
   }
 }
