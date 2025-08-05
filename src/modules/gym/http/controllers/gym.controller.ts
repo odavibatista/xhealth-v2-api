@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   HttpException,
+  Inject,
   Param,
   Req,
   Res,
@@ -19,6 +20,7 @@ import { FindGymByIDDto } from '../../domain/dtos/requests/FindGymByID.request.d
 import { AllExceptionsFilterDTO } from '../../../../shared/domain/dtos/errors/AllException.filter.dto';
 import { FindGymByIdUsecase } from '../../infra/usecases/find-gym-by-id.usecase';
 import { GymNotFoundException } from '../../domain/dtos/errors/GymNotFoundException.exception';
+import { Cache } from '@nestjs/cache-manager';
 
 @ApiTags('Academias')
 @Controller('gyms')
@@ -26,6 +28,8 @@ export class GymController implements GymControllerInterface {
   constructor(
     private readonly browseGymsUsecase: BrowseGymsUsecase,
     private readonly findGymByIdUsecase: FindGymByIdUsecase,
+    @Inject('CACHE_MANAGER')
+    private readonly cacheManager: Cache,
   ) {}
 
   @ApiOkResponse({
@@ -41,7 +45,17 @@ export class GymController implements GymControllerInterface {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response> {
+    const cachedGyms = await this.cacheManager.get<FindGymByIDDto[]>('gyms');
+
+    if (cachedGyms) {
+      console.log('Cache hit for gyms');
+      return res.status(200).json(cachedGyms);
+    }
+
     const result = await this.browseGymsUsecase.execute();
+
+    await this.cacheManager.set('gyms', result);
+
     return res.status(200).json(result);
   }
 
@@ -63,7 +77,17 @@ export class GymController implements GymControllerInterface {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response> {
+    const cachedGym = await this.cacheManager.get<FindGymByIDDto>(`gym-${cuid}`);
+
+    if (cachedGym) {
+      console.log('Cache hit for gym:', cuid);
+      return res.status(200).json(cachedGym);
+    }
+
     const result = await this.findGymByIdUsecase.execute(cuid);
+
+    await this.cacheManager.set(`gym-${cuid}`, result);
+
     if (result instanceof HttpException)
       return res.status(result.getStatus()).json({
         message: result.message,

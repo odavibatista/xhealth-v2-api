@@ -17,6 +17,11 @@ const appConfigurationsSchema = z.object({
 
   APP_SECRET: z.string().min(1),
 
+  REDIS_PRODUCTION_HOST: z.string().optional(),
+  REDIS_PRODUCTION_PORT: z.number().optional(),
+  REDIS_PRODUCTION_USER: z.string().optional(),
+  REDIS_PRODUCTION_PASSWORD: z.string().optional(),
+
   REDIS_HOST: z.string().optional(),
   REDIS_PORT: z.number().optional(),
 });
@@ -37,6 +42,11 @@ try {
     CRYPTO_IV: process.env.CRYPTO_IV,
 
     APP_SECRET: process.env.APP_SECRET,
+
+    REDIS_PRODUCTION_HOST: process.env.REDIS_PRODUCTION_HOST ? process.env.REDIS_PRODUCTION_HOST : null,
+    REDIS_PRODUCTION_PORT: process.env.REDIS_PRODUCTION_PORT ? Number(process.env.REDIS_PRODUCTION_PORT) : null,
+    REDIS_PRODUCTION_USER: process.env.REDIS_PRODUCTION_USER ? process.env.REDIS_PRODUCTION_USER : null,
+    REDIS_PRODUCTION_PASSWORD: process.env.REDIS_PRODUCTION_PASSWORD ? process.env.REDIS_PRODUCTION_PASSWORD : null,
 
     REDIS_HOST: process.env.REDIS_HOST,
     REDIS_PORT: process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : undefined,
