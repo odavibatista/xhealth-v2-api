@@ -13,16 +13,15 @@ import { TestimonyModule } from '../modules/testimony/infra/modules/testimony.mo
 import { GymPlanModule } from '../modules/gym-plan/infra/modules/gym-plan.module';
 import { ExtraServiceModule } from '../modules/extra-service/infra/modules/extra-service.module';
 import { AddressModule } from '../modules/address/infra/modules/address.module';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { GymModule } from '../modules/gym/infra/modules/gym.module';
-import { CacheModule } from '@nestjs/cache-manager';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { RedisOptions } from '../shared/config/redis.config';
-import { appConfigurations } from '../shared/config/app.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    appConfigurations.NODE_ENV === 'production' ? CacheModule.register() : CacheModule.registerAsync(RedisOptions), 
+    CacheModule.registerAsync(RedisOptions),
     SharedModule,
     UserModule,
     TrainerModule,
@@ -39,6 +38,10 @@ import { appConfigurations } from '../shared/config/app.config';
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
     },
   ],
 })
