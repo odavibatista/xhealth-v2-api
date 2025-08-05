@@ -15,10 +15,14 @@ import { ExtraServiceModule } from '../modules/extra-service/infra/modules/extra
 import { AddressModule } from '../modules/address/infra/modules/address.module';
 import { APP_PIPE } from '@nestjs/core';
 import { GymModule } from '../modules/gym/infra/modules/gym.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { RedisOptions } from '../shared/config/redis.config';
+import { appConfigurations } from '../shared/config/app.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    appConfigurations.NODE_ENV === 'production' ? CacheModule.register() : CacheModule.registerAsync(RedisOptions), 
     SharedModule,
     UserModule,
     TrainerModule,
