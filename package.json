@@ -25,7 +25,8 @@
     "docker:rebuild": "npm run docker:down && npm run docker:up"
   },
   "prisma": {
-    "schema": "src/shared/infra/db/prisma/schema.prisma"
+    "schema": "src/shared/infra/db/prisma/schema.prisma",
+    "seed": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/shared/infra/db/prisma/seeders/index.ts"
   },
   "dependencies": {
     "@keyv/redis": "^5.1.0",
@@ -80,6 +81,7 @@
     "ts-jest": "^29.4.0",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0"
