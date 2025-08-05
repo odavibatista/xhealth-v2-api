@@ -2,7 +2,6 @@ import 'dotenv/config';
 
 import z, { ZodError } from 'zod';
 import { EnvironmentException } from '../domain/errors/Environment.exception';
-import { join } from 'path';
 
 const appConfigurationsSchema = z.object({
   FRONTEND_URL: z.string().min(1),
@@ -17,6 +16,9 @@ const appConfigurationsSchema = z.object({
   CRYPTO_IV: z.string().min(1),
 
   APP_SECRET: z.string().min(1),
+
+  REDIS_HOST: z.string().optional(),
+  REDIS_PORT: z.number().optional(),
 });
 
 let appConfigurations: z.infer<typeof appConfigurationsSchema>;
@@ -35,6 +37,9 @@ try {
     CRYPTO_IV: process.env.CRYPTO_IV,
 
     APP_SECRET: process.env.APP_SECRET,
+
+    REDIS_HOST: process.env.REDIS_HOST,
+    REDIS_PORT: process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : undefined,
   });
 } catch (error) {
   if (error instanceof ZodError) {
