@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   HttpException,
+  Inject,
   Param,
   Req,
   Res,
@@ -19,6 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { FindExtraServiceByIdDto } from '../../domain/dtos/requests/FindExtraServiceById.request.dto';
 import { BrowseExtraServicesUsecase } from '../../infra/usecases/browse-extra-services.usecase';
+import { Cache } from '@nestjs/cache-manager';
 
 @ApiTags('Serviços Extras')
 @Controller('service')
@@ -26,6 +28,8 @@ export class ExtraServiceController implements ExtraServiceControllerInterface {
   constructor(
     private readonly browseExtraServicesUsecase: BrowseExtraServicesUsecase,
     private readonly findExtraServiceUsecase: FindExtraServiceUsecase,
+    @Inject('CACHE_MANAGER')
+    private readonly cacheManager: Cache,
   ) {}
 
   @Get('browse')

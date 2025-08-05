@@ -1,29 +1,31 @@
-import { Inject } from "@nestjs/common";
-import { UseCaseInterface } from "../../../../shared/domain/protocols/UseCase.protocol";
-import { TrainerRepository } from "../db/repositories/trainer.repository";
-import { FindTrainerByIDDto } from "../../domain/dtos/requests/FindTrainerByID.request.dto";
-import { TrainerNotFoundException } from "../../domain/dtos/errors/TrainerNotFound.exception";
+import { Inject } from '@nestjs/common';
+import { UseCaseInterface } from '../../../../shared/domain/protocols/UseCase.protocol';
+import { TrainerRepository } from '../db/repositories/trainer.repository';
+import { FindTrainerByIDDto } from '../../domain/dtos/requests/FindTrainerByID.request.dto';
+import { TrainerNotFoundException } from '../../domain/dtos/errors/TrainerNotFound.exception';
 
 export class FindTrainerByIdUsecase implements UseCaseInterface {
-      constructor(
-        @Inject()
-        private trainerRepository: TrainerRepository,
-      ) {}
+  constructor(
+    @Inject()
+    private trainerRepository: TrainerRepository,
+  ) {}
 
-        async execute(cuid: string): Promise<FindTrainerByIDDto | TrainerNotFoundException> {
-            const trainer = await this.trainerRepository.findById(cuid);
-    
-            if (!trainer) {
-             throw new TrainerNotFoundException();
-            }
-    
-            return {
-                id_trainer: trainer.id_trainer,
-                name: trainer.name,
-                imgUrl: trainer.imageUrl,
-                instagramUrl: trainer.instagram,
-                twitterUrl: trainer.twitter,
-                youtubeUrl: trainer.youtube,
-            } as FindTrainerByIDDto;
-        }
+  async execute(
+    cuid: string,
+  ): Promise<FindTrainerByIDDto | TrainerNotFoundException> {
+    const trainer = await this.trainerRepository.findById(cuid);
+
+    if (!trainer) {
+      throw new TrainerNotFoundException();
+    }
+
+    return {
+      id_trainer: trainer.id_trainer,
+      name: trainer.name,
+      imgUrl: trainer.imageUrl,
+      instagramUrl: trainer.instagram,
+      twitterUrl: trainer.twitter,
+      youtubeUrl: trainer.youtube,
+    } as FindTrainerByIDDto;
+  }
 }
