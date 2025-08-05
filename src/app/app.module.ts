@@ -13,9 +13,9 @@ import { TestimonyModule } from '../modules/testimony/infra/modules/testimony.mo
 import { GymPlanModule } from '../modules/gym-plan/infra/modules/gym-plan.module';
 import { ExtraServiceModule } from '../modules/extra-service/infra/modules/extra-service.module';
 import { AddressModule } from '../modules/address/infra/modules/address.module';
-import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_PIPE } from '@nestjs/core';
 import { GymModule } from '../modules/gym/infra/modules/gym.module';
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { CacheModule } from '@nestjs/cache-manager';
 import { RedisOptions } from '../shared/config/redis.config';
 
 @Module({
@@ -38,10 +38,6 @@ import { RedisOptions } from '../shared/config/redis.config';
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
     },
   ],
 })

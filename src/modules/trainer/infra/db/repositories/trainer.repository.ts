@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { TrainerRepositoryInterface } from '../../../domain/dtos/repositories/trainer.repository';
 import { Trainer } from '@prisma/client';
-import { prisma } from '../../../../../shared/infra/db/prisma';
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
+import { prisma } from '../../../../../shared/infra/db/prisma';
 
 @Injectable()
 export class TrainerRepository implements TrainerRepositoryInterface {
@@ -16,6 +16,34 @@ export class TrainerRepository implements TrainerRepositoryInterface {
   ];
 
   constructor(private encrypterProvider: EncrypterProvider) {}
+  /* This method will find all trainers */
+  async findAll(): Promise<Partial<Trainer>[] | null> {
+    const trainers = await prisma.trainer.findMany({
+      where: {
+        deletedAt: null,
+      },
+      select: {
+        id_trainer: true,
+        name: true,
+        instagram: true,
+        twitter: true,
+        youtube: true,
+        imageUrl: true,
+        createdAt: true,
+      },
+    });
+
+    if (!trainers || trainers.length === 0) {
+      return null;
+    }
+
+    return trainers.map((trainer) =>
+      this.encrypterProvider.decryptData(
+        trainer,
+        this.encryptedFields as (keyof typeof trainer)[],
+      ),
+    );
+  }
 
   /* This method will find a single trainer by its id */
   async findById(id: string): Promise<Partial<Trainer> | null> {
