@@ -33,9 +33,8 @@ export class AdminLoginUsecase implements UseCaseInterface {
       data.password,
     );
 
-    if (!isPasswordValid) {
-      return new InvalidCredentialsException();
-    }
+    if (!isPasswordValid) 
+      throw new InvalidCredentialsException();
 
     const token = this.jwtProvider.generate({
       payload: {
