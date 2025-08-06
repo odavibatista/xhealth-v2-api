@@ -1,4 +1,3 @@
-import { GymPlan } from '@prisma/client';
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
 import { GymPlanNotFoundException } from '../../domain/dtos/errors/GymPlanNotFound.exception';
 import { GymPlanRepository } from '../db/repositories/gym-plan.repository';

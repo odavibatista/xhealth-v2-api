@@ -22,10 +22,10 @@ export class FindTrainerByIdUsecase implements UseCaseInterface {
     return {
       id_trainer: trainer.id_trainer,
       name: trainer.name,
-      imgUrl: trainer.imageUrl,
-      instagramUrl: trainer.instagram,
-      twitterUrl: trainer.twitter,
-      youtubeUrl: trainer.youtube,
+      imageUrl: trainer.imageUrl,
+      instagramUrl: trainer.instagramUrl,
+      twitterUrl: trainer.twitterUrl,
+      youtubeUrl: trainer.youtubeUrl,
     } as FindTrainerByIDDto;
   }
 }

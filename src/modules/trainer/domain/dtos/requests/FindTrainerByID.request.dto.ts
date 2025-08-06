@@ -3,7 +3,7 @@ import { z } from 'nestjs-zod/z';
 
 export const FindTrainerByIDSchema = z.object({
   id_trainer: z.string(),
-  imgUrl: z.string(),
+  imageUrl: z.string(),
   name: z.string(),
   instagramUrl: z.string(),
   twitterUrl: z.string(),

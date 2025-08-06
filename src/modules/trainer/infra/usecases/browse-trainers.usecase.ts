@@ -12,13 +12,13 @@ export class BrowseTrainersUsecase implements UseCaseInterface {
   async execute(): Promise<FindTrainerByIDDto[]> {
     const trainers = await this.trainerRepository.findAll();
 
-    return trainers?.map((trainer) => ({
+    return trainers.map((trainer) => ({
       id_trainer: trainer.id_trainer,
       name: trainer.name,
-      imgUrl: trainer.imageUrl,
-      instagramUrl: trainer.instagram,
-      twitterUrl: trainer.twitter,
-      youtubeUrl: trainer.youtube,
+      imageUrl: trainer.imageUrl,
+      instagramUrl: trainer.instagramUrl,
+      twitterUrl: trainer.twitterUrl,
+      youtubeUrl: trainer.youtubeUrl,
     })) as FindTrainerByIDDto[];
   }
 }

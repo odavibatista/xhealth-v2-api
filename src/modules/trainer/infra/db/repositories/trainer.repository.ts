@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TrainerRepositoryInterface } from '../../../domain/dtos/repositories/trainer.repository';
-import { Trainer } from '../../../../../shared/infra/db/generated/prisma';
+import { Trainer } from '@prisma/client';
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 import { prisma } from '../../../../../shared/infra/db/prisma';
 
@@ -8,9 +8,9 @@ import { prisma } from '../../../../../shared/infra/db/prisma';
 export class TrainerRepository implements TrainerRepositoryInterface {
   public encryptedFields: (keyof Trainer)[] = [
     'name',
-    'instagram',
-    'twitter',
-    'youtube',
+    'instagramUrl',
+    'twitterUrl',
+    'youtubeUrl',
     'imageUrl',
   ];
 
@@ -24,11 +24,10 @@ export class TrainerRepository implements TrainerRepositoryInterface {
       select: {
         id_trainer: true,
         name: true,
-        instagram: true,
-        twitter: true,
-        youtube: true,
+        instagramUrl: true,
+        twitterUrl: true,
+        youtubeUrl: true,
         imageUrl: true,
-        createdAt: true,
       },
     });
 
@@ -51,9 +50,9 @@ export class TrainerRepository implements TrainerRepositoryInterface {
       select: {
         id_trainer: true,
         name: true,
-        instagram: true,
-        twitter: true,
-        youtube: true,
+        instagramUrl: true,
+        twitterUrl: true,
+        youtubeUrl: true,
         imageUrl: true,
         createdAt: true,
       },
@@ -82,9 +81,9 @@ export class TrainerRepository implements TrainerRepositoryInterface {
       select: {
         id_trainer: true,
         name: true,
-        instagram: true,
-        twitter: true,
-        youtube: true,
+        instagramUrl: true,
+        twitterUrl: true,
+        youtubeUrl: true,
         imageUrl: true,
         createdAt: true,
       },

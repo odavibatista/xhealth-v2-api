@@ -1,4 +1,4 @@
-import { Trainer } from '../../../../../shared/infra/db/generated/prisma';
+import { Trainer } from '@prisma/client';
 
 export interface TrainerRepositoryInterface {
   encryptedFields: (keyof Trainer)[];
