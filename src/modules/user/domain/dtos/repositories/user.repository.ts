@@ -9,4 +9,5 @@ export interface UserRepositoryInterface {
   findByUsername(username: string): Promise<Partial<User>[] | null>;
   setPassword(id: string, password: string): Promise<Partial<User> | null>;
   create(data: CreateUserBodyDTO): Promise<Partial<User>>;
+  comparePassword(userId: string, givenPassword: string): Promise<boolean | null>;
 }
