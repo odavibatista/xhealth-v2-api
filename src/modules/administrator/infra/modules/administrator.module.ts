@@ -8,7 +8,13 @@ import { AdminLoginUsecase } from '../usecases/admin-login.usecase';
 @Module({
   imports: [],
   controllers: [],
-  providers: [EncrypterProvider, HashProvider, JWTProvider, AdministratorRepository, AdminLoginUsecase],
+  providers: [
+    EncrypterProvider,
+    HashProvider,
+    JWTProvider,
+    AdministratorRepository,
+    AdminLoginUsecase,
+  ],
   exports: [],
 })
 export class AdministratorModule {}

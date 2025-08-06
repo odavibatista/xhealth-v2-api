@@ -333,12 +333,15 @@ export class UserRepository implements UserRepositoryInterface {
   }
 
   /* Method used to compare the user's password with a given password */
-  async comparePassword(userId: string, givenPassword: string): Promise<boolean | null> {
+  async comparePassword(
+    userId: string,
+    givenPassword: string,
+  ): Promise<boolean | null> {
     const user = await prisma.user.findUnique({
       where: {
         id_user: userId,
-      }
-    })
+      },
+    });
 
     if (!user) return null;
 
