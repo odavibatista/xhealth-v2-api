@@ -1,7 +1,11 @@
-import { Administrator } from '../../../../../shared/infra/db/generated/prisma';
+import { Administrator } from '@prisma/client';
 
 export interface AdministratorRepositoryInterface {
   encryptedFields: (keyof Administrator)[];
-  findById(id: string): Promise<Partial<Administrator>>;
-  findByEmail(email: string): Promise<Partial<Administrator>>;
+  findById(id: string): Promise<Partial<Administrator> | null>;
+  findByEmail(email: string): Promise<Partial<Administrator> | null>;
+  comparePassword(
+    adminId: string,
+    givenPassword: string,
+  ): Promise<boolean | null>;
 }

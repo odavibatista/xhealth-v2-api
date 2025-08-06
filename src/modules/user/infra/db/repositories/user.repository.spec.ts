@@ -1,6 +1,7 @@
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 import { AddressRepository } from '../../../../address/infra/db/repositories/address.repository';
 import { CreateUserBodyDTO } from '../../../domain/dtos/requests/CreateUser.request.dto';
+import { HashProvider } from '../../providers/hash.provider';
 import { UserRepository } from './user.repository';
 
 describe('User Repository Test Suites', () => {
@@ -12,7 +13,7 @@ describe('User Repository Test Suites', () => {
   });
 
   beforeEach(() => {
-    repository = new UserRepository(new EncrypterProvider(), addressRepository);
+    repository = new UserRepository(new HashProvider(),new EncrypterProvider(), addressRepository);
   });
 
   afterEach(() => {
@@ -213,6 +214,56 @@ describe('User Repository Test Suites', () => {
       expect(result).toEqual(mockUser);
       expect(repository.create).toHaveBeenCalledWith(createUserDTO);
       expect(repository.create).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('comparePassword method tests', () => {
+    it('should return false for an invalid user ID', async () => {
+      const invalidId = 'invalid-id';
+      const password = 'password';
+
+      jest.spyOn(repository, 'comparePassword').mockResolvedValueOnce(null);
+
+      const result = await repository.comparePassword(invalidId, password);
+
+      expect(result).toBeNull();
+      expect(repository.comparePassword).toHaveBeenCalledWith(
+        invalidId,
+        password,
+      );
+      expect(repository.comparePassword).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return true for a valid user ID and correct password', async () => {
+      const validId = 'valid-id';
+      const password = 'correct-password';
+
+      jest.spyOn(repository, 'comparePassword').mockResolvedValueOnce(true);
+
+      const result = await repository.comparePassword(validId, password);
+
+      expect(result).toBe(true);
+      expect(repository.comparePassword).toHaveBeenCalledWith(
+        validId,
+        password,
+      );
+      expect(repository.comparePassword).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return false for a valid user ID and incorrect password', async () => {
+      const validId = 'valid-id';
+      const password = 'incorrect-password';
+
+      jest.spyOn(repository, 'comparePassword').mockResolvedValueOnce(false);
+
+      const result = await repository.comparePassword(validId, password);
+
+      expect(result).toBe(false);
+      expect(repository.comparePassword).toHaveBeenCalledWith(
+        validId,
+        password,
+      );
+      expect(repository.comparePassword).toHaveBeenCalledTimes(1);
     });
   });
 });

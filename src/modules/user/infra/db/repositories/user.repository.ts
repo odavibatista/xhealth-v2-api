@@ -5,6 +5,7 @@ import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypt
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { AddressRepository } from '../../../../address/infra/db/repositories/address.repository';
 import { CreateUserBodyDTO } from '../../../domain/dtos/requests/CreateUser.request.dto';
+import { HashProvider } from '../../providers/hash.provider';
 
 @Injectable()
 export class UserRepository implements UserRepositoryInterface {
@@ -15,6 +16,7 @@ export class UserRepository implements UserRepositoryInterface {
   ];
 
   constructor(
+    private readonly hashProvider: HashProvider,
     private encrypterProvider: EncrypterProvider,
     private addressRepository: AddressRepository,
   ) {}
@@ -328,5 +330,25 @@ export class UserRepository implements UserRepositoryInterface {
     });
 
     return this.encrypterProvider.decryptData(user, this.encryptedFields);
+  }
+
+  /* Method used to compare the user's password with a given password */
+  async comparePassword(
+    userId: string,
+    givenPassword: string,
+  ): Promise<boolean | null> {
+    const user = await prisma.user.findUnique({
+      where: {
+        id_user: userId,
+      },
+    });
+
+    if (!user) return null;
+
+    const decryptedPassword = this.encrypterProvider.decrypt({
+      content: user.password,
+    });
+
+    return this.hashProvider.compare(givenPassword, decryptedPassword);
   }
 }
