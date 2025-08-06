@@ -43,13 +43,23 @@ try {
 
     APP_SECRET: process.env.APP_SECRET,
 
-    REDIS_PRODUCTION_HOST: process.env.REDIS_PRODUCTION_HOST ? process.env.REDIS_PRODUCTION_HOST : null,
-    REDIS_PRODUCTION_PORT: process.env.REDIS_PRODUCTION_PORT ? Number(process.env.REDIS_PRODUCTION_PORT) : null,
-    REDIS_PRODUCTION_USER: process.env.REDIS_PRODUCTION_USER ? process.env.REDIS_PRODUCTION_USER : null,
-    REDIS_PRODUCTION_PASSWORD: process.env.REDIS_PRODUCTION_PASSWORD ? process.env.REDIS_PRODUCTION_PASSWORD : null,
+    REDIS_PRODUCTION_HOST: process.env.REDIS_PRODUCTION_HOST
+      ? process.env.REDIS_PRODUCTION_HOST
+      : null,
+    REDIS_PRODUCTION_PORT: process.env.REDIS_PRODUCTION_PORT
+      ? Number(process.env.REDIS_PRODUCTION_PORT)
+      : null,
+    REDIS_PRODUCTION_USER: process.env.REDIS_PRODUCTION_USER
+      ? process.env.REDIS_PRODUCTION_USER
+      : null,
+    REDIS_PRODUCTION_PASSWORD: process.env.REDIS_PRODUCTION_PASSWORD
+      ? process.env.REDIS_PRODUCTION_PASSWORD
+      : null,
 
     REDIS_HOST: process.env.REDIS_HOST,
-    REDIS_PORT: process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : undefined,
+    REDIS_PORT: process.env.REDIS_PORT
+      ? Number(process.env.REDIS_PORT)
+      : undefined,
   });
 } catch (error) {
   if (error instanceof ZodError) {

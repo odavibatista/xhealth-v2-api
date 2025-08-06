@@ -45,16 +45,11 @@ export class GymController implements GymControllerInterface {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response> {
-    const cachedGyms = await this.cacheManager.get<FindGymByIDDto[]>('gyms');
+    const cachedGyms = await this.cacheManager.get('gyms');
 
-    if (cachedGyms) {
-      console.log('Cache hit for gyms');
-      return res.status(200).json(cachedGyms);
-    }
+    if (cachedGyms) return res.status(200).json(cachedGyms);
 
     const result = await this.browseGymsUsecase.execute();
-
-    await this.cacheManager.set('gyms', result);
 
     return res.status(200).json(result);
   }
@@ -77,16 +72,11 @@ export class GymController implements GymControllerInterface {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response> {
-    const cachedGym = await this.cacheManager.get<FindGymByIDDto>(`gym-${cuid}`);
+    const cachedGym = await this.cacheManager.get(`gym-${cuid}`);
 
-    if (cachedGym) {
-      console.log('Cache hit for gym:', cuid);
-      return res.status(200).json(cachedGym);
-    }
+    if (cachedGym) return res.status(200).json(cachedGym);
 
     const result = await this.findGymByIdUsecase.execute(cuid);
-
-    await this.cacheManager.set(`gym-${cuid}`, result);
 
     if (result instanceof HttpException)
       return res.status(result.getStatus()).json({

@@ -3,7 +3,7 @@ import { GymPlanRepository } from '../db/repositories/gym-plan.repository';
 import { BrowseGymPlansUsecase } from './browse-gym-plans.usecase';
 import { faker } from '@faker-js/faker';
 
-describe('Browse Gym Plans Use Case', () => {
+describe('Browse Gym Plans Use Case Test Suites', () => {
   let usecase: BrowseGymPlansUsecase;
   let mockRepository: GymPlanRepository;
   let encrypterProvider: EncrypterProvider;

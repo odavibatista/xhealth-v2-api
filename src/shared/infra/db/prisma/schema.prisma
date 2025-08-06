@@ -165,9 +165,9 @@ model Testimony {
 model Trainer {
   id_trainer String @id @default(cuid())
   name String
-  instagram String?
-  twitter String?
-  youtube String?
+  instagramUrl String
+  twitterUrl String
+  youtubeUrl String
   imageUrl String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,5 +1,5 @@
 import { createZodDto } from 'nestjs-zod';
-import { number, z } from 'nestjs-zod/z';
+import { z } from 'nestjs-zod/z';
 
 export const FindGymByIDSchema = z.object({
   id_gym: z.string(),

@@ -26,10 +26,6 @@ export class ExtraServiceRepository implements ExtraServiceRepositoryInterface {
       },
     });
 
-    if (!extraServices || extraServices.length === 0) {
-      return [];
-    }
-
     return extraServices?.map((extraService) =>
       this.encrypterProvider.decryptData(
         extraService,
