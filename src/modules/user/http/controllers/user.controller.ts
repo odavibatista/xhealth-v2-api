@@ -24,6 +24,7 @@ import {
   CreateUserResponseDTO,
 } from '../../domain/dtos/requests/CreateUser.request.dto';
 import { Request, Response } from 'express';
+import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
 
 @Controller('user')
 @ApiTags('Usuário')
@@ -40,7 +41,7 @@ export class UserController implements UserControllerInterface {
     type: AllExceptionsFilterDTO,
   })
   @ApiUnprocessableEntityResponse({
-    description: 'Dados não processáveis.',
+    description: new UnprocessableDataException().message,
     type: AllExceptionsFilterDTO,
   })
   @ApiConflictResponse({
