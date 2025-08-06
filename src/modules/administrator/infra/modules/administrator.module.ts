@@ -4,10 +4,11 @@ import { HashProvider } from '../../../user/infra/providers/hash.provider';
 import { JWTProvider } from '../../../user/infra/providers/jwt.provider';
 import { AdministratorRepository } from '../db/repositories/administrator.repository';
 import { AdminLoginUsecase } from '../usecases/admin-login.usecase';
+import { AdminController } from '../../http/controllers/admin.controller';
 
 @Module({
   imports: [],
-  controllers: [],
+  controllers: [AdminController],
   providers: [
     EncrypterProvider,
     HashProvider,
