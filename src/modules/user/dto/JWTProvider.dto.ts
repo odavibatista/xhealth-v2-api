@@ -1,8 +1,15 @@
 export type JWTProviderDTO = {
   payload: {
-    id_user: string;
-    name?: string;
-    plan_id?: string;
+    user?: {
+      id_user: string;
+      name?: string;
+      plan_id?: string;
+    };
+
+    administrator?: {
+      id: string;
+      administrator_name: string;
+    };
   };
   secret?: string;
   expiresIn?: number | string;

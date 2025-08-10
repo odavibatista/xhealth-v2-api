@@ -222,10 +222,68 @@ model Administrator {
   deletedAt DateTime? @map("deleted_at")
 
   ExtraService ExtraService[]
+  administrator_permissions AdministratorPermission[]
 
   @@map("administrators")
 }
 
 enum AdministratorRole {
   ADMIN
+}
+
+model AdministratorPermission {
+  id_administrator_permission String @id @default(cuid())
+  administrator_id String
+
+  /* PERMISSÕES */
+
+
+  /* Academias */
+  can_create_gyms Boolean @default(false)
+  can_edit_gyms Boolean @default(false)
+  can_delete_gyms Boolean @default(false)
+
+  /* Usuários Padrão */
+  can_create_users Boolean @default(false)
+  can_edit_users Boolean @default(false)
+  can_delete_users Boolean @default(false)
+
+  /* Treinadores */
+  can_create_trainers Boolean @default(false)
+  can_edit_trainers Boolean @default(false)
+  can_delete_trainers Boolean @default(false)
+
+  /* Serviços Extras */
+  can_create_extra_services Boolean @default(false)
+  can_edit_extra_services Boolean @default(false)
+  can_delete_extra_services Boolean @default(false)
+
+  /* Modalidades Esportivas */
+  can_create_sport_modalities Boolean @default(false)
+  can_edit_sport_modalities Boolean @default(false)
+  can_delete_sport_modalities Boolean @default(false)
+
+  /* Depoimentos */
+  can_create_testimonies Boolean @default(false)
+  can_edit_testimonies Boolean @default(false)
+  can_delete_testimonies Boolean @default(false)
+
+  /* Planos de Academia */
+  can_create_gym_plans Boolean @default(false)
+  can_edit_gym_plans Boolean @default(false)
+  can_delete_gym_plans Boolean @default(false)
+  
+  /* Outros Administradores */
+  can_create_administrators Boolean @default(false)
+  can_edit_administrators Boolean @default(false)
+  can_delete_administrators Boolean @default(false)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  deletedAt DateTime? @map("deleted_at")
+
+  administrator Administrator @relation(fields: [administrator_id], references: [id_administrator])
+
+  @@map("administrator_permissions")
 }

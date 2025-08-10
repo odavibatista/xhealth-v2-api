@@ -5,8 +5,9 @@ declare namespace Express {
       userIp: string | string[];
       plan: string;
     };
-    administrator: {
-      id: number;
+    administrator?: {
+      id: string;
+      administrator_name: string;
     };
   }
 }

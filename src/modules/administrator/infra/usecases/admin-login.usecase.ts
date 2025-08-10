@@ -38,8 +38,10 @@ export class AdminLoginUsecase implements UseCaseInterface {
 
     const token = this.jwtProvider.generate({
       payload: {
-        id_user: admin.id_administrator,
-        name: admin.name,
+        administrator: {
+          id: admin.id_administrator,
+          administrator_name: admin.name,
+        }
       },
     });
 
