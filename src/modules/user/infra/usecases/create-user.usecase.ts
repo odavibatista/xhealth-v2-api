@@ -112,7 +112,7 @@ export class CreateUserUseCase implements UseCaseInterface {
           id_user: user.id_user,
           plan_id: user.gym_plan_id,
           name: user.name,
-        }
+        },
       },
     });
 
