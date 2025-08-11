@@ -10,7 +10,9 @@ export const adminPermissionSeeder = async () => {
 
   const enc = encrypterProvider.encrypt({ content: adminName });
 
-  const encSecondary = encrypterProvider.encrypt({ content: secondaryAdminName });
+  const encSecondary = encrypterProvider.encrypt({
+    content: secondaryAdminName,
+  });
 
   const existingAdmin = await prisma.administrator.findFirst({
     where: {
@@ -28,14 +30,15 @@ export const adminPermissionSeeder = async () => {
 
   if (!existingSecondaryAdmin) return;
 
-  const existingAdminPermissions = await prisma.administratorPermission.findMany({
-    where: {
-      OR: [
-        { administrator_id: existingAdmin.id_administrator },
-        { administrator_id: existingSecondaryAdmin.id_administrator },
-      ],
-    },
-  });
+  const existingAdminPermissions =
+    await prisma.administratorPermission.findMany({
+      where: {
+        OR: [
+          { administrator_id: existingAdmin.id_administrator },
+          { administrator_id: existingSecondaryAdmin.id_administrator },
+        ],
+      },
+    });
 
   if (existingAdminPermissions.length > 1) return;
 

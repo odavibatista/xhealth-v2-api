@@ -11,7 +11,7 @@ import { gymSeeder } from './gym.seed';
 
 const seed = async () => {
   console.log('Running seed: ');
-  
+
   await ufsSeeder();
   await citySeeder();
   await administratorSeeder();

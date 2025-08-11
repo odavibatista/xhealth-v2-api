@@ -86,9 +86,9 @@ describe('Add Permission Usecase Test Suites', () => {
       permission: 'can_edit_administrators',
     };
 
-    await expect(
-      usecase.execute(data, faker.string.uuid()),
-    ).rejects.toThrow(UnauthorizedException);
+    await expect(usecase.execute(data, faker.string.uuid())).rejects.toThrow(
+      UnauthorizedException,
+    );
   });
 
   it('should throw AccountNotFoundException if admin to be modified does not exist', async () => {
@@ -103,9 +103,9 @@ describe('Add Permission Usecase Test Suites', () => {
       permission: 'can_edit_administrators',
     };
 
-    await expect(
-      usecase.execute(data, faker.string.uuid()),
-    ).rejects.toThrow(AccountNotFoundException);
+    await expect(usecase.execute(data, faker.string.uuid())).rejects.toThrow(
+      AccountNotFoundException,
+    );
   });
 
   it('should throw PermissionAlreadySetException if permission is already set for the admin', async () => {
@@ -122,9 +122,9 @@ describe('Add Permission Usecase Test Suites', () => {
       permission: 'can_edit_administrators',
     };
 
-    await expect(
-      usecase.execute(data, faker.string.uuid()),
-    ).rejects.toThrow(PermissionAlreadySetException);
+    await expect(usecase.execute(data, faker.string.uuid())).rejects.toThrow(
+      PermissionAlreadySetException,
+    );
   });
 
   it('should add permission if not already set', async () => {

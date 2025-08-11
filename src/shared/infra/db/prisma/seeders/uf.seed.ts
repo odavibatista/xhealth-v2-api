@@ -1,145 +1,145 @@
-import { prisma } from '..'
+import { prisma } from '..';
 
 export default async function ufsSeeder() {
-  if ((await prisma.uF.count()) > 0) return
+  if ((await prisma.uF.count()) > 0) return;
 
   await prisma.uF.createMany({
     data: [
       {
         ibge_id: 11,
         acronym: 'RO',
-        name: 'Rondônia'
+        name: 'Rondônia',
       },
       {
         ibge_id: 12,
         acronym: 'AC',
-        name: 'Acre'
+        name: 'Acre',
       },
       {
         ibge_id: 13,
         acronym: 'AM',
-        name: 'Amazonas'
+        name: 'Amazonas',
       },
       {
         ibge_id: 14,
         acronym: 'RR',
-        name: 'Roraima'
+        name: 'Roraima',
       },
       {
         ibge_id: 15,
         acronym: 'PA',
-        name: 'Pará'
+        name: 'Pará',
       },
       {
         ibge_id: 16,
         acronym: 'AP',
-        name: 'Amapá'
+        name: 'Amapá',
       },
       {
         ibge_id: 17,
         acronym: 'TO',
-        name: 'Tocantins'
+        name: 'Tocantins',
       },
       {
         ibge_id: 21,
         acronym: 'MA',
-        name: 'Maranhão'
+        name: 'Maranhão',
       },
       {
         ibge_id: 22,
         acronym: 'PI',
-        name: 'Piauí'
+        name: 'Piauí',
       },
       {
         ibge_id: 23,
         acronym: 'CE',
-        name: 'Ceará'
+        name: 'Ceará',
       },
       {
         ibge_id: 24,
         acronym: 'RN',
-        name: 'Rio Grande do Norte'
+        name: 'Rio Grande do Norte',
       },
       {
         ibge_id: 25,
         acronym: 'PB',
-        name: 'Paraíba'
+        name: 'Paraíba',
       },
       {
         ibge_id: 26,
         acronym: 'PE',
-        name: 'Pernambuco'
+        name: 'Pernambuco',
       },
       {
         ibge_id: 27,
         acronym: 'AL',
-        name: 'Alagoas'
+        name: 'Alagoas',
       },
       {
         ibge_id: 28,
         acronym: 'SE',
-        name: 'Sergipe'
+        name: 'Sergipe',
       },
       {
         ibge_id: 29,
         acronym: 'BA',
-        name: 'Bahia'
+        name: 'Bahia',
       },
       {
         ibge_id: 31,
         acronym: 'MG',
-        name: 'Minas Gerais'
+        name: 'Minas Gerais',
       },
       {
         ibge_id: 32,
         acronym: 'ES',
-        name: 'Espírito Santo'
+        name: 'Espírito Santo',
       },
       {
         ibge_id: 33,
         acronym: 'RJ',
-        name: 'Rio de Janeiro'
+        name: 'Rio de Janeiro',
       },
       {
         ibge_id: 35,
         acronym: 'SP',
-        name: 'São Paulo'
+        name: 'São Paulo',
       },
       {
         ibge_id: 41,
         acronym: 'PR',
-        name: 'Paraná'
+        name: 'Paraná',
       },
       {
         ibge_id: 42,
         acronym: 'SC',
-        name: 'Santa Catarina'
+        name: 'Santa Catarina',
       },
       {
         ibge_id: 43,
         acronym: 'RS',
-        name: 'Rio Grande do Sul'
+        name: 'Rio Grande do Sul',
       },
       {
         ibge_id: 50,
         acronym: 'MS',
-        name: 'Mato Grosso do Sul'
+        name: 'Mato Grosso do Sul',
       },
       {
         ibge_id: 51,
         acronym: 'MT',
-        name: 'Mato Grosso'
+        name: 'Mato Grosso',
       },
       {
         ibge_id: 52,
         acronym: 'GO',
-        name: 'Goiás'
+        name: 'Goiás',
       },
       {
         ibge_id: 53,
         acronym: 'DF',
-        name: 'Distrito Federal'
-      }
-    ]
-  })
+        name: 'Distrito Federal',
+      },
+    ],
+  });
 }
