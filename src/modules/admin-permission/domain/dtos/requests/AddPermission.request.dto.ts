@@ -17,7 +17,11 @@ export const AddPermissionResponseSchema = z.object({
       name: z.string().describe('Nome do administrador autenticado'),
     })
     .describe('Dados do administrador autenticado'),
-  added_permission: z.string().min(1).max(255).describe('Permissão do administrador que foi adicionada'),
+  added_permission: z
+    .string()
+    .min(1)
+    .max(255)
+    .describe('Permissão do administrador que foi adicionada'),
 });
 
 export class AddPermissionResponseDTO extends createZodDto(

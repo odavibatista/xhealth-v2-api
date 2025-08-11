@@ -15,29 +15,29 @@ describe('Add Permission Usecase Test Suites', () => {
   let encrypterProvider: EncrypterProvider;
   let hashProvider: HashProvider;
 
-    beforeEach(() => {
-      jest.useFakeTimers({ doNotFake: ['nextTick'] });
-    });
-  
-    beforeEach(async () => {
-      encrypterProvider = new EncrypterProvider();
-      hashProvider = new HashProvider();
+  beforeEach(() => {
+    jest.useFakeTimers({ doNotFake: ['nextTick'] });
+  });
 
-      mockAdminRepository = new AdministratorRepository(
+  beforeEach(async () => {
+    encrypterProvider = new EncrypterProvider();
+    hashProvider = new HashProvider();
+
+    mockAdminRepository = new AdministratorRepository(
       encrypterProvider,
       hashProvider,
-      );
+    );
 
-      mockPermRepository = new AdminPermissionRepository();
-      usecase = new AddPermissionUsecase(mockPermRepository, mockAdminRepository);
-      jest.clearAllMocks();
-    });
+    mockPermRepository = new AdminPermissionRepository();
+    usecase = new AddPermissionUsecase(mockPermRepository, mockAdminRepository);
+    jest.clearAllMocks();
+  });
 
-    afterAll(() => {
-      jest.useRealTimers();
-    });
+  afterAll(() => {
+    jest.useRealTimers();
+  });
 
-      const mockAdmin = {
+  const mockAdmin = {
     id_administrator: faker.string.uuid(),
     email: faker.internet.email(),
     name: faker.person.fullName(),
@@ -65,7 +65,9 @@ describe('Add Permission Usecase Test Suites', () => {
   });
 
   it('should throw UnauthorizedException if requesting admin does not have permission to edit administrators', async () => {
-    jest.spyOn(mockAdminRepository, 'findById').mockResolvedValue(mockAdmin as any);
+    jest
+      .spyOn(mockAdminRepository, 'findById')
+      .mockResolvedValue(mockAdmin as any);
     jest.spyOn(mockPermRepository, 'hasPermission').mockResolvedValue(false);
 
     const data = {
@@ -73,13 +75,15 @@ describe('Add Permission Usecase Test Suites', () => {
       permission: 'can_edit_administrators',
     };
 
-    await expect(usecase.execute(data, mockAdmin.id_administrator)).rejects.toThrow(
-      UnauthorizedException,
-    );
+    await expect(
+      usecase.execute(data, mockAdmin.id_administrator),
+    ).rejects.toThrow(UnauthorizedException);
   });
 
   it('should throw AccountNotFoundException if admin to be modified does not exist', async () => {
-    jest.spyOn(mockAdminRepository, 'findById').mockResolvedValueOnce(mockAdmin as any);
+    jest
+      .spyOn(mockAdminRepository, 'findById')
+      .mockResolvedValueOnce(mockAdmin as any);
     jest.spyOn(mockPermRepository, 'hasPermission').mockResolvedValue(true);
     jest.spyOn(mockAdminRepository, 'findById').mockResolvedValue(null);
 
@@ -88,32 +92,41 @@ describe('Add Permission Usecase Test Suites', () => {
       permission: 'can_edit_administrators',
     };
 
-
-    await expect(usecase.execute(data, mockAdmin.id_administrator)).rejects.toThrow(
-      AccountNotFoundException
-    );
+    await expect(
+      usecase.execute(data, mockAdmin.id_administrator),
+    ).rejects.toThrow(AccountNotFoundException);
   });
 
   it('should throw PermissionAlreadySetException if permission is already set for the admin', async () => {
-    jest.spyOn(mockAdminRepository, 'findById').mockResolvedValueOnce(mockAdmin as any);
+    jest
+      .spyOn(mockAdminRepository, 'findById')
+      .mockResolvedValueOnce(mockAdmin as any);
     jest.spyOn(mockPermRepository, 'hasPermission').mockResolvedValue(true);
-    jest.spyOn(mockAdminRepository, 'findById').mockResolvedValue(mockAdmin as any);
+    jest
+      .spyOn(mockAdminRepository, 'findById')
+      .mockResolvedValue(mockAdmin as any);
 
     const data = {
       admin_id: mockAdmin.id_administrator,
       permission: 'can_edit_administrators',
     };
 
-    await expect(usecase.execute(data, mockAdmin.id_administrator)).rejects.toThrow(
-      PermissionAlreadySetException
-    );
+    await expect(
+      usecase.execute(data, mockAdmin.id_administrator),
+    ).rejects.toThrow(PermissionAlreadySetException);
   });
 
   it('should add permission if not already set', async () => {
-    jest.spyOn(mockAdminRepository, 'findById').mockResolvedValueOnce(mockAdmin as any);
+    jest
+      .spyOn(mockAdminRepository, 'findById')
+      .mockResolvedValueOnce(mockAdmin as any);
     jest.spyOn(mockPermRepository, 'hasPermission').mockResolvedValueOnce(true);
-    jest.spyOn(mockAdminRepository, 'findById').mockResolvedValue(mockAdmin as any);
-    jest.spyOn(mockPermRepository, 'hasPermission').mockResolvedValueOnce(false);
+    jest
+      .spyOn(mockAdminRepository, 'findById')
+      .mockResolvedValue(mockAdmin as any);
+    jest
+      .spyOn(mockPermRepository, 'hasPermission')
+      .mockResolvedValueOnce(false);
     jest.spyOn(mockPermRepository, 'addPermission').mockResolvedValue(true);
 
     const data = {
