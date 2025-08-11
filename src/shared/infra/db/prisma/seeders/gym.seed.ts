@@ -12,6 +12,20 @@ export const gymSeeder = async () => {
 
   if (!ufSP) return;
 
+  const adminName = 'Admin Default';
+  const enc = encrypterProvider.encrypt({ content: adminName });
+
+  const existingAdmin = await prisma.administrator.findFirst({
+    where: {
+      name: enc,
+    },
+  });
+
+  if (!existingAdmin) {
+    console.log('No administrator found, skipping gym seeder.');
+    return;
+  }
+
   const gym1AddressData = {
     cep: encrypterProvider.encrypt({
       content: '04045002',
@@ -81,6 +95,7 @@ export const gymSeeder = async () => {
     imageUrl: encrypterProvider.encrypt({
       content: 'https://i.imgur.com/EN6njoM.jpeg',
     }),
+    created_by: existingAdmin.id_administrator,
   };
 
   const gym2 = {
@@ -92,6 +107,7 @@ export const gymSeeder = async () => {
     imageUrl: encrypterProvider.encrypt({
       content: 'https://i.imgur.com/EN6njoM.jpeg',
     }),
+    created_by: existingAdmin.id_administrator,
   };
 
   const gym3 = {
@@ -103,6 +119,7 @@ export const gymSeeder = async () => {
     imageUrl: encrypterProvider.encrypt({
       content: 'https://i.imgur.com/EN6njoM.jpeg',
     }),
+    created_by: existingAdmin.id_administrator,
   };
 
   const existingGyms = await prisma.gym.findMany({

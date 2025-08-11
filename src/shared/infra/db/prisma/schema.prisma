@@ -109,6 +109,7 @@ model Gym {
   address_id String @unique
   phone_number String @unique
   imageUrl String
+  created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -116,6 +117,7 @@ model Gym {
 
   address Address @relation(fields: [address_id], references: [id_address])
 
+  createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
   @@map("gyms")
   @@unique([name, address_id])
 }
@@ -126,6 +128,7 @@ model GymPlan {
   description String
   price Float
   duration Int
+  created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -133,6 +136,7 @@ model GymPlan {
 
   users User[]
 
+  createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
   @@map("gym_plans")
 }
 
@@ -141,11 +145,13 @@ model SportModality {
   name String
   description String
   imageUrl String
+  created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   deletedAt DateTime? @map("deleted_at")
 
+  createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
   @@map("sport_modalities")
 }
 
@@ -154,11 +160,13 @@ model Testimony {
   personName String
   stars Int
   comment String
+  created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   deletedAt DateTime? @map("deleted_at")
 
+  createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
   @@map("testimonies")
 }
 
@@ -169,11 +177,13 @@ model Trainer {
   twitterUrl String
   youtubeUrl String
   imageUrl String
+  created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   deletedAt DateTime? @map("deleted_at")
 
+  createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
   @@map("trainers")
 }
 
@@ -216,12 +226,20 @@ model Administrator {
   name       String        @db.LongText
   password   String        @db.LongText
   role       AdministratorRole
+  created_by String?
   created_at DateTime      @default(now())
   updated_at DateTime      @updatedAt
 
   deletedAt DateTime? @map("deleted_at")
 
   ExtraService ExtraService[]
+  CreatorAdmin Administrator? @relation("CreatorAdmin", fields: [created_by], references: [id_administrator])
+  CreatedAdministrators Administrator[] @relation("CreatorAdmin")
+  Gym          Gym[]
+  SportModality SportModality[]
+  Testimony    Testimony[]
+  Trainer      Trainer[]
+  GymPlan      GymPlan[]
   administrator_permissions AdministratorPermission[]
 
   @@map("administrators")

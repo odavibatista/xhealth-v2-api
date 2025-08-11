@@ -6,6 +6,20 @@ export const trainerSeeder = async () => {
 
   const encrypterProvider = new EncrypterProvider();
 
+  const adminName = 'Admin Default';
+  const enc = encrypterProvider.encrypt({ content: adminName });
+
+  const existingAdmin = await prisma.administrator.findFirst({
+    where: {
+      name: enc,
+    },
+  });
+
+  if (!existingAdmin) {
+    console.log('No administrator found, skipping trainer seeder.');
+    return;
+  }
+
   const trainer1 = {
     name: encrypterProvider.encrypt({ content: 'Anna Fernandes' }),
     instagramUrl: encrypterProvider.encrypt({
@@ -16,6 +30,7 @@ export const trainerSeeder = async () => {
     imageUrl: encrypterProvider.encrypt({
       content: 'https://i.imgur.com/8RodANa.jpeg',
     }),
+    created_by: existingAdmin.id_administrator,
   };
 
   const trainer2 = {
@@ -28,6 +43,7 @@ export const trainerSeeder = async () => {
     imageUrl: encrypterProvider.encrypt({
       content: 'https://i.imgur.com/fwT2RWC.jpeg',
     }),
+    created_by: existingAdmin.id_administrator,
   };
 
   const trainer3 = {
@@ -40,6 +56,7 @@ export const trainerSeeder = async () => {
     imageUrl: encrypterProvider.encrypt({
       content: 'https://i.imgur.com/pKbq9IH.jpeg',
     }),
+    created_by: existingAdmin.id_administrator,
   };
 
   const trainer4 = {
@@ -52,6 +69,7 @@ export const trainerSeeder = async () => {
     imageUrl: encrypterProvider.encrypt({
       content: 'https://i.imgur.com/yF6nGKP.jpeg',
     }),
+    created_by: existingAdmin.id_administrator,
   };
 
   const existingTrainers = await prisma.trainer.findMany({
