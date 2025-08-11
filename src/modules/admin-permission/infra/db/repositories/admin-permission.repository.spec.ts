@@ -1,6 +1,6 @@
 import { AdminPermissionRepository } from './admin-permission.repository';
 
-describe('AdminPermissionRepository', () => {
+describe('Admin Permissions Repository Test Suites', () => {
   let repository: AdminPermissionRepository;
 
   beforeEach(() => {
@@ -43,7 +43,9 @@ describe('AdminPermissionRepository', () => {
     it('should find an admin permission row given a valid ID', async () => {
       const validId = 'valid-admin-id';
 
-      jest.spyOn(repository, 'findByAdminId').mockResolvedValueOnce(mockAdminPermission);
+      jest
+        .spyOn(repository, 'findByAdminId')
+        .mockResolvedValueOnce(mockAdminPermission);
 
       const result = await repository.findByAdminId(validId);
 
@@ -62,7 +64,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.addPermission(adminId, permission);
 
       expect(result).toBe(false);
-      expect(repository.addPermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.addPermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.addPermission).toHaveBeenCalledTimes(1);
     });
 
@@ -75,7 +80,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.addPermission(adminId, permission);
 
       expect(result).toBe(false);
-      expect(repository.addPermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.addPermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.addPermission).toHaveBeenCalledTimes(1);
     });
 
@@ -88,7 +96,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.addPermission(adminId, permission);
 
       expect(result).toBe(false);
-      expect(repository.addPermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.addPermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.addPermission).toHaveBeenCalledTimes(1);
     });
 
@@ -101,7 +112,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.addPermission(adminId, permission);
 
       expect(result).toBe(true);
-      expect(repository.addPermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.addPermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.addPermission).toHaveBeenCalledTimes(1);
     });
   });
@@ -116,7 +130,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.removePermission(adminId, permission);
 
       expect(result).toBe(false);
-      expect(repository.removePermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.removePermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.removePermission).toHaveBeenCalledTimes(1);
     });
 
@@ -129,7 +146,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.removePermission(adminId, permission);
 
       expect(result).toBe(false);
-      expect(repository.removePermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.removePermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.removePermission).toHaveBeenCalledTimes(1);
     });
 
@@ -142,7 +162,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.removePermission(adminId, permission);
 
       expect(result).toBe(false);
-      expect(repository.removePermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.removePermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.removePermission).toHaveBeenCalledTimes(1);
     });
 
@@ -155,7 +178,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.removePermission(adminId, permission);
 
       expect(result).toBe(true);
-      expect(repository.removePermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.removePermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.removePermission).toHaveBeenCalledTimes(1);
     });
   });
@@ -170,7 +196,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.hasPermission(adminId, permission);
 
       expect(result).toBe(false);
-      expect(repository.hasPermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.hasPermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.hasPermission).toHaveBeenCalledTimes(1);
     });
 
@@ -183,7 +212,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.hasPermission(adminId, permission);
 
       expect(result).toBe(false);
-      expect(repository.hasPermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.hasPermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.hasPermission).toHaveBeenCalledTimes(1);
     });
 
@@ -196,7 +228,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.hasPermission(adminId, permission);
 
       expect(result).toBe(false);
-      expect(repository.hasPermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.hasPermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.hasPermission).toHaveBeenCalledTimes(1);
     });
 
@@ -209,7 +244,10 @@ describe('AdminPermissionRepository', () => {
       const result = await repository.hasPermission(adminId, permission);
 
       expect(result).toBe(true);
-      expect(repository.hasPermission).toHaveBeenCalledWith(adminId, permission);
+      expect(repository.hasPermission).toHaveBeenCalledWith(
+        adminId,
+        permission,
+      );
       expect(repository.hasPermission).toHaveBeenCalledTimes(1);
     });
   });
