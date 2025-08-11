@@ -68,9 +68,10 @@ export const validateAddress = (address: IAddressObject): boolean => {
       'Complemento não pode ter mais de 100 caracteres.',
     );
 
-  if (!validateComplement(address.complement || ''))
+  if (address.complement && !validateComplement(address.complement))
     throw new UnprocessableDataException(
-      'Complemento não pode conter caracteres especiais.',
+      'Complemento deve conter apenas letras, números e hífens.',
     );
+    
   else return true;
 };

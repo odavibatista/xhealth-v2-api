@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { GymRepository } from '../db/repositories/gym.repository';
 import { BrowseGymsUsecase } from '../usecases/browse-gyms.usecase';
 import { FindGymByIdUsecase } from '../usecases/find-gym-by-id.usecase';
@@ -27,13 +32,11 @@ import { JWTProvider } from '../../../user/infra/providers/jwt.provider';
     JWTProvider,
   ],
 })
-export class GymModule  implements NestModule {
+export class GymModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticationMiddleware).forRoutes(
-      {
-        path: 'gyms/create',
-        method: RequestMethod.POST,
-      },
-    );
+    consumer.apply(AuthenticationMiddleware).forRoutes({
+      path: 'gyms/create',
+      method: RequestMethod.POST,
+    });
   }
 }

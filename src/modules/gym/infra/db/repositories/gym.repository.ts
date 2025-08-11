@@ -5,16 +5,13 @@ import { prisma } from '../../../../../shared/infra/db/prisma';
 import { FindGymByIDDto } from '../../../domain/dtos/requests/FindGymByID.request.dto';
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 import { CreateGymBodyDTO } from '../../../domain/dtos/requests/CreateGym.request.dto';
-import { AddressRepository } from '../../../../address/infra/db/repositories/address.repository';
 
 @Injectable()
 export class GymRepository implements GymRepositoryInterface {
-  public encryptedFields: (keyof Gym)[] = ['phone_number', 'imageUrl'];
+  public encryptedFields: (keyof Gym)[] = ['name', 'phone_number', 'imageUrl'];
 
   constructor(
     private encrypterProvider: EncrypterProvider,
-    @Inject()
-    private readonly addressRepository: AddressRepository,
   ) {}
 
   /* This method will be used to find all gyms */
@@ -111,28 +108,24 @@ export class GymRepository implements GymRepositoryInterface {
     data: CreateGymBodyDTO,
     admin_id: string,
   ): Promise<Partial<Gym>> {
-    const encryptedData = this.encrypterProvider.encryptData(
-      data,
-      this.encryptedFields as (keyof typeof data)[],
-    );
 
     const gym = await prisma.gym.create({
       data: {
-        name: encryptedData.name,
-        phone_number: encryptedData.phone_number,
+        name: this.encrypterProvider.encrypt({content: data.name}),
+        phone_number: this.encrypterProvider.encrypt({content: data.phone_number}),
         address: {
           create: {
-            cep: encryptedData.address.cep,
-            street: encryptedData.address.street,
-            number: encryptedData.address.number,
-            complement: encryptedData.address.complement,
-            city: encryptedData.address.city,
+            cep: this.encrypterProvider.encrypt({content: data.address.cep}),
+            street: this.encrypterProvider.encrypt({content: data.address.street}),
+            number: this.encrypterProvider.encrypt({content: data.address.number}),
+            complement: this.encrypterProvider.encrypt({content: data.address.complement}),
+            city: this.encrypterProvider.encrypt({content: data.address.city}),
             uf: {
               connect: { id_uf: data.address.uf_id },
             },
           },
         },
-        imageUrl: encryptedData.imageUrl,
+        imageUrl: this.encrypterProvider.encrypt({content: data.imageUrl}),
         createdBy: {
           connect: { id_administrator: admin_id },
         },

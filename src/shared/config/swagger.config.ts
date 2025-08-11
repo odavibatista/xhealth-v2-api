@@ -13,6 +13,6 @@ export const sharedSwaggerConfig = new DocumentBuilder()
       bearerFormat: 'JWT',
       description: 'Insira um token JWT para autenticar a requisição.',
     },
-    'user-token',
+    'access-token',
   )
   .build();

@@ -15,7 +15,7 @@ export class AddressRepository implements AddressRepositoryInterface {
   ];
 
   constructor(private readonly encrypterProvider: EncrypterProvider) {}
-  
+
   /* Finding by its id */
   async findById(id: string): Promise<Partial<Address> | null> {
     const address = await prisma.address.findUnique({

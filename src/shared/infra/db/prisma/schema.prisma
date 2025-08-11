@@ -119,7 +119,7 @@ model Gym {
 
   createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
   @@map("gyms")
-  @@unique([name, address_id])
+  @@unique([name, address_id, phone_number])
 }
 
 model GymPlan {

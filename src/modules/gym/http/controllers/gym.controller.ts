@@ -1,18 +1,25 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
   Inject,
   Param,
+  Post,
   Req,
   Res,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { GymControllerInterface } from '../../domain/dtos/controllers/gym-controller.interface';
 import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
+  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { BrowseGymsUsecase } from '../../infra/usecases/browse-gyms.usecase';
@@ -21,6 +28,9 @@ import { AllExceptionsFilterDTO } from '../../../../shared/domain/dtos/errors/Al
 import { FindGymByIdUsecase } from '../../infra/usecases/find-gym-by-id.usecase';
 import { GymNotFoundException } from '../../domain/dtos/errors/GymNotFoundException.exception';
 import { Cache } from '@nestjs/cache-manager';
+import { CreateGymBodyDTO, CreateGymResponseDTO } from '../../domain/dtos/requests/CreateGym.request.dto';
+import { CreateGymUsecase } from '../../infra/usecases/create-gym.usecase';
+import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
 
 @ApiTags('Academias')
 @Controller('gyms')
@@ -28,6 +38,7 @@ export class GymController implements GymControllerInterface {
   constructor(
     private readonly browseGymsUsecase: BrowseGymsUsecase,
     private readonly findGymByIdUsecase: FindGymByIdUsecase,
+    private readonly createGymUsecase: CreateGymUsecase,
     @Inject('CACHE_MANAGER')
     private readonly cacheManager: Cache,
   ) {}
@@ -85,5 +96,44 @@ export class GymController implements GymControllerInterface {
       });
 
     return res.status(200).json(result);
+  }
+
+  @Post('/create')
+  @ApiBearerAuth('access-token')
+  @ApiCreatedResponse({
+    description: 'Academia criada com sucesso.',
+    type: CreateGymResponseDTO,
+  })
+  @ApiUnprocessableEntityResponse({
+    description: new UnprocessableDataException().message,
+    type: AllExceptionsFilterDTO,
+  })
+  @ApiUnauthorizedResponse({
+    description: new UnauthorizedException().message,
+    type: AllExceptionsFilterDTO,
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Erro interno do servidor.',
+    type: AllExceptionsFilterDTO,
+  })
+  async createGym(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() body: CreateGymBodyDTO,
+  ): Promise<Response> {
+    if (!req.administrator) throw new UnauthorizedException();
+
+    const result = await this.createGymUsecase.execute(
+      body,
+      req.administrator.id,
+    );
+
+    if (result instanceof HttpException)
+      return res.status(result.getStatus()).json({
+        message: result.message,
+        status: result.getStatus(),
+      });
+
+    return res.status(201).json(result);
   }
 }

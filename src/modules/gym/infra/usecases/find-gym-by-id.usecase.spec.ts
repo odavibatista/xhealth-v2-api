@@ -16,7 +16,7 @@ describe('Find Gym By Id Use Case', () => {
   beforeEach(async () => {
     encrypterProvider = new EncrypterProvider();
     mockRepository = new GymRepository(encrypterProvider);
-    usecase = new FindGymByIdUsecase(mockRepository);
+    usecase = new FindGymByIdUsecase(encrypterProvider,mockRepository);
     jest.clearAllMocks();
   });
 
