@@ -1,16 +1,21 @@
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
+import { AddressRepository } from '../../../../address/infra/db/repositories/address.repository';
 import { GymRepository } from './gym.repository';
 import { faker } from '@faker-js/faker';
 
 describe('Gym Repository Test Suites', () => {
   let repository: GymRepository;
+  let addressRepository: AddressRepository;
+  let encrypterProvider: EncrypterProvider;
 
   beforeEach(() => {
     jest.useFakeTimers({ doNotFake: ['nextTick'] });
   });
 
   beforeEach(() => {
-    repository = new GymRepository(new EncrypterProvider());
+    encrypterProvider = new EncrypterProvider();
+    addressRepository = new AddressRepository(encrypterProvider);
+    repository = new GymRepository(encrypterProvider);
   });
 
   afterEach(() => {
@@ -80,6 +85,32 @@ describe('Gym Repository Test Suites', () => {
       expect(result).toEqual(mockGym);
       expect(repository.findById).toHaveBeenCalledWith(validId);
       expect(repository.findById).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('findByPhoneNumber method test suites', () => {
+    it('should return null when no gym is found for the given phone number', async () => {
+      const invalidPhoneNumber = 'invalid-phone';
+
+      jest.spyOn(repository, 'findByPhoneNumber').mockResolvedValueOnce(null);
+
+      const result = await repository.findByPhoneNumber(invalidPhoneNumber);
+
+      expect(result).toBeNull();
+      expect(repository.findByPhoneNumber).toHaveBeenCalledWith(invalidPhoneNumber);
+      expect(repository.findByPhoneNumber).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return a gym when a valid phone number is provided', async () => {
+      const validPhoneNumber = mockGym.phone_number;
+
+      jest.spyOn(repository, 'findByPhoneNumber').mockResolvedValueOnce(mockGym as any);
+
+      const result = await repository.findByPhoneNumber(validPhoneNumber);
+
+      expect(result).toEqual(mockGym);
+      expect(repository.findByPhoneNumber).toHaveBeenCalledWith(validPhoneNumber);
+      expect(repository.findByPhoneNumber).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -51,6 +51,8 @@ export class TrainerController implements TrainerControllerInterface {
 
     const result = await this.browseTrainersUseCase.execute();
 
+    if (!cachedTrainers) await this.cacheManager.set('trainers', result);
+
     return res.status(200).json(result);
   }
 
@@ -83,6 +85,8 @@ export class TrainerController implements TrainerControllerInterface {
         message: result.message,
         status: result.getStatus(),
       });
+
+    if (!cachedTrainer) await this.cacheManager.set(`trainer-${cuid}`, result);
 
     return res.status(200).json(result);
   }

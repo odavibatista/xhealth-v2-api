@@ -50,6 +50,9 @@ export class GymPlanController implements GymPlanControllerInterface {
     if (cachedGymPlans) return res.status(200).json(cachedGymPlans);
 
     const result = await this.browseGymPlansUsecase.execute();
+
+    if (!cachedGymPlans) await this.cacheManager.set('gym-plans', result);
+
     return res.status(200).json(result);
   }
 
@@ -79,6 +82,7 @@ export class GymPlanController implements GymPlanControllerInterface {
     if (result instanceof HttpException) {
       return res.status(404).json(result);
     }
+    if (!cachedGymPlan) await this.cacheManager.set(`gym-plan-${cuid}`, result);
     return res.status(200).json(result);
   }
 }

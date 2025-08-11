@@ -9,10 +9,7 @@ import {
 } from '@nestjs/common';
 import { AdminPermissionControllerInterface } from '../../domain/dtos/controllers/admin-permission.controller.interface';
 import { AddPermissionUsecase } from '../../infra/usecases/add-permission.usecase';
-import {
-  AddPermissionRequestDTO,
-  AddPermissionResponseDTO,
-} from '../../domain/dtos/requests/AddPermission.request.dto';
+import { AddPermissionRequestDTO } from '../../domain/dtos/requests/AddPermission.request.dto';
 import { Request, Response } from 'express';
 import {
   ApiBearerAuth,
@@ -36,6 +33,7 @@ import {
   RemovePermissionResponseDTO,
 } from '../../domain/dtos/requests/RemovePermission.request.dto';
 import { PermissionDoesNotExistException } from '../../domain/dtos/errors/PermissionDoesNotExist.exception.dto';
+import { AllExceptionsFilterDTO } from '../../../../shared/domain/dtos/errors/AllException.filter.dto';
 
 @ApiTags('Permissões de Administradores')
 @Controller('permissions')
@@ -53,23 +51,23 @@ export class AdminPermissionController
   @ApiBearerAuth('access-token')
   @ApiCreatedResponse({
     description: 'Permissão adicionada com sucesso.',
-    type: AddPermissionResponseDTO,
+    type: ChangePermissionResponseDTO,
   })
   @ApiUnprocessableEntityResponse({
     description: new PermissionDoesNotExistException().message,
-    type: PermissionDoesNotExistException,
+    type: AllExceptionsFilterDTO,
   })
   @ApiNotFoundResponse({
     description: new AccountNotFoundException().message,
-    type: AccountNotFoundException,
+    type: AllExceptionsFilterDTO,
   })
   @ApiConflictResponse({
     description: new PermissionAlreadySetException().message,
-    type: PermissionAlreadySetException,
+    type: AllExceptionsFilterDTO,
   })
   @ApiUnauthorizedResponse({
     description: new UnauthorizedException().message,
-    type: UnauthorizedException,
+    type: AllExceptionsFilterDTO,
   })
   async addPermission(
     @Body() body: AddPermissionRequestDTO,
@@ -101,15 +99,15 @@ export class AdminPermissionController
   })
   @ApiUnprocessableEntityResponse({
     description: new PermissionDoesNotExistException().message,
-    type: PermissionDoesNotExistException,
+    type: AllExceptionsFilterDTO,
   })
   @ApiNotFoundResponse({
     description: new AccountNotFoundException().message,
-    type: AccountNotFoundException,
+    type: AllExceptionsFilterDTO,
   })
   @ApiUnauthorizedResponse({
     description: new UnauthorizedException().message,
-    type: UnauthorizedException,
+    type: AllExceptionsFilterDTO,
   })
   async changePermission(
     @Body() body: ChangePermissionRequestDTO,
@@ -141,19 +139,19 @@ export class AdminPermissionController
   })
   @ApiUnprocessableEntityResponse({
     description: new PermissionDoesNotExistException().message,
-    type: PermissionDoesNotExistException,
+    type: AllExceptionsFilterDTO,
   })
   @ApiNotFoundResponse({
     description: new AccountNotFoundException().message,
-    type: AccountNotFoundException,
+    type: AllExceptionsFilterDTO,
   })
   @ApiConflictResponse({
     description: new PermissionAlreadySetException().message,
-    type: PermissionAlreadySetException,
+    type: AllExceptionsFilterDTO,
   })
   @ApiUnauthorizedResponse({
     description: new UnauthorizedException().message,
-    type: UnauthorizedException,
+    type: AllExceptionsFilterDTO,
   })
   async removePermission(
     @Body() body: RemovePermissionRequestDTO,
