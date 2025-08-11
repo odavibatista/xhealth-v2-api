@@ -3,6 +3,7 @@ import { HashProvider } from '../../../../../modules/user/infra/providers/hash.p
 import { EncrypterProvider } from '../../../providers/Encrypter.provider';
 
 export const administratorSeeder = async () => {
+  console.log('Running administrator seeder...');
   const hashProvider = new HashProvider();
   const encrypterProvider = new EncrypterProvider();
 

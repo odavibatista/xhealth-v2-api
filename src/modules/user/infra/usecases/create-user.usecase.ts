@@ -108,9 +108,11 @@ export class CreateUserUseCase implements UseCaseInterface {
 
     const token = this.jwtProvider.generate({
       payload: {
-        id_user: user.id_user,
-        name: user.name,
-        plan_id: user.gym_plan_id,
+        user: {
+          id_user: user.id_user,
+          plan_id: user.gym_plan_id,
+          name: user.name,
+        },
       },
     });
 

@@ -17,6 +17,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { GymModule } from '../modules/gym/infra/modules/gym.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { RedisOptions } from '../shared/config/redis.config';
+import { AdminPermissionModule } from '../modules/admin-permission/infra/modules/admin-permission.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { RedisOptions } from '../shared/config/redis.config';
     TrainerModule,
     GymPlanModule,
     AdministratorModule,
+    AdminPermissionModule,
     TestimonyModule,
     TrainerModule,
     ExtraServiceModule,

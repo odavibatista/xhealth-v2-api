@@ -13,7 +13,11 @@ describe('User Repository Test Suites', () => {
   });
 
   beforeEach(() => {
-    repository = new UserRepository(new HashProvider(),new EncrypterProvider(), addressRepository);
+    repository = new UserRepository(
+      new HashProvider(),
+      new EncrypterProvider(),
+      addressRepository,
+    );
   });
 
   afterEach(() => {
