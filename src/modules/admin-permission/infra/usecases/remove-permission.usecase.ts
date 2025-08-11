@@ -52,7 +52,7 @@ export class RemovePermissionUsecase implements UseCaseInterface {
     );
 
     if (!hasPermission) throw new PermissionAlreadySetException();
-    
+
     const removed = await this.permRepository.removePermission(
       admin_id,
       permission,
