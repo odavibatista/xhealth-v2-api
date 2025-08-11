@@ -1,16 +1,19 @@
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
+import { AddressRepository } from '../../../../address/infra/db/repositories/address.repository';
 import { GymRepository } from './gym.repository';
 import { faker } from '@faker-js/faker';
 
 describe('Gym Repository Test Suites', () => {
   let repository: GymRepository;
+  let addressRepository: AddressRepository;
 
   beforeEach(() => {
     jest.useFakeTimers({ doNotFake: ['nextTick'] });
   });
 
   beforeEach(() => {
-    repository = new GymRepository(new EncrypterProvider());
+    addressRepository = new AddressRepository();
+    repository = new GymRepository(new EncrypterProvider(), addressRepository);
   });
 
   afterEach(() => {

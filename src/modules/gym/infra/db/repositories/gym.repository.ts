@@ -1,15 +1,20 @@
 import { Gym } from '@prisma/client';
 import { GymRepositoryInterface } from '../../../domain/dtos/repositories/gym.repository.interface';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { FindGymByIDDto } from '../../../domain/dtos/requests/FindGymByID.request.dto';
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
+import { CreateGymBodyDTO } from '../../../domain/dtos/requests/CreateGym.request.dto';
+import { AddressRepository } from '../../../../address/infra/db/repositories/address.repository';
 
 @Injectable()
 export class GymRepository implements GymRepositoryInterface {
   public encryptedFields: (keyof Gym)[] = ['phone_number', 'imageUrl'];
 
-  constructor(private encrypterProvider: EncrypterProvider) {}
+  constructor(private encrypterProvider: EncrypterProvider,
+    @Inject()
+    private readonly addressRepository: AddressRepository,
+  ) {}
 
   /* This method will be used to find all gyms */
   async findAll(): Promise<FindGymByIDDto[]> {
@@ -98,5 +103,38 @@ export class GymRepository implements GymRepositoryInterface {
       imageUrl: decryptedGym.imageUrl,
       created_at: decryptedGym.createdAt?.toISOString(),
     } as FindGymByIDDto;
+  }
+
+  /* Creating Gyms */
+  async create(data: CreateGymBodyDTO, admin_id: string): Promise<Partial<Gym>> {
+    const encryptedData = this.encrypterProvider.encryptData(
+      data,
+      this.encryptedFields as (keyof typeof data)[],
+    );
+
+    const gym = await prisma.gym.create({
+      data: {
+        name: encryptedData.name,
+        phone_number: encryptedData.phone_number,
+        address: {
+          create: {
+            cep: encryptedData.address.cep,
+            street: encryptedData.address.street,
+            number: encryptedData.address.number,
+            complement: encryptedData.address.complement,
+            city: encryptedData.address.city,
+            uf: {
+              connect: { id_uf: data.address.uf_id },
+            }
+          }
+        },
+        imageUrl: encryptedData.imageUrl,
+        createdBy: {
+          connect: { id_administrator: admin_id },
+        },
+      },
+    });
+
+    return this.encrypterProvider.decryptData(gym, this.encryptedFields);
   }
 }
