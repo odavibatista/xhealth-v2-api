@@ -10,9 +10,7 @@ import { CreateGymBodyDTO } from '../../../domain/dtos/requests/CreateGym.reques
 export class GymRepository implements GymRepositoryInterface {
   public encryptedFields: (keyof Gym)[] = ['name', 'phone_number', 'imageUrl'];
 
-  constructor(
-    private encrypterProvider: EncrypterProvider,
-  ) {}
+  constructor(private encrypterProvider: EncrypterProvider) {}
 
   /* This method will be used to find all gyms */
   async findAll(): Promise<FindGymByIDDto[]> {
@@ -108,24 +106,33 @@ export class GymRepository implements GymRepositoryInterface {
     data: CreateGymBodyDTO,
     admin_id: string,
   ): Promise<Partial<Gym>> {
-
     const gym = await prisma.gym.create({
       data: {
-        name: this.encrypterProvider.encrypt({content: data.name}),
-        phone_number: this.encrypterProvider.encrypt({content: data.phone_number}),
+        name: this.encrypterProvider.encrypt({ content: data.name }),
+        phone_number: this.encrypterProvider.encrypt({
+          content: data.phone_number,
+        }),
         address: {
           create: {
-            cep: this.encrypterProvider.encrypt({content: data.address.cep}),
-            street: this.encrypterProvider.encrypt({content: data.address.street}),
-            number: this.encrypterProvider.encrypt({content: data.address.number}),
-            complement: this.encrypterProvider.encrypt({content: data.address.complement}),
-            city: this.encrypterProvider.encrypt({content: data.address.city}),
+            cep: this.encrypterProvider.encrypt({ content: data.address.cep }),
+            street: this.encrypterProvider.encrypt({
+              content: data.address.street,
+            }),
+            number: this.encrypterProvider.encrypt({
+              content: data.address.number,
+            }),
+            complement: this.encrypterProvider.encrypt({
+              content: data.address.complement,
+            }),
+            city: this.encrypterProvider.encrypt({
+              content: data.address.city,
+            }),
             uf: {
               connect: { id_uf: data.address.uf_id },
             },
           },
         },
-        imageUrl: this.encrypterProvider.encrypt({content: data.imageUrl}),
+        imageUrl: this.encrypterProvider.encrypt({ content: data.imageUrl }),
         createdBy: {
           connect: { id_administrator: admin_id },
         },

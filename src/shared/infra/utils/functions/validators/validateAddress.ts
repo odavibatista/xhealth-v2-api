@@ -72,6 +72,5 @@ export const validateAddress = (address: IAddressObject): boolean => {
     throw new UnprocessableDataException(
       'Complemento deve conter apenas letras, números e hífens.',
     );
-    
   else return true;
 };

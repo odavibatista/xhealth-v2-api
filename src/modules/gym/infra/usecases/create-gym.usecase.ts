@@ -31,7 +31,10 @@ export class CreateGymUsecase implements UseCaseInterface {
     data: CreateGymBodyDTO,
     administrator_id: string,
   ): Promise<
-    CreateGymResponseDTO | UnauthorizedException | AccountNotFoundException
+    | CreateGymResponseDTO
+    | UnauthorizedException
+    | AccountNotFoundException
+    | UnprocessableDataException
   > {
     validateAddress({
       cep: data.address.cep,

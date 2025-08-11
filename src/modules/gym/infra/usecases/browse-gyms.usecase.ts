@@ -20,16 +20,18 @@ export class BrowseGymsUsecase implements UseCaseInterface {
       address: {
         id_address: gym.address.id_address,
         city: this.encrypterProvider.decrypt({
-          content: gym.address.city
+          content: gym.address.city,
         }),
         cep: this.encrypterProvider.decrypt({
-          content: gym.address.cep
+          content: gym.address.cep,
         }),
         uf_id: gym.address.uf_id,
         street: this.encrypterProvider.decrypt({
-          content: gym.address.street
+          content: gym.address.street,
         }),
-        complement: gym.address.complement ? this.encrypterProvider.decrypt({content: gym.address.complement}) : undefined,
+        complement: gym.address.complement
+          ? this.encrypterProvider.decrypt({ content: gym.address.complement })
+          : undefined,
       },
       phone_number: gym.phone_number,
       imageUrl: gym.imageUrl,

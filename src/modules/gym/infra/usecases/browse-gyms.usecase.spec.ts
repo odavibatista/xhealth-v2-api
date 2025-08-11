@@ -49,10 +49,18 @@ describe('Browse Gyms Use Case Test Suites', () => {
     };
 
     jest.spyOn(mockRepository, 'findAll').mockResolvedValueOnce([mockGym]);
-    jest.spyOn(encrypterProvider, 'decrypt').mockReturnValueOnce(mockGym.address.city);
-    jest.spyOn(encrypterProvider, 'decrypt').mockReturnValueOnce(mockGym.address.cep);
-    jest.spyOn(encrypterProvider, 'decrypt').mockReturnValueOnce(mockGym.address.street);
-    jest.spyOn(encrypterProvider, 'decrypt').mockReturnValueOnce(mockGym.address.complement);
+    jest
+      .spyOn(encrypterProvider, 'decrypt')
+      .mockReturnValueOnce(mockGym.address.city);
+    jest
+      .spyOn(encrypterProvider, 'decrypt')
+      .mockReturnValueOnce(mockGym.address.cep);
+    jest
+      .spyOn(encrypterProvider, 'decrypt')
+      .mockReturnValueOnce(mockGym.address.street);
+    jest
+      .spyOn(encrypterProvider, 'decrypt')
+      .mockReturnValueOnce(mockGym.address.complement);
 
     const result = await usecase.execute();
 

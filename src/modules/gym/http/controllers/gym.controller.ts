@@ -28,9 +28,13 @@ import { AllExceptionsFilterDTO } from '../../../../shared/domain/dtos/errors/Al
 import { FindGymByIdUsecase } from '../../infra/usecases/find-gym-by-id.usecase';
 import { GymNotFoundException } from '../../domain/dtos/errors/GymNotFoundException.exception';
 import { Cache } from '@nestjs/cache-manager';
-import { CreateGymBodyDTO, CreateGymResponseDTO } from '../../domain/dtos/requests/CreateGym.request.dto';
+import {
+  CreateGymBodyDTO,
+  CreateGymResponseDTO,
+} from '../../domain/dtos/requests/CreateGym.request.dto';
 import { CreateGymUsecase } from '../../infra/usecases/create-gym.usecase';
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
+import { console } from 'inspector';
 
 @ApiTags('Academias')
 @Controller('gyms')
@@ -61,6 +65,8 @@ export class GymController implements GymControllerInterface {
     if (cachedGyms) return res.status(200).json(cachedGyms);
 
     const result = await this.browseGymsUsecase.execute();
+
+    if (!cachedGyms) await this.cacheManager.set('gyms', result);
 
     return res.status(200).json(result);
   }
@@ -95,6 +101,8 @@ export class GymController implements GymControllerInterface {
         status: result.getStatus(),
       });
 
+    if (!cachedGym) await this.cacheManager.set(`gym-${cuid}`, result);
+
     return res.status(200).json(result);
   }
 
@@ -128,11 +136,17 @@ export class GymController implements GymControllerInterface {
       req.administrator.id,
     );
 
+    const updatedGyms = await this.browseGymsUsecase.execute();
+
+    await this.cacheManager.set('gyms', updatedGyms);
+
     if (result instanceof HttpException)
       return res.status(result.getStatus()).json({
         message: result.message,
         status: result.getStatus(),
       });
+
+    await this.cacheManager.set(`gym-${result.id_gym}`, result);
 
     return res.status(201).json(result);
   }
