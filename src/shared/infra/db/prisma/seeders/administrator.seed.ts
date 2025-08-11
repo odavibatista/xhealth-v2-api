@@ -10,6 +10,11 @@ export const administratorSeeder = async () => {
   const adminName = 'Admin Default';
   const enc = encrypterProvider.encrypt({ content: adminName });
 
+  const secondaryAdminName = 'Admin Secondary';
+  const encSecondary = encrypterProvider.encrypt({
+    content: secondaryAdminName,
+  });
+
   const existingAdmin = await prisma.administrator.findFirst({
     where: {
       name: enc,
@@ -24,6 +29,19 @@ export const administratorSeeder = async () => {
       email: encrypterProvider.encrypt({ content: 'admin@xhealth.com' }),
       password: encrypterProvider.encrypt({
         content: await hashProvider.hash('admin123'),
+      }),
+      role: 'ADMIN',
+    },
+  });
+
+  await prisma.administrator.create({
+    data: {
+      name: encSecondary,
+      email: encrypterProvider.encrypt({
+        content: 'secondaryadmin@xhealth.com',
+      }),
+      password: encrypterProvider.encrypt({
+        content: await hashProvider.hash('admin321'),
       }),
       role: 'ADMIN',
     },

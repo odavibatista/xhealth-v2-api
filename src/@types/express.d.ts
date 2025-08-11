@@ -1,8 +1,8 @@
 declare namespace Express {
   export interface Request {
+    userIp: string | string[];
     user?: {
       id: string;
-      userIp: string | string[];
       plan: string;
     };
     administrator?: {

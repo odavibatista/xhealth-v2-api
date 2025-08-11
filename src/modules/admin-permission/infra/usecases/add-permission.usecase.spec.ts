@@ -53,6 +53,17 @@ describe('Add Permission Usecase Test Suites', () => {
     can_edit_administrators: true,
   };
 
+  it('should throw UnauthorizedException if requesting admin ID is the same as admin ID', async () => {
+    const data = {
+      admin_id: mockAdmin.id_administrator,
+      permission: 'can_edit_administrators',
+    };
+
+    await expect(
+      usecase.execute(data, mockAdmin.id_administrator),
+    ).rejects.toThrow(UnauthorizedException);
+  });
+
   it('should throw UnauthorizedException if requesting admin does not exist', async () => {
     const data = {
       admin_id: faker.string.uuid(),
@@ -75,9 +86,9 @@ describe('Add Permission Usecase Test Suites', () => {
       permission: 'can_edit_administrators',
     };
 
-    await expect(
-      usecase.execute(data, mockAdmin.id_administrator),
-    ).rejects.toThrow(UnauthorizedException);
+    await expect(usecase.execute(data, faker.string.uuid())).rejects.toThrow(
+      UnauthorizedException,
+    );
   });
 
   it('should throw AccountNotFoundException if admin to be modified does not exist', async () => {
@@ -92,9 +103,9 @@ describe('Add Permission Usecase Test Suites', () => {
       permission: 'can_edit_administrators',
     };
 
-    await expect(
-      usecase.execute(data, mockAdmin.id_administrator),
-    ).rejects.toThrow(AccountNotFoundException);
+    await expect(usecase.execute(data, faker.string.uuid())).rejects.toThrow(
+      AccountNotFoundException,
+    );
   });
 
   it('should throw PermissionAlreadySetException if permission is already set for the admin', async () => {
@@ -111,9 +122,9 @@ describe('Add Permission Usecase Test Suites', () => {
       permission: 'can_edit_administrators',
     };
 
-    await expect(
-      usecase.execute(data, mockAdmin.id_administrator),
-    ).rejects.toThrow(PermissionAlreadySetException);
+    await expect(usecase.execute(data, faker.string.uuid())).rejects.toThrow(
+      PermissionAlreadySetException,
+    );
   });
 
   it('should add permission if not already set', async () => {
@@ -134,7 +145,7 @@ describe('Add Permission Usecase Test Suites', () => {
       permission: 'can_edit_administrators',
     };
 
-    const result = await usecase.execute(data, mockAdmin.id_administrator);
+    const result = await usecase.execute(data, faker.string.uuid());
 
     expect(result).toEqual({
       admin: {
