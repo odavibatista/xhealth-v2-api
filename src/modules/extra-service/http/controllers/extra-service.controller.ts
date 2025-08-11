@@ -45,7 +45,13 @@ export class ExtraServiceController implements ExtraServiceControllerInterface {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response> {
+    const cachedServices = await this.cacheManager.get('extra-services');
+
+    if (cachedServices) return res.status(200).json(cachedServices);
+
     const result = await this.browseExtraServicesUsecase.execute();
+
+    if (!cachedServices) await this.cacheManager.set('extra-services', result);
 
     return res.status(200).json(result);
   }
@@ -68,6 +74,10 @@ export class ExtraServiceController implements ExtraServiceControllerInterface {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response | AllExceptionsFilterDTO> {
+    const cachedService = await this.cacheManager.get(`extra-service-${id}`);
+
+    if (cachedService) return res.status(200).json(cachedService);
+
     const result = await this.findExtraServiceUsecase.execute(id);
 
     if (result instanceof HttpException) {
@@ -76,6 +86,8 @@ export class ExtraServiceController implements ExtraServiceControllerInterface {
         status: result.getStatus(),
       });
     } else {
+      if (!cachedService) await this.cacheManager.set(`extra-service-${id}`, result);
+      
       return res.status(200).json(result);
     }
   }

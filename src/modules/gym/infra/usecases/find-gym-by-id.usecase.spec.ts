@@ -16,7 +16,7 @@ describe('Find Gym By Id Use Case', () => {
   beforeEach(async () => {
     encrypterProvider = new EncrypterProvider();
     mockRepository = new GymRepository(encrypterProvider);
-    usecase = new FindGymByIdUsecase(mockRepository);
+    usecase = new FindGymByIdUsecase(encrypterProvider, mockRepository);
     jest.clearAllMocks();
   });
 
@@ -51,6 +51,18 @@ describe('Find Gym By Id Use Case', () => {
     };
 
     jest.spyOn(mockRepository, 'findById').mockResolvedValueOnce(mockGym);
+    jest
+      .spyOn(encrypterProvider, 'decrypt')
+      .mockReturnValueOnce(mockGym.address.city);
+    jest
+      .spyOn(encrypterProvider, 'decrypt')
+      .mockReturnValueOnce(mockGym.address.cep);
+    jest
+      .spyOn(encrypterProvider, 'decrypt')
+      .mockReturnValueOnce(mockGym.address.street);
+    jest
+      .spyOn(encrypterProvider, 'decrypt')
+      .mockReturnValueOnce(mockGym.address.complement);
 
     const result = await usecase.execute(mockGym.id_gym);
 
