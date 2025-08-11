@@ -26,10 +26,10 @@ export class AuthenticationMiddleware implements NestMiddleware {
 
       req.userIp = userIp;
 
-      if (decoded.admin) {
+      if (decoded.administrator) {
         req.administrator = {
-          id: decoded.admin.id,
-          administrator_name: decoded.admin.administrator_name,
+          id: decoded.administrator.id,
+          administrator_name: decoded.administrator.administrator_name,
         };
       }
 
