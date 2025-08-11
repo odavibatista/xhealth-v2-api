@@ -26,7 +26,10 @@ import { RemovePermissionUsecase } from '../../infra/usecases/remove-permission.
 import { ChangePermissionUsecase } from '../../infra/usecases/change-permission.usecase';
 import { AccountNotFoundException } from '../../../administrator/domain/dtos/errors/AccountNotFound.exception';
 import { PermissionAlreadySetException } from '../../domain/dtos/errors/PermissionAlreadySet.exception.dto';
-import { ChangePermissionRequestDTO, ChangePermissionResponseDTO } from '../../domain/dtos/requests/ChangePermission.request.dto';
+import {
+  ChangePermissionRequestDTO,
+  ChangePermissionResponseDTO,
+} from '../../domain/dtos/requests/ChangePermission.request.dto';
 
 @ApiTags('Permissões de Administradores')
 @Controller('permissions')
@@ -94,7 +97,11 @@ export class AdminPermissionController
     description: new UnauthorizedException().message,
     type: UnauthorizedException,
   })
-  async changePermission(@Body() body: ChangePermissionRequestDTO, @Req() req: Request, @Res() res: Response): Promise<Response> {
+  async changePermission(
+    @Body() body: ChangePermissionRequestDTO,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<Response> {
     if (!req.administrator) throw new UnauthorizedException();
 
     const result = await this.changePermUsecase.execute(
