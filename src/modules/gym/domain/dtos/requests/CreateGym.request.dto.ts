@@ -30,6 +30,7 @@ export const CreateGymResponseSchema = z.object({
   id_gym: z.string().describe('ID da academia criada'),
   name: z.string().describe('Nome da academia criada'),
   address: z.object({
+    id_address: z.string().describe('ID do endereço da academia criada'),
     cep: z.string().describe('CEP da academia criada'),
     street: z.string().describe('Rua da academia criada'),
     number: z.string().describe('Número da academia criada'),

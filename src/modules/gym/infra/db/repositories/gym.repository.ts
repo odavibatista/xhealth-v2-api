@@ -11,7 +11,8 @@ import { AddressRepository } from '../../../../address/infra/db/repositories/add
 export class GymRepository implements GymRepositoryInterface {
   public encryptedFields: (keyof Gym)[] = ['phone_number', 'imageUrl'];
 
-  constructor(private encrypterProvider: EncrypterProvider,
+  constructor(
+    private encrypterProvider: EncrypterProvider,
     @Inject()
     private readonly addressRepository: AddressRepository,
   ) {}
@@ -106,7 +107,10 @@ export class GymRepository implements GymRepositoryInterface {
   }
 
   /* Creating Gyms */
-  async create(data: CreateGymBodyDTO, admin_id: string): Promise<Partial<Gym>> {
+  async create(
+    data: CreateGymBodyDTO,
+    admin_id: string,
+  ): Promise<Partial<Gym>> {
     const encryptedData = this.encrypterProvider.encryptData(
       data,
       this.encryptedFields as (keyof typeof data)[],
@@ -125,8 +129,8 @@ export class GymRepository implements GymRepositoryInterface {
             city: encryptedData.address.city,
             uf: {
               connect: { id_uf: data.address.uf_id },
-            }
-          }
+            },
+          },
         },
         imageUrl: encryptedData.imageUrl,
         createdBy: {
