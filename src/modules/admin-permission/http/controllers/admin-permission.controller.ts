@@ -21,6 +21,7 @@ import {
   ApiNotFoundResponse,
   ApiTags,
   ApiUnauthorizedResponse,
+  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { RemovePermissionUsecase } from '../../infra/usecases/remove-permission.usecase';
 import { ChangePermissionUsecase } from '../../infra/usecases/change-permission.usecase';
@@ -30,6 +31,11 @@ import {
   ChangePermissionRequestDTO,
   ChangePermissionResponseDTO,
 } from '../../domain/dtos/requests/ChangePermission.request.dto';
+import {
+  RemovePermissionRequestDTO,
+  RemovePermissionResponseDTO,
+} from '../../domain/dtos/requests/RemovePermission.request.dto';
+import { PermissionDoesNotExistException } from '../../domain/dtos/errors/PermissionDoesNotExist.exception.dto';
 
 @ApiTags('Permissões de Administradores')
 @Controller('permissions')
@@ -48,6 +54,10 @@ export class AdminPermissionController
   @ApiCreatedResponse({
     description: 'Permissão adicionada com sucesso.',
     type: AddPermissionResponseDTO,
+  })
+  @ApiUnprocessableEntityResponse({
+    description: new PermissionDoesNotExistException().message,
+    type: PermissionDoesNotExistException,
   })
   @ApiNotFoundResponse({
     description: new AccountNotFoundException().message,
@@ -89,6 +99,10 @@ export class AdminPermissionController
     description: 'Permissão alterada com sucesso.',
     type: ChangePermissionResponseDTO,
   })
+  @ApiUnprocessableEntityResponse({
+    description: new PermissionDoesNotExistException().message,
+    type: PermissionDoesNotExistException,
+  })
   @ApiNotFoundResponse({
     description: new AccountNotFoundException().message,
     type: AccountNotFoundException,
@@ -116,5 +130,49 @@ export class AdminPermissionController
       });
 
     return res.status(200).json(result);
+  }
+
+  /* Removing permissions from an admin */
+  @Post('/remove')
+  @ApiBearerAuth('access-token')
+  @ApiCreatedResponse({
+    description: 'Permissão removida com sucesso.',
+    type: RemovePermissionResponseDTO,
+  })
+  @ApiUnprocessableEntityResponse({
+    description: new PermissionDoesNotExistException().message,
+    type: PermissionDoesNotExistException,
+  })
+  @ApiNotFoundResponse({
+    description: new AccountNotFoundException().message,
+    type: AccountNotFoundException,
+  })
+  @ApiConflictResponse({
+    description: new PermissionAlreadySetException().message,
+    type: PermissionAlreadySetException,
+  })
+  @ApiUnauthorizedResponse({
+    description: new UnauthorizedException().message,
+    type: UnauthorizedException,
+  })
+  async removePermission(
+    @Body() body: RemovePermissionRequestDTO,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<Response> {
+    if (!req.administrator) throw new UnauthorizedException();
+
+    const result = await this.removePermUsecase.execute(
+      body,
+      req.administrator.id,
+    );
+
+    if (result instanceof HttpException)
+      return res.status(result.getStatus()).json({
+        statusCode: result.getStatus(),
+        message: result.message,
+      });
+
+    return res.status(201).json(result);
   }
 }
