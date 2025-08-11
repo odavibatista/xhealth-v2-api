@@ -26,6 +26,9 @@ export class AddPermissionUsecase implements UseCaseInterface {
     | AccountNotFoundException
     | PermissionAlreadySetException
   > {
+    if (requesting_admin_id === data.admin_id)
+      throw new UnauthorizedException();
+
     const requestingAdmin =
       await this.adminRepository.findById(requesting_admin_id);
 
