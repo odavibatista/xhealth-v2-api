@@ -26,6 +26,7 @@ import { RemovePermissionUsecase } from '../../infra/usecases/remove-permission.
 import { ChangePermissionUsecase } from '../../infra/usecases/change-permission.usecase';
 import { AccountNotFoundException } from '../../../administrator/domain/dtos/errors/AccountNotFound.exception';
 import { PermissionAlreadySetException } from '../../domain/dtos/errors/PermissionAlreadySet.exception.dto';
+import { ChangePermissionRequestDTO, ChangePermissionResponseDTO } from '../../domain/dtos/requests/ChangePermission.request.dto';
 
 @ApiTags('Permissões de Administradores')
 @Controller('permissions')
@@ -37,6 +38,8 @@ export class AdminPermissionController
     private readonly changePermUsecase: ChangePermissionUsecase,
     private readonly removePermUsecase: RemovePermissionUsecase,
   ) {}
+
+  /* Adding permissions to an admin */
   @Post('/add')
   @ApiBearerAuth('access-token')
   @ApiCreatedResponse({
@@ -74,5 +77,37 @@ export class AdminPermissionController
       });
 
     return res.status(201).json(result);
+  }
+
+  /* Changing permissions of an admin */
+  @Post('/change')
+  @ApiBearerAuth('access-token')
+  @ApiCreatedResponse({
+    description: 'Permissão alterada com sucesso.',
+    type: ChangePermissionResponseDTO,
+  })
+  @ApiNotFoundResponse({
+    description: new AccountNotFoundException().message,
+    type: AccountNotFoundException,
+  })
+  @ApiUnauthorizedResponse({
+    description: new UnauthorizedException().message,
+    type: UnauthorizedException,
+  })
+  async changePermission(@Body() body: ChangePermissionRequestDTO, @Req() req: Request, @Res() res: Response): Promise<Response> {
+    if (!req.administrator) throw new UnauthorizedException();
+
+    const result = await this.changePermUsecase.execute(
+      body,
+      req.administrator.id,
+    );
+
+    if (result instanceof HttpException)
+      return res.status(result.getStatus()).json({
+        statusCode: result.getStatus(),
+        message: result.message,
+      });
+
+    return res.status(200).json(result);
   }
 }
