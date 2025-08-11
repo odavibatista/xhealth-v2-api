@@ -65,7 +65,7 @@ model PasswordHistory {
 model UF {
   id_uf      String @id @default(cuid()) @map("id")
   name    String
-  acronym String
+  acronym String @unique @db.Char(2)
   ibge_id Int    @unique
 
   addresses    Address[]

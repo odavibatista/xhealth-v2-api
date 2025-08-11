@@ -28,6 +28,17 @@ export const adminPermissionSeeder = async () => {
 
   if (!existingSecondaryAdmin) return;
 
+  const existingAdminPermissions = await prisma.administratorPermission.findMany({
+    where: {
+      OR: [
+        { administrator_id: existingAdmin.id_administrator },
+        { administrator_id: existingSecondaryAdmin.id_administrator },
+      ],
+    },
+  });
+
+  if (existingAdminPermissions.length > 1) return;
+
   await prisma.administratorPermission.create({
     data: {
       administrator_id: existingAdmin.id_administrator,

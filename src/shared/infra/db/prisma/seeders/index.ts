@@ -7,6 +7,7 @@ import { adminPermissionSeeder } from './admin-permission.seed';
 import { trainerSeeder } from './trainer.seed';
 import ufsSeeder from './uf.seed';
 import citySeeder from './city.seed';
+import { gymSeeder } from './gym.seed';
 
 const seed = async () => {
   console.log('Running seed: ');
@@ -16,6 +17,7 @@ const seed = async () => {
   await administratorSeeder();
   await adminPermissionSeeder();
   await trainerSeeder();
+  await gymSeeder();
 };
 
 const seedTest = async () => {
