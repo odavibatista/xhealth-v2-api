@@ -129,7 +129,7 @@ export class AdminPermissionController
         message: result.message,
       });
 
-    return res.status(200).json(result);
+    return res.status(201).json(result);
   }
 
   /* Removing permissions from an admin */
