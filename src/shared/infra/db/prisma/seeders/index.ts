@@ -4,12 +4,14 @@ import { appConfigurations } from '../../../../config/app.config';
 import { mainSeeder } from './main.seed';
 import { administratorSeeder } from './administrator.seed';
 import { adminPermissionSeeder } from './admin-permission.seed';
+import { trainerSeeder } from './trainer.seed';
 
 const seed = async () => {
   console.log('Running seed: ');
 
   await administratorSeeder();
   await adminPermissionSeeder();
+  await trainerSeeder();
 };
 
 const seedTest = async () => {
