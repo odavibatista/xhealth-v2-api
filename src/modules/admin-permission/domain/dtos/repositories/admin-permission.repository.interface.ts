@@ -4,14 +4,19 @@ import { PermissionDoesNotExistException } from '../errors/PermissionDoesNotExis
 
 export interface AdminPermissionRepositoryInterface {
   encryptedFields: (keyof AdministratorPermission)[];
-  findByAdminId(adminId: string): Promise<Partial<AdministratorPermission> | null>;
+  findByAdminId(
+    adminId: string,
+  ): Promise<Partial<AdministratorPermission> | null>;
 
   addPermission(
     adminId: string,
     permission: string,
   ): Promise<boolean | AdminAlreadyHasPermissionException>;
-  
+
   removePermission(adminId: string, permission: string): Promise<boolean>;
-  
-  hasPermission(adminId: string, permission: string): Promise<boolean | PermissionDoesNotExistException>;
+
+  hasPermission(
+    adminId: string,
+    permission: string,
+  ): Promise<boolean | PermissionDoesNotExistException>;
 }

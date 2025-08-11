@@ -233,7 +233,7 @@ enum AdministratorRole {
 
 model AdministratorPermission {
   id_administrator_permission String @id @default(cuid())
-  administrator_id String
+  administrator_id String @unique
 
   /* PERMISSÕES */
 

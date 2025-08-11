@@ -14,16 +14,18 @@ export class AdminPermissionRepository
   constructor() {}
 
   /* Buscar permissões por ID do administrador */
-  async findByAdminId(adminId: string): Promise<Partial<AdministratorPermission> | null> {
+  async findByAdminId(
+    adminId: string,
+  ): Promise<Partial<AdministratorPermission> | null> {
     const adminPermission = await prisma.administratorPermission.findUnique({
       where: {
-        id_administrator_permission: adminId,
+        administrator_id: adminId,
         deletedAt: null,
       },
       omit: {
         created_at: true,
         updated_at: true,
-      }
+      },
     });
 
     if (!adminPermission) return null;
@@ -32,10 +34,13 @@ export class AdminPermissionRepository
   }
 
   /* Remover uma permissão */
-  async removePermission(adminId: string, permission: string): Promise<boolean> {
+  async removePermission(
+    adminId: string,
+    permission: string,
+  ): Promise<boolean> {
     const adminPermission = await prisma.administratorPermission.findUnique({
       where: {
-        id_administrator_permission: adminId,
+        administrator_id: adminId,
       },
     });
 
@@ -46,7 +51,7 @@ export class AdminPermissionRepository
 
     await prisma.administratorPermission.update({
       where: {
-        id_administrator_permission: adminId,
+        administrator_id: adminId,
       },
       data: {
         [permission]: false,
@@ -60,7 +65,7 @@ export class AdminPermissionRepository
   async addPermission(adminId: string, permission: string): Promise<boolean> {
     const adminPermission = await prisma.administratorPermission.findUnique({
       where: {
-        id_administrator_permission: adminId,
+        administrator_id: adminId,
       },
       include: {
         administrator: true,
@@ -74,7 +79,7 @@ export class AdminPermissionRepository
 
     await prisma.administratorPermission.update({
       where: {
-        id_administrator_permission: adminId,
+        administrator_id: adminId,
       },
       data: {
         [permission]: true,
@@ -88,12 +93,14 @@ export class AdminPermissionRepository
   async hasPermission(adminId: string, permission: string): Promise<boolean> {
     const adminPermission = await prisma.administratorPermission.findUnique({
       where: {
-        id_administrator_permission: adminId,
+        administrator_id: adminId,
       },
     });
 
     if (!adminPermission) throw new PermissionDoesNotExistException();
 
-    return adminPermission[permission as keyof AdministratorPermission] === true;
+    return (
+      adminPermission[permission as keyof AdministratorPermission] === true
+    );
   }
 }
