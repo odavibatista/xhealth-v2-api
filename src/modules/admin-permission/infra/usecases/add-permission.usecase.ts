@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { Inject, UnauthorizedException } from '@nestjs/common';
 import { UseCaseInterface } from '../../../../shared/domain/protocols/UseCase.protocol';
 import { AddPermissionRequestDTO, AddPermissionResponseDTO } from '../../domain/dtos/requests/AddPermission.request.dto';
 import { AdminPermissionRepository } from '../db/repositories/admin-permission.repository';
@@ -14,7 +14,15 @@ export class AddPermissionUsecase implements UseCaseInterface {
     private readonly adminRepository: AdministratorRepository,
   ) {}
 
-  async execute (data: AddPermissionRequestDTO): Promise<AddPermissionResponseDTO | AccountNotFoundException | PermissionAlreadySetException> {
+  async execute (data: AddPermissionRequestDTO, requesting_admin_id: string): Promise<AddPermissionResponseDTO | UnauthorizedException | AccountNotFoundException | PermissionAlreadySetException> {
+    const requestingAdmin = await this.adminRepository.findById(requesting_admin_id);
+
+    if (!requestingAdmin) throw new UnauthorizedException();
+
+    const requestingHasPermission = await this.permRepository.hasPermission(requesting_admin_id, 'can_edit_administrators');
+
+    if (!requestingHasPermission) throw new UnauthorizedException();
+
     const { admin_id, permission } = data;
 
     const admin = await this.adminRepository.findById(admin_id);

@@ -6,7 +6,7 @@ import { AdministratorRepository } from '../db/repositories/administrator.reposi
 import { AdminLoginUsecase } from './admin-login.usecase';
 import { faker } from '@faker-js/faker';
 
-describe('AdminLoginUsecase', () => {
+describe('Admin Login Usecase Test Suites', () => {
   let usecase: AdminLoginUsecase;
   let mockRepository: AdministratorRepository;
   let encrypterProvider: EncrypterProvider;
