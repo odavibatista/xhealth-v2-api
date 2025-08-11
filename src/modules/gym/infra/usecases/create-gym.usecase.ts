@@ -14,6 +14,7 @@ import {
 } from '../../../../shared/infra/utils/functions/validators';
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
 import { AddressRepository } from '../../../address/infra/db/repositories/address.repository';
+import { PhoneNumberAlreadyRegisteredException } from '../../../user/domain/dtos/errors/PhoneNumberAlreadyRegistered.exception';
 
 export class CreateGymUsecase implements UseCaseInterface {
   constructor(
@@ -35,6 +36,7 @@ export class CreateGymUsecase implements UseCaseInterface {
     | UnauthorizedException
     | AccountNotFoundException
     | UnprocessableDataException
+    | PhoneNumberAlreadyRegisteredException
   > {
     validateAddress({
       cep: data.address.cep,
@@ -45,13 +47,20 @@ export class CreateGymUsecase implements UseCaseInterface {
     });
     const isPhoneValid = validatePhone(data.phone_number);
 
-    if (!isPhoneValid) {
+    if (!isPhoneValid) 
       throw new UnprocessableDataException('Número de telefone inválido');
-    }
+    
     const adminExists =
       await this.administratorRepository.findById(administrator_id);
 
     if (!adminExists) throw new AccountNotFoundException();
+
+    const isPhoneInUse = await this.gymRepository.findByPhoneNumber(
+      data.phone_number,
+    );
+
+    if (isPhoneInUse) 
+      throw new PhoneNumberAlreadyRegisteredException();
 
     const hasPermission = await this.adminPermissionsRepository.hasPermission(
       administrator_id,
@@ -79,11 +88,7 @@ export class CreateGymUsecase implements UseCaseInterface {
       },
       administrator_id,
     );
-
-    if (!gym || !gym.id_gym || !gym.address_id)
-      throw new UnauthorizedException('Erro ao criar academia.');
-
-    const address = await this.addressRepository.findById(gym.address_id);
+    const address = await this.addressRepository.findById(gym.address.id_address);
 
     return {
       id_gym: gym.id_gym,
@@ -100,8 +105,8 @@ export class CreateGymUsecase implements UseCaseInterface {
         city: address?.city,
       },
       created_by: administrator_id,
-      created_at: String(gym.createdAt),
-      updated_at: String(gym.updatedAt),
+      created_at: gym.created_at,
+      updated_at: gym.updated_at,
     } as CreateGymResponseDTO;
   }
 }

@@ -6,5 +6,6 @@ export interface GymRepositoryInterface {
   encryptedFields: (keyof Gym)[];
   findAll(): Promise<FindGymByIDDto[]>;
   findById(id: string): Promise<FindGymByIDDto | null>;
+  findByPhoneNumber(phone_number: string): Promise<FindGymByIDDto | null>;
   create(data: CreateGymBodyDTO, admin_id: string): Promise<Partial<Gym>>;
 }
