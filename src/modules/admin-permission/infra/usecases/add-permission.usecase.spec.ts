@@ -53,6 +53,17 @@ describe('Add Permission Usecase Test Suites', () => {
     can_edit_administrators: true,
   };
 
+  it('should throw UnauthorizedException if requesting admin ID is the same as admin ID', async () => {
+    const data = {
+      admin_id: mockAdmin.id_administrator,
+      permission: 'can_edit_administrators',
+    };
+
+    await expect(
+      usecase.execute(data, mockAdmin.id_administrator),
+    ).rejects.toThrow(UnauthorizedException);
+  });
+
   it('should throw UnauthorizedException if requesting admin does not exist', async () => {
     const data = {
       admin_id: faker.string.uuid(),
@@ -76,7 +87,7 @@ describe('Add Permission Usecase Test Suites', () => {
     };
 
     await expect(
-      usecase.execute(data, mockAdmin.id_administrator),
+      usecase.execute(data, faker.string.uuid()),
     ).rejects.toThrow(UnauthorizedException);
   });
 
@@ -93,7 +104,7 @@ describe('Add Permission Usecase Test Suites', () => {
     };
 
     await expect(
-      usecase.execute(data, mockAdmin.id_administrator),
+      usecase.execute(data, faker.string.uuid()),
     ).rejects.toThrow(AccountNotFoundException);
   });
 
@@ -112,7 +123,7 @@ describe('Add Permission Usecase Test Suites', () => {
     };
 
     await expect(
-      usecase.execute(data, mockAdmin.id_administrator),
+      usecase.execute(data, faker.string.uuid()),
     ).rejects.toThrow(PermissionAlreadySetException);
   });
 
@@ -134,7 +145,7 @@ describe('Add Permission Usecase Test Suites', () => {
       permission: 'can_edit_administrators',
     };
 
-    const result = await usecase.execute(data, mockAdmin.id_administrator);
+    const result = await usecase.execute(data, faker.string.uuid());
 
     expect(result).toEqual({
       admin: {
