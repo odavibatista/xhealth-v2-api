@@ -33,13 +33,14 @@ export class AdminLoginUsecase implements UseCaseInterface {
       data.password,
     );
 
-    if (!isPasswordValid) 
-      throw new InvalidCredentialsException();
+    if (!isPasswordValid) throw new InvalidCredentialsException();
 
     const token = this.jwtProvider.generate({
       payload: {
-        id_user: admin.id_administrator,
-        name: admin.name,
+        administrator: {
+          id: admin.id_administrator,
+          administrator_name: admin.name,
+        },
       },
     });
 
