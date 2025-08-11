@@ -19,9 +19,6 @@ export class BrowseGymsUsecase implements UseCaseInterface {
       name: gym.name,
       address: {
         id_address: gym.address.id_address,
-        complement: gym.address.complement ? this.encrypterProvider.decrypt({
-          content: gym.address.complement
-        }) : undefined,
         city: this.encrypterProvider.decrypt({
           content: gym.address.city
         }),
@@ -32,6 +29,7 @@ export class BrowseGymsUsecase implements UseCaseInterface {
         street: this.encrypterProvider.decrypt({
           content: gym.address.street
         }),
+        complement: gym.address.complement ? this.encrypterProvider.decrypt({content: gym.address.complement}) : undefined,
       },
       phone_number: gym.phone_number,
       imageUrl: gym.imageUrl,
