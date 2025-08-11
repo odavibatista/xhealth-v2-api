@@ -24,13 +24,21 @@ export class AuthenticationMiddleware implements NestMiddleware {
         secret: String(process.env.APP_SECRET),
       });
 
-      const { id } = decoded;
+      req.userIp = userIp;
 
-      req.user = {
-        id,
-        userIp,
-        plan: decoded.plan,
-      };
+      if (decoded.admin) {
+        req.administrator = {
+          id: decoded.admin.id,
+          administrator_name: decoded.admin.administrator_name,
+        };
+      }
+
+      if (decoded.user) {
+        req.user = {
+          id: decoded.user.id_user,
+          plan: decoded.user.plan_id,
+        };
+      }
 
       return next();
     } catch (error) {
