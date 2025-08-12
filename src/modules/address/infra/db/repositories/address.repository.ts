@@ -3,6 +3,7 @@ import { AddressRepositoryInterface } from '../../../domain/dtos/repositories/ad
 import { Address } from '@prisma/client';
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
+import { EditAddressBodyDTO } from '../../../domain/dtos/requests/EditAddress.request.dto';
 
 @Injectable()
 export class AddressRepository implements AddressRepositoryInterface {
@@ -30,6 +31,42 @@ export class AddressRepository implements AddressRepositoryInterface {
         uf_id: true,
       },
     });
+
+    const decryptedAddress = this.encrypterProvider.decryptData(
+      address,
+      this.encryptedFields as (keyof typeof address)[],
+    );
+
+    return decryptedAddress;
+  }
+
+  /* Editing an address' data */
+  async edit(
+    id_address: string,
+    data: EditAddressBodyDTO,
+  ): Promise<Partial<Address> | null> {
+    const encryptedData = this.encrypterProvider.encryptData(
+      data,
+      this.encryptedFields as (keyof typeof data)[],
+    );
+
+    const address = await prisma.address.update({
+      where: { id_address },
+      data: {
+        ...encryptedData,
+      },
+      select: {
+        id_address: true,
+        cep: true,
+        street: true,
+        number: true,
+        complement: true,
+        city: true,
+        uf_id: true,
+      },
+    });
+
+    if (!address) return null;
 
     const decryptedAddress = this.encrypterProvider.decryptData(
       address,
