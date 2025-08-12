@@ -1,5 +1,6 @@
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 import { AddressRepository } from './address.repository';
+import { faker } from '@faker-js/faker';
 
 describe('Address Repository Test Suites', () => {
   let repository: AddressRepository;
@@ -23,13 +24,13 @@ describe('Address Repository Test Suites', () => {
   });
 
   const mockAddress = {
-    id_address: 'valid-address-id',
-    cep: '12345678',
-    street: 'Rua Exemplo',
-    number: '123',
-    complement: 'Apto 1',
-    city: 'Cidade Exemplo',
-    uf_id: 'SP',
+    id_address: faker.string.uuid(),
+    cep: faker.location.zipCode(),
+    street: faker.location.street(),
+    number: faker.string.numeric(),
+    complement: faker.location.secondaryAddress(),
+    city: faker.location.city(),
+    uf_id: faker.string.uuid(),
   };
 
   describe('findById method test suites', () => {
@@ -47,6 +48,38 @@ describe('Address Repository Test Suites', () => {
       const result = await repository.findById('invalid-id');
 
       expect(result).toBeNull();
+    });
+  });
+
+  describe('edit method test suites', () => {
+    it('should return null if address is not found', async () => {
+      jest.spyOn(repository, 'edit').mockResolvedValueOnce(null);
+
+      const result = await repository.edit('invalid-id', {
+        cep: faker.location.zipCode(),
+        street: faker.location.street(),
+        number: faker.string.numeric(),
+        complement: faker.location.secondaryAddress(),
+        city: faker.location.city(),
+        uf_id: faker.string.uuid(),
+      });
+
+      expect(result).toBeNull();
+    });
+
+    it('should return the updated address if successful', async () => {
+      jest.spyOn(repository, 'edit').mockResolvedValueOnce(mockAddress);
+
+      const result = await repository.edit(mockAddress.id_address, {
+        cep: faker.location.zipCode(),
+        street: faker.location.street(),
+        number: faker.string.numeric(),
+        complement: faker.location.secondaryAddress(),
+        city: faker.location.city(),
+        uf_id: faker.string.uuid(),
+      });
+
+      expect(result).toEqual(mockAddress);
     });
   });
 

@@ -266,6 +266,55 @@ export class GymRepository implements GymRepositoryInterface {
     };
   }
 
+  /* Editing a gym */
+  async edit(
+    id_gym: string,
+    data: Partial<CreateGymBodyDTO>,
+  ): Promise<Partial<Gym> | null> {
+    const gym = await prisma.gym.update({
+      where: { id_gym, deletedAt: null },
+      data: {
+        name: data.name
+          ? this.encrypterProvider.encrypt({ content: data.name })
+          : undefined,
+        phone_number: data.phone_number
+          ? this.encrypterProvider.encrypt({
+              content: data.phone_number,
+            })
+          : undefined,
+        imageUrl: data.imageUrl
+          ? this.encrypterProvider.encrypt({ content: data.imageUrl })
+          : undefined,
+      },
+      select: {
+        id_gym: true,
+        name: true,
+        phone_number: true,
+        imageUrl: true,
+        address_id: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!gym) return null;
+
+    const decryptedGym = this.encrypterProvider.decryptData(
+      gym,
+      this.encryptedFields as (keyof typeof gym)[],
+    );
+
+    return {
+      id_gym: decryptedGym.id_gym,
+      name: decryptedGym.name,
+      phone_number: decryptedGym.phone_number,
+      imageUrl: decryptedGym.imageUrl,
+      address_id: decryptedGym.address_id,
+      createdAt: decryptedGym.createdAt,
+      updatedAt: decryptedGym.updatedAt,
+    };
+  }
+
   /* Deleting a gym */
   async delete(id_gym: string): Promise<boolean> {
     const gym = await prisma.gym.update({
