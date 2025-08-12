@@ -1,4 +1,4 @@
-import { GymPlan } from '../../../../../shared/infra/db/generated/prisma';
+import { GymPlan } from '@prisma/client';
 
 export interface GymPlanRepositoryInterface {
   encryptedFields: (keyof GymPlan)[];

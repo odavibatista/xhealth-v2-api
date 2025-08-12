@@ -86,8 +86,9 @@ export class ExtraServiceController implements ExtraServiceControllerInterface {
         status: result.getStatus(),
       });
     } else {
-      if (!cachedService) await this.cacheManager.set(`extra-service-${id}`, result);
-      
+      if (!cachedService)
+        await this.cacheManager.set(`extra-service-${id}`, result);
+
       return res.status(200).json(result);
     }
   }
