@@ -18,6 +18,7 @@ import { PhoneNumberAlreadyRegisteredException } from '../../../user/domain/dtos
 import { UserRepository } from '../../../user/infra/db/repositories/user.repository';
 import { UfRepository } from '../../../../shared/infra/db/repositories/uf.repository';
 import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNotFound.exception.dto';
+import { GymNameInUseException } from '../../domain/dtos/errors/GymNameInUseException.exception';
 
 export class CreateGymUsecase implements UseCaseInterface {
   constructor(
@@ -40,6 +41,7 @@ export class CreateGymUsecase implements UseCaseInterface {
     administrator_id: string,
   ): Promise<
     | CreateGymResponseDTO
+    | GymNameInUseException
     | UnauthorizedException
     | AccountNotFoundException
     | UnprocessableDataException
@@ -66,6 +68,10 @@ export class CreateGymUsecase implements UseCaseInterface {
 
     if (!isUFfValid) throw new UFNotFoundException();
 
+    const isNameInUse = await this.gymRepository.findByName(data.name);
+
+    if (isNameInUse) throw new GymNameInUseException();
+      
     const isPhoneInUseByGym = await this.gymRepository.findByPhoneNumber(
       data.phone_number,
     );
