@@ -1,18 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GymController } from './gym.controller';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { PrismaProvider } from '../../../../shared/infra/providers/Prisma.provider';
 
-describe('GymController', () => {
+describe('GymController - /gyms', () => {
+  const controllerRoute = '/gyms';
+  const browseGymsRoute = `${controllerRoute}/browse`;
+  const findGymByIdRoute = `${controllerRoute}/:cuid`;
+  const createGymRoute = `${controllerRoute}/create`;
+  const editGymRoute = `${controllerRoute}/edit/:cuid`;
+  const deleteGymRoute = `${controllerRoute}/delete/:cuid`;
+
   let controller: GymController;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [GymController],
-    }).compile();
-
-    controller = module.get<GymController>(GymController);
-  });
-
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+  let app: NestExpressApplication;
+  let prisma: PrismaProvider;
+  let jwtToken: string;
 });

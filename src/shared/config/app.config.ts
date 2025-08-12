@@ -3,14 +3,22 @@ import 'dotenv/config';
 import z, { ZodError } from 'zod';
 import { EnvironmentException } from '../domain/errors/Environment.exception';
 
+export enum Environment {
+  DEVELOPMENT = 'development',
+  PRODUCTION = 'production',
+  TEST = 'test',
+}
+
 const appConfigurationsSchema = z.object({
   FRONTEND_URL: z.string().min(1),
 
   DATABASE_URL: z.string().min(1),
 
+  SHADOW_DATABASE_URL: z.string().min(1),
+
   PORT: z.number(),
 
-  NODE_ENV: z.string(),
+  NODE_ENV: z.nativeEnum(Environment).default(Environment.DEVELOPMENT),
 
   CRYPTO_SECRET: z.string().min(1),
   CRYPTO_IV: z.string().min(1),
@@ -33,6 +41,8 @@ try {
     FRONTEND_URL: process.env.FRONTEND_URL,
 
     DATABASE_URL: process.env.DATABASE_URL,
+
+    SHADOW_DATABASE_URL: process.env.SHADOW_DATABASE_URL,
 
     PORT: Number(process.env.PORT),
 

@@ -65,7 +65,7 @@ describe('Edit Gym Use Case Test Suites', () => {
     jest.useRealTimers();
   });
 
-  it('should not edit a gym with invalid address data', async ()  => {
+  it('should not edit a gym with invalid address data', async () => {
     const invalidData: EditGymBodyDTO = {
       name: faker.company.name(),
       imageUrl: faker.image.url(),
@@ -83,7 +83,7 @@ describe('Edit Gym Use Case Test Suites', () => {
     await expect(
       useCase.execute('valid-gym-id', 'valid-admin-id', invalidData),
     ).rejects.toThrow(UnprocessableDataException);
-  })
+  });
 
   it('should not edit a gym with an invalid phone number', async () => {
     const invalidData: EditGymBodyDTO = {
@@ -110,7 +110,7 @@ describe('Edit Gym Use Case Test Suites', () => {
       name: faker.company.name(),
       imageUrl: faker.image.url(),
       address: {
-        cep: faker.location.zipCode({format: '########'}),
+        cep: faker.location.zipCode({ format: '########' }),
         street: faker.location.street(),
         number: faker.string.numeric(),
         city: 'São Paulo',
@@ -132,7 +132,7 @@ describe('Edit Gym Use Case Test Suites', () => {
       name: faker.company.name(),
       imageUrl: faker.image.url(),
       address: {
-        cep: faker.location.zipCode({format: '########'}),
+        cep: faker.location.zipCode({ format: '########' }),
         street: faker.location.street(),
         number: faker.string.numeric(),
         city: 'São Paulo',
@@ -143,7 +143,9 @@ describe('Edit Gym Use Case Test Suites', () => {
     };
 
     jest.spyOn(mockadministratorRepository, 'findById').mockResolvedValue(null);
-    jest.spyOn(mockUFRepository, 'findById').mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
+    jest
+      .spyOn(mockUFRepository, 'findById')
+      .mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
 
     await expect(
       useCase.execute('valid-gym-id', 'invalid-admin-id', validData),
@@ -155,7 +157,7 @@ describe('Edit Gym Use Case Test Suites', () => {
       name: faker.company.name(),
       imageUrl: faker.image.url(),
       address: {
-        cep: faker.location.zipCode({format: '########'}),
+        cep: faker.location.zipCode({ format: '########' }),
         street: faker.location.street(),
         number: faker.string.numeric(),
         city: 'São Paulo',
@@ -165,9 +167,15 @@ describe('Edit Gym Use Case Test Suites', () => {
       phone_number: '11999999999',
     };
 
-    jest.spyOn(mockadministratorRepository, 'findById').mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
-    jest.spyOn(mockadminPermissionsRepository, 'hasPermission').mockResolvedValue(false);
-    jest.spyOn(mockUFRepository, 'findById').mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
+    jest
+      .spyOn(mockadministratorRepository, 'findById')
+      .mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
+    jest
+      .spyOn(mockadminPermissionsRepository, 'hasPermission')
+      .mockResolvedValue(false);
+    jest
+      .spyOn(mockUFRepository, 'findById')
+      .mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
 
     await expect(
       useCase.execute('valid-gym-id', 'valid-admin-id', validData),
@@ -179,7 +187,7 @@ describe('Edit Gym Use Case Test Suites', () => {
       name: faker.company.name(),
       imageUrl: faker.image.url(),
       address: {
-        cep: faker.location.zipCode({format: '########'}),
+        cep: faker.location.zipCode({ format: '########' }),
         street: faker.location.street(),
         number: faker.string.numeric(),
         city: 'São Paulo',
@@ -190,9 +198,15 @@ describe('Edit Gym Use Case Test Suites', () => {
     };
 
     jest.spyOn(mockGymRepository, 'findById').mockResolvedValue(null);
-    jest.spyOn(mockadministratorRepository, 'findById').mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
-    jest.spyOn(mockadminPermissionsRepository, 'hasPermission').mockResolvedValue(true);
-    jest.spyOn(mockUFRepository, 'findById').mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
+    jest
+      .spyOn(mockadministratorRepository, 'findById')
+      .mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
+    jest
+      .spyOn(mockadminPermissionsRepository, 'hasPermission')
+      .mockResolvedValue(true);
+    jest
+      .spyOn(mockUFRepository, 'findById')
+      .mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
 
     await expect(
       useCase.execute('invalid-gym-id', 'valid-admin-id', validData),
@@ -204,7 +218,7 @@ describe('Edit Gym Use Case Test Suites', () => {
       name: faker.company.name(),
       imageUrl: faker.image.url(),
       address: {
-        cep: faker.location.zipCode({format: '########'}),
+        cep: faker.location.zipCode({ format: '########' }),
         street: faker.location.street(),
         number: faker.string.numeric(),
         city: 'São Paulo',
@@ -214,12 +228,25 @@ describe('Edit Gym Use Case Test Suites', () => {
       phone_number: '11999999999',
     };
 
-    jest.spyOn(mockGymRepository, 'findById').mockResolvedValue({ id_gym: 'valid-gym-id', phone_number: '11999999998' } as any);
-    jest.spyOn(mockadministratorRepository, 'findById').mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
-    jest.spyOn(mockadminPermissionsRepository, 'hasPermission').mockResolvedValue(true);
-    jest.spyOn(mockGymRepository, 'findByPhoneNumber').mockResolvedValue({ id_gym: 'another-gym-id' } as any);
+    jest
+      .spyOn(mockGymRepository, 'findById')
+      .mockResolvedValue({
+        id_gym: 'valid-gym-id',
+        phone_number: '11999999998',
+      } as any);
+    jest
+      .spyOn(mockadministratorRepository, 'findById')
+      .mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
+    jest
+      .spyOn(mockadminPermissionsRepository, 'hasPermission')
+      .mockResolvedValue(true);
+    jest
+      .spyOn(mockGymRepository, 'findByPhoneNumber')
+      .mockResolvedValue({ id_gym: 'another-gym-id' } as any);
     jest.spyOn(mockUserRepository, 'findByPhoneNumber').mockResolvedValue(null);
-    jest.spyOn(mockUFRepository, 'findById').mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
+    jest
+      .spyOn(mockUFRepository, 'findById')
+      .mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
 
     await expect(
       useCase.execute('valid-gym-id', 'valid-admin-id', validData),
@@ -231,7 +258,7 @@ describe('Edit Gym Use Case Test Suites', () => {
       name: faker.company.name(),
       imageUrl: faker.image.url(),
       address: {
-        cep: faker.location.zipCode({format: '########'}),
+        cep: faker.location.zipCode({ format: '########' }),
         street: faker.location.street(),
         number: faker.string.numeric(),
         city: 'São Paulo',
@@ -241,12 +268,25 @@ describe('Edit Gym Use Case Test Suites', () => {
       phone_number: '11999999999',
     };
 
-    jest.spyOn(mockGymRepository, 'findById').mockResolvedValue({ id_gym: 'valid-gym-id', phone_number: '11999999998' } as any);
-    jest.spyOn(mockadministratorRepository, 'findById').mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
-    jest.spyOn(mockadminPermissionsRepository, 'hasPermission').mockResolvedValue(true);
+    jest
+      .spyOn(mockGymRepository, 'findById')
+      .mockResolvedValue({
+        id_gym: 'valid-gym-id',
+        phone_number: '11999999998',
+      } as any);
+    jest
+      .spyOn(mockadministratorRepository, 'findById')
+      .mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
+    jest
+      .spyOn(mockadminPermissionsRepository, 'hasPermission')
+      .mockResolvedValue(true);
     jest.spyOn(mockGymRepository, 'findByPhoneNumber').mockResolvedValue(null);
-    jest.spyOn(mockUserRepository, 'findByPhoneNumber').mockResolvedValue({ id_user: 'user-id' } as any);
-    jest.spyOn(mockUFRepository, 'findById').mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
+    jest
+      .spyOn(mockUserRepository, 'findByPhoneNumber')
+      .mockResolvedValue({ id_user: 'user-id' } as any);
+    jest
+      .spyOn(mockUFRepository, 'findById')
+      .mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
     jest.spyOn(mockGymRepository, 'findByPhoneNumber').mockResolvedValue(null);
 
     await expect(
@@ -259,7 +299,7 @@ describe('Edit Gym Use Case Test Suites', () => {
       name: 'Gym Name',
       imageUrl: faker.image.url(),
       address: {
-        cep: faker.location.zipCode({format: '########'}),
+        cep: faker.location.zipCode({ format: '########' }),
         street: faker.location.street(),
         number: faker.string.numeric(),
         city: 'São Paulo',
@@ -269,13 +309,30 @@ describe('Edit Gym Use Case Test Suites', () => {
       phone_number: '11999999999',
     };
 
-    jest.spyOn(mockGymRepository, 'findById').mockResolvedValue({ id_gym: 'valid-gym-id', name: 'Old Gym Name' } as any);
-    jest.spyOn(mockadministratorRepository, 'findById').mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
-    jest.spyOn(mockadminPermissionsRepository, 'hasPermission').mockResolvedValue(true);
-    jest.spyOn(mockGymRepository, 'findByName').mockResolvedValue({ id_gym: 'another-gym-id' } as any);
-    jest.spyOn(mockUFRepository, 'findById').mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
-    jest.spyOn(mockGymRepository, 'findByPhoneNumber').mockResolvedValueOnce(null);
-    jest.spyOn(mockUserRepository, 'findByPhoneNumber').mockResolvedValueOnce(null);
+    jest
+      .spyOn(mockGymRepository, 'findById')
+      .mockResolvedValue({
+        id_gym: 'valid-gym-id',
+        name: 'Old Gym Name',
+      } as any);
+    jest
+      .spyOn(mockadministratorRepository, 'findById')
+      .mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
+    jest
+      .spyOn(mockadminPermissionsRepository, 'hasPermission')
+      .mockResolvedValue(true);
+    jest
+      .spyOn(mockGymRepository, 'findByName')
+      .mockResolvedValue({ id_gym: 'another-gym-id' } as any);
+    jest
+      .spyOn(mockUFRepository, 'findById')
+      .mockResolvedValue({ id_uf: 'valid-uf-id', name: 'São Paulo' });
+    jest
+      .spyOn(mockGymRepository, 'findByPhoneNumber')
+      .mockResolvedValueOnce(null);
+    jest
+      .spyOn(mockUserRepository, 'findByPhoneNumber')
+      .mockResolvedValueOnce(null);
 
     await expect(
       useCase.execute('valid-gym-id', 'valid-admin-id', validData),
@@ -287,7 +344,7 @@ describe('Edit Gym Use Case Test Suites', () => {
       name: faker.company.name(),
       imageUrl: faker.image.url(),
       address: {
-        cep: faker.location.zipCode({format: '########'}),
+        cep: faker.location.zipCode({ format: '########' }),
         street: faker.location.street(),
         number: faker.string.numeric(),
         city: 'São Paulo',
@@ -314,8 +371,12 @@ describe('Edit Gym Use Case Test Suites', () => {
     };
 
     jest.spyOn(mockGymRepository, 'findById').mockResolvedValue(mockGym as any);
-    jest.spyOn(mockadministratorRepository, 'findById').mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
-    jest.spyOn(mockadminPermissionsRepository, 'hasPermission').mockResolvedValue(true);
+    jest
+      .spyOn(mockadministratorRepository, 'findById')
+      .mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
+    jest
+      .spyOn(mockadminPermissionsRepository, 'hasPermission')
+      .mockResolvedValue(true);
     jest.spyOn(mockGymRepository, 'findByPhoneNumber').mockResolvedValue(null);
     jest.spyOn(mockUserRepository, 'findByPhoneNumber').mockResolvedValue(null);
     jest.spyOn(mockGymRepository, 'findByName').mockResolvedValue(null);
@@ -327,9 +388,18 @@ describe('Edit Gym Use Case Test Suites', () => {
       ...mockGym,
       ...validData,
     });
-    jest.spyOn(mockUFRepository, 'findById').mockResolvedValue({ id_uf: validData.address.uf_id, name: validData.address.city });
+    jest
+      .spyOn(mockUFRepository, 'findById')
+      .mockResolvedValue({
+        id_uf: validData.address.uf_id,
+        name: validData.address.city,
+      });
 
-    const result = await useCase.execute('valid-gym-id', 'valid-admin-id', validData);
+    const result = await useCase.execute(
+      'valid-gym-id',
+      'valid-admin-id',
+      validData,
+    );
 
     expect(result).toEqual({
       id_gym: mockGym.id_gym,
