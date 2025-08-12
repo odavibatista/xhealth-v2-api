@@ -71,7 +71,7 @@ export class CreateGymUsecase implements UseCaseInterface {
     const isNameInUse = await this.gymRepository.findByName(data.name);
 
     if (isNameInUse) throw new GymNameInUseException();
-      
+
     const isPhoneInUseByGym = await this.gymRepository.findByPhoneNumber(
       data.phone_number,
     );

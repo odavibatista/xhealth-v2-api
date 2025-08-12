@@ -164,7 +164,7 @@ export class GymController implements GymControllerInterface {
     description: new GymNotFoundException().message,
     type: AllExceptionsFilterDTO,
   })
-    @ApiUnauthorizedResponse({
+  @ApiUnauthorizedResponse({
     description: new UnauthorizedException().message,
     type: AllExceptionsFilterDTO,
   })
