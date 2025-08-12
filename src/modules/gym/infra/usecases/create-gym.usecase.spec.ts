@@ -12,6 +12,7 @@ import { PhoneNumberAlreadyRegisteredException } from '../../../user/domain/dtos
 import { UfRepository } from '../../../../shared/infra/db/repositories/uf.repository';
 import { UserRepository } from '../../../user/infra/db/repositories/user.repository';
 import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNotFound.exception.dto';
+import { GymNameInUseException } from '../../domain/dtos/errors/GymNameInUseException.exception';
 
 describe('Create Gym Usecase Test Suites', () => {
   let useCase: CreateGymUsecase;
@@ -139,6 +140,37 @@ describe('Create Gym Usecase Test Suites', () => {
 
     await expect(useCase.execute(data, administrator_id)).rejects.toThrow(
       UnauthorizedException,
+    );
+  });
+
+  it('should not create a gym if the name is already in use', async () => {
+    const data = {
+      name: 'Gym Test',
+      address: {
+        cep: '12345678',
+        street: 'Test Street',
+        number: '123',
+        city: 'Test City',
+        uf_id: '1',
+        complement: 'Test Complement',
+      },
+      phone_number: '1234567890',
+      imageUrl: 'http://example.com/image.jpg',
+    };
+    const administrator_id = 'admin-id';
+
+    jest
+      .spyOn(mockadministratorRepository, 'findById')
+      .mockResolvedValueOnce({ id_administrator: administrator_id });
+    jest
+      .spyOn(mockUFRepository, 'findById')
+      .mockResolvedValueOnce(data.address.uf_id as any);
+    jest
+      .spyOn(mockGymRepository, 'findByName')
+      .mockResolvedValueOnce(data as any);
+
+    await expect(useCase.execute(data, administrator_id)).rejects.toThrow(
+      GymNameInUseException,
     );
   });
 

@@ -104,6 +104,54 @@ export class GymRepository implements GymRepositoryInterface {
     } as FindGymByIDDto;
   }
 
+  /* Finding a Gym by its name */
+  async findByName(name: string): Promise<FindGymByIDDto | null> {
+    const encName = this.encrypterProvider.encrypt({ content: name });
+
+    const gym = await prisma.gym.findFirst({
+      where: { name: encName, deletedAt: null },
+      include: {
+        address: {
+          select: {
+            id_address: true,
+            street: true,
+            number: true,
+            city: true,
+            cep: true,
+            uf_id: true,
+            complement: true,
+          },
+        },
+      },
+    });
+
+    if (!gym) {
+      return null;
+    }
+
+    const decryptedGym = this.encrypterProvider.decryptData(
+      gym,
+      this.encryptedFields as (keyof typeof gym)[],
+    );
+
+    return {
+      id_gym: decryptedGym.id_gym,
+      name: decryptedGym.name,
+      address: {
+        id_address: decryptedGym.address?.id_address,
+        complement: decryptedGym.address?.complement,
+        city: decryptedGym.address?.city,
+        cep: decryptedGym.address?.cep,
+        uf_id: decryptedGym.address?.uf_id,
+        street: decryptedGym.address?.street,
+        number: decryptedGym.address?.number,
+      },
+      phone_number: decryptedGym.phone_number,
+      imageUrl: decryptedGym.imageUrl,
+      created_at: decryptedGym.createdAt?.toISOString(),
+    } as FindGymByIDDto;
+  }
+
   /* Finding by a phonenumber */
   async findByPhoneNumber(
     phone_number: string,
@@ -216,5 +264,15 @@ export class GymRepository implements GymRepositoryInterface {
       updated_at: String(gym.updatedAt),
       created_by: admin_id,
     };
+  }
+
+  /* Deleting a gym */
+  async delete(id_gym: string): Promise<boolean> {
+    const gym = await prisma.gym.update({
+      where: { id_gym, deletedAt: null },
+      data: { deletedAt: new Date() },
+    });
+
+    return !!gym;
   }
 }

@@ -9,4 +9,5 @@ export interface GymControllerInterface {
     res: Response,
     body: CreateGymBodyDTO,
   ): Promise<Response>;
+  deleteGym(cuid: string, req: Request, res: Response): Promise<Response>;
 }
