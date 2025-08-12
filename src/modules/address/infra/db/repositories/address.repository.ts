@@ -41,7 +41,7 @@ export class AddressRepository implements AddressRepositoryInterface {
   }
 
   /* Editing an address' data */
-  async edit(id_address: string, data: EditAddressBodyDTO): Promise<Partial<Address>> {
+  async edit(id_address: string, data: EditAddressBodyDTO): Promise<Partial<Address> | null> {
     const encryptedData = this.encrypterProvider.encryptData(
       data,
       this.encryptedFields as (keyof typeof data)[],
@@ -62,6 +62,8 @@ export class AddressRepository implements AddressRepositoryInterface {
         uf_id: true,
       },
     });
+    
+    if (!address) return null;
 
     const decryptedAddress = this.encrypterProvider.decryptData(
       address,
