@@ -19,6 +19,7 @@ import { JWTProvider } from '../../../user/infra/providers/jwt.provider';
 import { UserRepository } from '../../../user/infra/db/repositories/user.repository';
 import { UfRepository } from '../../../../shared/infra/db/repositories/uf.repository';
 import { DeleteGymUsecase } from '../usecases/delete-gym.usecase';
+import { EditGymUsecase } from '../usecases/edit-gym.usecase';
 
 @Module({
   controllers: [GymController],
@@ -28,6 +29,7 @@ import { DeleteGymUsecase } from '../usecases/delete-gym.usecase';
     FindGymByIdUsecase,
     EncrypterProvider,
     CreateGymUsecase,
+    EditGymUsecase,
     DeleteGymUsecase,
     AddressRepository,
     AdministratorRepository,
@@ -44,6 +46,10 @@ export class GymModule implements NestModule {
       {
         path: 'gyms/create',
         method: RequestMethod.POST,
+      },
+      {
+        path: 'gyms/edit/:cuid',
+        method: RequestMethod.PATCH,
       },
       {
         path: 'gyms/delete/:cuid',

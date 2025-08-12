@@ -9,5 +9,9 @@ export interface GymRepositoryInterface {
   findByName(name: string): Promise<FindGymByIDDto | null>;
   findByPhoneNumber(phone_number: string): Promise<FindGymByIDDto | null>;
   create(data: CreateGymBodyDTO, admin_id: string): Promise<Partial<Gym>>;
+  edit(
+    id_gym: string,
+    data: Partial<CreateGymBodyDTO>,
+  ): Promise<Partial<Gym> | null>;
   delete(id_gym: string): Promise<boolean>;
 }
