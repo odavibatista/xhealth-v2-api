@@ -9,6 +9,9 @@ import { AddressRepository } from '../../../address/infra/db/repositories/addres
 import { AuthenticationMiddleware } from '../../http/middlewares/Auth.middleware';
 import { UserController } from '../../http/controllers/user.controller';
 import { CreateUserUseCase } from '../usecases/create-user.usecase';
+import { AdministratorRepository } from '../../../administrator/infra/db/repositories/administrator.repository';
+import { UfRepository } from '../../../../shared/infra/db/repositories/uf.repository';
+import { GymRepository } from '../../../gym/infra/db/repositories/gym.repository';
 
 @Module({
   imports: [],
@@ -22,6 +25,9 @@ import { CreateUserUseCase } from '../usecases/create-user.usecase';
     PasswordRepository,
     AddressRepository,
     CreateUserUseCase,
+    AdministratorRepository,
+    UfRepository,
+    GymRepository,
   ],
   exports: [JWTProvider, HashProvider],
 })

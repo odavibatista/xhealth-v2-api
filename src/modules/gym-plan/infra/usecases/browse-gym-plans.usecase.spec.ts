@@ -1,4 +1,5 @@
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
+import { GymPlanFeatureRepository } from '../db/repositories/gym-plan-feature.repository';
 import { GymPlanRepository } from '../db/repositories/gym-plan.repository';
 import { BrowseGymPlansUsecase } from './browse-gym-plans.usecase';
 import { faker } from '@faker-js/faker';
@@ -6,6 +7,7 @@ import { faker } from '@faker-js/faker';
 describe('Browse Gym Plans Use Case Test Suites', () => {
   let usecase: BrowseGymPlansUsecase;
   let mockRepository: GymPlanRepository;
+  let mockGymPlanFeatRepo: GymPlanFeatureRepository;
   let encrypterProvider: EncrypterProvider;
 
   beforeEach(() => {
@@ -15,7 +17,8 @@ describe('Browse Gym Plans Use Case Test Suites', () => {
   beforeEach(async () => {
     encrypterProvider = new EncrypterProvider();
     mockRepository = new GymPlanRepository(encrypterProvider);
-    usecase = new BrowseGymPlansUsecase(mockRepository);
+    mockGymPlanFeatRepo = new GymPlanFeatureRepository();
+    usecase = new BrowseGymPlansUsecase(mockRepository, mockGymPlanFeatRepo);
     jest.clearAllMocks();
   });
 
@@ -39,6 +42,7 @@ describe('Browse Gym Plans Use Case Test Suites', () => {
         description: faker.commerce.productDescription(),
         price: faker.commerce.price(),
         duration: '3 months',
+        features: [],
       },
       {
         id_gym_plan: faker.string.uuid(),
@@ -46,6 +50,7 @@ describe('Browse Gym Plans Use Case Test Suites', () => {
         description: faker.commerce.productDescription(),
         price: faker.commerce.price(),
         duration: '6 months',
+        features: [],
       },
       {
         id_gym_plan: faker.string.uuid(),
@@ -53,12 +58,17 @@ describe('Browse Gym Plans Use Case Test Suites', () => {
         description: faker.commerce.productDescription(),
         price: faker.commerce.price(),
         duration: '12 months',
+        features: [],
       },
     ];
 
     jest
       .spyOn(mockRepository, 'findAll')
       .mockResolvedValueOnce(mockPlans as any);
+
+    jest
+      .spyOn(mockGymPlanFeatRepo, 'findByGymPlanId')
+      .mockResolvedValueOnce([]);
 
     const result = await usecase.execute();
 

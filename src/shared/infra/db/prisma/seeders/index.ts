@@ -8,6 +8,8 @@ import { trainerSeeder } from './trainer.seed';
 import ufsSeeder from './uf.seed';
 import citySeeder from './city.seed';
 import { gymSeeder } from './gym.seed';
+import { gymPlanSeeder } from './gym-plan.seed';
+import { gymPlanFeaturesSeeder } from './gym-plan-feature.seed';
 
 const seed = async () => {
   console.log('Running seed: ');
@@ -18,6 +20,8 @@ const seed = async () => {
   await adminPermissionSeeder();
   await trainerSeeder();
   await gymSeeder();
+  await gymPlanSeeder();
+  await gymPlanFeaturesSeeder();
 };
 
 const seedTest = async () => {

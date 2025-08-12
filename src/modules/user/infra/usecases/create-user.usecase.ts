@@ -17,6 +17,11 @@ import {
   validatePassword,
   validatePhone,
 } from '../../../../shared/infra/utils/functions/validators';
+import { UfRepository } from '../../../../shared/infra/db/repositories/uf.repository';
+import { GymRepository } from '../../../gym/infra/db/repositories/gym.repository';
+import { AdministratorRepository } from '../../../administrator/infra/db/repositories/administrator.repository';
+import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNotFound.exception.dto';
+import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
 
 export class CreateUserUseCase implements UseCaseInterface {
   constructor(
@@ -24,6 +29,12 @@ export class CreateUserUseCase implements UseCaseInterface {
     private jwtProvider: JWTProvider,
     @Inject()
     private userRepository: UserRepository,
+    @Inject()
+    private readonly ufRepository: UfRepository,
+    @Inject()
+    private readonly gymRepository: GymRepository,
+    @Inject()
+    private readonly adminRepository: AdministratorRepository,
   ) {}
 
   async execute(
@@ -44,57 +55,61 @@ export class CreateUserUseCase implements UseCaseInterface {
 
     const isNameValid = validateName(data.name);
 
-    if (!isNameValid) {
-      throw new UnprocessableEntityException('Nome inválido');
-    }
+    if (!isNameValid) throw new UnprocessableDataException('Nome inválido');
 
     const isEmailValid = validateEmail(data.email);
 
-    if (!isEmailValid) {
-      throw new UnprocessableEntityException('E-mail inválido');
-    }
+    if (!isEmailValid) throw new UnprocessableDataException('E-mail inválido');
 
     const isPhoneValid = validatePhone(data.phone_number);
 
-    if (!isPhoneValid) {
-      throw new UnprocessableEntityException('Número de telefone inválido');
-    }
+    if (!isPhoneValid)
+      throw new UnprocessableDataException('Número de telefone inválido');
 
     const isAgeValid = validateAge(new Date(data.birth_date));
 
-    if (!isAgeValid) {
-      throw new UnprocessableEntityException('Idade inválida');
-    }
+    if (!isAgeValid) throw new UnprocessableDataException('Idade inválida');
 
     const isPasswordValid = validatePassword(data.password);
 
-    if (!isPasswordValid) {
-      throw new UnprocessableEntityException('Senha inválida');
-    }
+    if (!isPasswordValid)
+      throw new UnprocessableDataException('Senha inválida');
 
-    const emailAlreadyRegistered = await this.userRepository.findByEmail(
+    const isUfValid = await this.ufRepository.findById(data.address.uf_id);
+
+    if (!isUfValid) throw new UFNotFoundException();
+
+    const emailAlreadyRegisteredByUser = await this.userRepository.findByEmail(
       data.email,
     );
 
-    if (emailAlreadyRegistered) {
+    if (emailAlreadyRegisteredByUser)
       throw new EmailAlreadyRegisteredException();
-    }
 
-    const phoneAlreadyRegistered = await this.userRepository.findByPhoneNumber(
-      data.phone_number,
-    );
+    const emailAlreadyRegisteredByAdmin =
+      await this.adminRepository.findByEmail(data.email);
 
-    if (phoneAlreadyRegistered) {
+    if (emailAlreadyRegisteredByAdmin)
+      throw new EmailAlreadyRegisteredException();
+
+    const phoneAlreadyRegisteredByUser =
+      await this.userRepository.findByPhoneNumber(data.phone_number);
+
+    if (phoneAlreadyRegisteredByUser)
       throw new PhoneNumberAlreadyRegisteredException();
-    }
+
+    const phoneAlreadyRegisteredByGym =
+      await this.gymRepository.findByPhoneNumber(data.phone_number);
+
+    if (phoneAlreadyRegisteredByGym)
+      throw new PhoneNumberAlreadyRegisteredException();
 
     if (
       !data.password ||
       !data.password_confirmation ||
       data.password !== data.password_confirmation
-    ) {
+    )
       throw new UnprocessableEntityException();
-    }
 
     delete data.password_confirmation;
 

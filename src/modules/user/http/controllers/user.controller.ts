@@ -31,7 +31,7 @@ import { UnprocessableDataException } from '../../../../shared/domain/errors/Unp
 export class UserController implements UserControllerInterface {
   constructor(private readonly createUserUseCase: CreateUserUseCase) {}
 
-  @Post('create')
+  @Post('register')
   @ApiCreatedResponse({
     description: 'Usuário cadastrado com sucesso!',
     type: CreateUserResponseDTO,

@@ -97,19 +97,25 @@ describe('Gym Repository Test Suites', () => {
       const result = await repository.findByPhoneNumber(invalidPhoneNumber);
 
       expect(result).toBeNull();
-      expect(repository.findByPhoneNumber).toHaveBeenCalledWith(invalidPhoneNumber);
+      expect(repository.findByPhoneNumber).toHaveBeenCalledWith(
+        invalidPhoneNumber,
+      );
       expect(repository.findByPhoneNumber).toHaveBeenCalledTimes(1);
     });
 
     it('should return a gym when a valid phone number is provided', async () => {
       const validPhoneNumber = mockGym.phone_number;
 
-      jest.spyOn(repository, 'findByPhoneNumber').mockResolvedValueOnce(mockGym as any);
+      jest
+        .spyOn(repository, 'findByPhoneNumber')
+        .mockResolvedValueOnce(mockGym as any);
 
       const result = await repository.findByPhoneNumber(validPhoneNumber);
 
       expect(result).toEqual(mockGym);
-      expect(repository.findByPhoneNumber).toHaveBeenCalledWith(validPhoneNumber);
+      expect(repository.findByPhoneNumber).toHaveBeenCalledWith(
+        validPhoneNumber,
+      );
       expect(repository.findByPhoneNumber).toHaveBeenCalledTimes(1);
     });
   });

@@ -15,6 +15,9 @@ import {
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
 import { AddressRepository } from '../../../address/infra/db/repositories/address.repository';
 import { PhoneNumberAlreadyRegisteredException } from '../../../user/domain/dtos/errors/PhoneNumberAlreadyRegistered.exception';
+import { UserRepository } from '../../../user/infra/db/repositories/user.repository';
+import { UfRepository } from '../../../../shared/infra/db/repositories/uf.repository';
+import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNotFound.exception.dto';
 
 export class CreateGymUsecase implements UseCaseInterface {
   constructor(
@@ -26,6 +29,10 @@ export class CreateGymUsecase implements UseCaseInterface {
     private readonly adminPermissionsRepository: AdminPermissionRepository,
     @Inject()
     private readonly addressRepository: AddressRepository,
+    @Inject()
+    private readonly userRepository: UserRepository,
+    @Inject()
+    private readonly ufRepository: UfRepository,
   ) {}
 
   async execute(
@@ -47,20 +54,29 @@ export class CreateGymUsecase implements UseCaseInterface {
     });
     const isPhoneValid = validatePhone(data.phone_number);
 
-    if (!isPhoneValid) 
+    if (!isPhoneValid)
       throw new UnprocessableDataException('Número de telefone inválido');
-    
+
     const adminExists =
       await this.administratorRepository.findById(administrator_id);
 
     if (!adminExists) throw new AccountNotFoundException();
 
-    const isPhoneInUse = await this.gymRepository.findByPhoneNumber(
+    const isUFfValid = await this.ufRepository.findById(data.address.uf_id);
+
+    if (!isUFfValid) throw new UFNotFoundException();
+
+    const isPhoneInUseByGym = await this.gymRepository.findByPhoneNumber(
       data.phone_number,
     );
 
-    if (isPhoneInUse) 
-      throw new PhoneNumberAlreadyRegisteredException();
+    if (isPhoneInUseByGym) throw new PhoneNumberAlreadyRegisteredException();
+
+    const isPhoneInUseByUser = await this.userRepository.findByPhoneNumber(
+      data.phone_number,
+    );
+
+    if (isPhoneInUseByUser) throw new PhoneNumberAlreadyRegisteredException();
 
     const hasPermission = await this.adminPermissionsRepository.hasPermission(
       administrator_id,
@@ -88,7 +104,9 @@ export class CreateGymUsecase implements UseCaseInterface {
       },
       administrator_id,
     );
-    const address = await this.addressRepository.findById(gym.address.id_address);
+    const address = await this.addressRepository.findById(
+      gym.address.id_address,
+    );
 
     return {
       id_gym: gym.id_gym,
