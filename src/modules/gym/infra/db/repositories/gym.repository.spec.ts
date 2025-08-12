@@ -119,4 +119,30 @@ describe('Gym Repository Test Suites', () => {
       expect(repository.findByPhoneNumber).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('delete method test suites', () => {
+    it('should return false when no gym is found for the given ID', async () => {
+      const invalidId = 'invalid-id';
+
+      jest.spyOn(repository, 'delete').mockResolvedValueOnce(false);
+
+      const result = await repository.delete(invalidId);
+
+      expect(result).toBe(false);
+      expect(repository.delete).toHaveBeenCalledWith(invalidId);
+      expect(repository.delete).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return true when a gym is successfully deleted', async () => {
+      const validId = 'valid-id';
+
+      jest.spyOn(repository, 'delete').mockResolvedValueOnce(true);
+
+      const result = await repository.delete(validId);
+
+      expect(result).toBe(true);
+      expect(repository.delete).toHaveBeenCalledWith(validId);
+      expect(repository.delete).toHaveBeenCalledTimes(1);
+    });
+  });
 });

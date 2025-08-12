@@ -217,4 +217,14 @@ export class GymRepository implements GymRepositoryInterface {
       created_by: admin_id,
     };
   }
+
+  /* Deleting a gym */
+  async delete(id_gym: string): Promise<boolean> {
+    const gym = await prisma.gym.update({
+      where: { id_gym, deletedAt: null },
+      data: { deletedAt: new Date() },
+    });
+
+    return !!gym;
+  }
 }
