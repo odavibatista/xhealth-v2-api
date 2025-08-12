@@ -7,7 +7,7 @@ import { AdministratorRepository } from '../../../administrator/infra/db/reposit
 import { HashProvider } from '../../../user/infra/providers/hash.provider';
 import { GymRepository } from '../db/repositories/gym.repository';
 import { DeleteGymUsecase } from './delete-gym.usecase';
-import { fa, faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import { GymNotFoundException } from '../../domain/dtos/errors/GymNotFoundException.exception';
 
 describe('Delete Gym Usecase Test Suites', () => {
