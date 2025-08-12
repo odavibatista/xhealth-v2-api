@@ -7,6 +7,10 @@ export const FindGymPlanByIDSchema = z.object({
   description: z.string().describe('Descrição do plano de academia'),
   price: z.number().describe('Preço do plano de academia'),
   duration: z.string().optional().describe('Duração do plano de academia'),
+  features: z.array(z.object({
+    id_gym_plan_feature: z.string().describe('ID da feature do plano de academia'),
+    feature_name: z.string().describe('Nome da feature do plano de academia'),
+  })),
   createdAt: z.date().describe('Data de criação do plano de academia'),
 });
 

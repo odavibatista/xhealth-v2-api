@@ -1,7 +1,9 @@
 import { GymPlanFeature } from "@prisma/client";
 import { GymPlanFeatureRepositoryInterface } from "../../../domain/dtos/repositories/gym-plan-feature-repository.interface";
 import { prisma } from "../../../../../shared/infra/db/prisma";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class GymPlanFeatureRepository implements GymPlanFeatureRepositoryInterface {
     public encryptedFields: (keyof GymPlanFeature)[] = [];
 

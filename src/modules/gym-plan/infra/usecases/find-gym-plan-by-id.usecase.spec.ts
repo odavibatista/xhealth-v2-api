@@ -1,5 +1,6 @@
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
 import { GymPlanNotFoundException } from '../../domain/dtos/errors/GymPlanNotFound.exception';
+import { GymPlanFeatureRepository } from '../db/repositories/gym-plan-feature.repository';
 import { GymPlanRepository } from '../db/repositories/gym-plan.repository';
 import { FindGymPlanByIdUsecase } from './find-gym-plan-by-id.usecase';
 import { faker } from '@faker-js/faker';
@@ -7,6 +8,7 @@ import { faker } from '@faker-js/faker';
 describe('Find Gym Plan By ID Use Case', () => {
   let usecase: FindGymPlanByIdUsecase;
   let mockRepository: GymPlanRepository;
+  let mockGymPlanFeatRepo: GymPlanFeatureRepository;
   let encrypterProvider: EncrypterProvider;
 
   beforeEach(() => {
@@ -16,7 +18,8 @@ describe('Find Gym Plan By ID Use Case', () => {
   beforeEach(async () => {
     encrypterProvider = new EncrypterProvider();
     mockRepository = new GymPlanRepository(encrypterProvider);
-    usecase = new FindGymPlanByIdUsecase(mockRepository);
+    mockGymPlanFeatRepo = new GymPlanFeatureRepository();
+    usecase = new FindGymPlanByIdUsecase(mockRepository, mockGymPlanFeatRepo);
     jest.clearAllMocks();
   });
 
@@ -30,6 +33,7 @@ describe('Find Gym Plan By ID Use Case', () => {
     description: faker.commerce.productDescription(),
     price: faker.commerce.price(),
     duration: '3 months',
+    features: []
   };
 
   it('should return null when no gym plan is found for the given ID', async () => {
@@ -48,6 +52,8 @@ describe('Find Gym Plan By ID Use Case', () => {
     jest
       .spyOn(mockRepository, 'findById')
       .mockResolvedValueOnce(mockGymPlan as any);
+
+    jest.spyOn(mockGymPlanFeatRepo, 'findByGymPlanId').mockResolvedValueOnce([]);
 
     const result = await usecase.execute(validId);
 
