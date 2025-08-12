@@ -6,6 +6,7 @@ import ufsSeeder from './uf.seed';
 import citySeeder from './city.seed';
 import { gymSeeder } from './gym.seed';
 import { gymPlanSeeder } from './gym-plan.seed';
+import { gymPlanFeaturesSeeder } from './gym-plan-feature.seed';
 
 export const mainSeeder = async () => {
   console.log('Running main seeder...');
@@ -17,4 +18,5 @@ export const mainSeeder = async () => {
   await trainerSeeder();
   await gymSeeder();
   await gymPlanSeeder();
+  await gymPlanFeaturesSeeder();
 };
