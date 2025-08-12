@@ -1,6 +1,6 @@
-import { prisma } from '..';
+import { PrismaClient } from '@prisma/client';
 
-export default async function citySeeder() {
+export default async function citySeeder(prisma: PrismaClient) {
   if ((await prisma.ibgeCity.count()) > 0) return;
 
   await prisma.ibgeCity.createMany({

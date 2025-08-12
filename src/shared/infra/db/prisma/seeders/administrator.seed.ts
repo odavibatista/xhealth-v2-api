@@ -1,8 +1,8 @@
-import { prisma } from '..';
+import { PrismaClient } from '@prisma/client';
 import { HashProvider } from '../../../../../modules/user/infra/providers/hash.provider';
 import { EncrypterProvider } from '../../../providers/Encrypter.provider';
 
-export const administratorSeeder = async () => {
+export const administratorSeeder = async (prisma: PrismaClient) => {
   console.log('Running administrator seeder...');
   const hashProvider = new HashProvider();
   const encrypterProvider = new EncrypterProvider();

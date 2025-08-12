@@ -1,6 +1,7 @@
+import { PrismaClient } from '@prisma/client';
 import { prisma } from '..';
 
-export default async function ufsSeeder() {
+export default async function ufsSeeder(prisma: PrismaClient) {
   if ((await prisma.uF.count()) > 0) return;
 
   await prisma.uF.createMany({

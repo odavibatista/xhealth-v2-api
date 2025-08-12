@@ -1,7 +1,8 @@
+import { PrismaClient } from '@prisma/client';
 import { prisma } from '..';
 import { EncrypterProvider } from '../../../providers/Encrypter.provider';
 
-export const adminPermissionSeeder = async () => {
+export const adminPermissionSeeder = async (prisma: PrismaClient) => {
   console.log('Running admin permission seeder...');
   const adminName = 'Admin Default';
   const encrypterProvider = new EncrypterProvider();

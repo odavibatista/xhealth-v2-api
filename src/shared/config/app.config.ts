@@ -7,6 +7,7 @@ export enum Environment {
   DEVELOPMENT = 'development',
   PRODUCTION = 'production',
   TEST = 'test',
+  LOCAL = 'local',
 }
 
 const appConfigurationsSchema = z.object({
