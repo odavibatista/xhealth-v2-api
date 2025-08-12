@@ -8,7 +8,9 @@ import { GymPlanRepositoryInterface } from '../../../domain/dtos/repositories/gy
 export class GymPlanRepository implements GymPlanRepositoryInterface {
   public encryptedFields: (keyof GymPlan)[] = ['price', 'duration'];
 
-  constructor(private encrypterProvider: EncrypterProvider) {}
+  constructor(
+    private readonly encrypterProvider: EncrypterProvider,
+  ) {}
 
   /* This method will find all gym plans */
   async findAll(): Promise<Partial<GymPlan>[]> {

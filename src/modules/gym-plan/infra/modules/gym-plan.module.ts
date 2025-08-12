@@ -4,6 +4,7 @@ import { GymPlanRepository } from '../db/repositories/gym-plan.repository';
 import { FindGymPlanByIdUsecase } from '../usecases/find-gym-plan-by-id.usecase';
 import { BrowseGymPlansUsecase } from '../usecases/browse-gym-plans.usecase';
 import { GymPlanController } from '../../http/controllers/gym-plan.controller';
+import { GymPlanFeatureRepository } from '../db/repositories/gym-plan-feature.repository';
 
 @Module({
   imports: [],
@@ -13,6 +14,7 @@ import { GymPlanController } from '../../http/controllers/gym-plan.controller';
     GymPlanRepository,
     BrowseGymPlansUsecase,
     FindGymPlanByIdUsecase,
+    GymPlanFeatureRepository,
   ],
   exports: [],
 })

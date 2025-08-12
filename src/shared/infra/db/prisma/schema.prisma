@@ -135,9 +135,26 @@ model GymPlan {
   deletedAt DateTime? @map("deleted_at")
 
   users User[]
+  gymPlanFeatures GymPlanFeature[]
 
   createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
   @@map("gym_plans")
+}
+
+model GymPlanFeature {
+  id_gym_plan_feature String @id @default(cuid())
+  gym_plan_id String
+  feature_name String
+  created_by String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  deletedAt DateTime? @map("deleted_at")
+
+  gymPlan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
+  createdBy Administrator @relation(fields: [created_by], references: [id_administrator])
+
+  @@map("gym_plan_features")
 }
 
 model SportModality {
@@ -240,6 +257,7 @@ model Administrator {
   Testimony    Testimony[]
   Trainer      Trainer[]
   GymPlan      GymPlan[]
+  GymPlanFeatures GymPlanFeature[]
   administrator_permissions AdministratorPermission[]
 
   @@map("administrators")
