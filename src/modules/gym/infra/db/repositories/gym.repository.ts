@@ -4,7 +4,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { FindGymByIDDto } from '../../../domain/dtos/requests/FindGymByID.request.dto';
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
-import { CreateGymBodyDTO, CreateGymResponseDTO } from '../../../domain/dtos/requests/CreateGym.request.dto';
+import {
+  CreateGymBodyDTO,
+  CreateGymResponseDTO,
+} from '../../../domain/dtos/requests/CreateGym.request.dto';
 
 @Injectable()
 export class GymRepository implements GymRepositoryInterface {
@@ -102,7 +105,9 @@ export class GymRepository implements GymRepositoryInterface {
   }
 
   /* Finding by a phonenumber */
-  async findByPhoneNumber(phone_number: string): Promise<FindGymByIDDto | null> {
+  async findByPhoneNumber(
+    phone_number: string,
+  ): Promise<FindGymByIDDto | null> {
     const encPhone = this.encrypterProvider.encrypt({ content: phone_number });
 
     const gym = await prisma.gym.findFirst({

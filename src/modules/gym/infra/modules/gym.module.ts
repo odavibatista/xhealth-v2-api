@@ -16,6 +16,8 @@ import { AdminPermissionRepository } from '../../../admin-permission/infra/db/re
 import { HashProvider } from '../../../user/infra/providers/hash.provider';
 import { AuthenticationMiddleware } from '../../../user/http/middlewares/Auth.middleware';
 import { JWTProvider } from '../../../user/infra/providers/jwt.provider';
+import { UserRepository } from '../../../user/infra/db/repositories/user.repository';
+import { UfRepository } from '../../../../shared/infra/db/repositories/uf.repository';
 
 @Module({
   controllers: [GymController],
@@ -30,6 +32,8 @@ import { JWTProvider } from '../../../user/infra/providers/jwt.provider';
     AdminPermissionRepository,
     HashProvider,
     JWTProvider,
+    UserRepository,
+    UfRepository,
   ],
 })
 export class GymModule implements NestModule {
