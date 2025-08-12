@@ -34,17 +34,26 @@ export const administratorSeeder = async () => {
     });
   }
 
-  await prisma.administrator.create({
-    data: {
-      name: encSecondary,
-      email: encrypterProvider.encrypt({
-        content: 'secondaryadmin@xhealth.com',
-      }),
-      password: encrypterProvider.encrypt({
-        content: await hashProvider.hash('admin321'),
-      }),
-      role: 'ADMIN',
-      created_by: existingAdmin ? existingAdmin.id_administrator : null,
-    },
-  });
+    const existingSecondaryAdmin = await prisma.administrator.findFirst({
+      where: {
+        name: encSecondary,
+      },
+    });
+
+    if (!existingSecondaryAdmin)  {
+      await prisma.administrator.create({
+        data: {
+          name: encSecondary,
+          email: encrypterProvider.encrypt({
+            content: 'secondaryadmin@xhealth.com',
+          }),
+          password: encrypterProvider.encrypt({
+            content: await hashProvider.hash('admin321'),
+          }),
+          role: 'ADMIN',
+          created_by: existingAdmin ? existingAdmin.id_administrator : null,
+        },
+      });
+    }
+
 };

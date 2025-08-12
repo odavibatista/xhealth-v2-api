@@ -8,7 +8,7 @@ export class PrismaProvider
   implements OnModuleInit, OnModuleDestroy
 {
   constructor(private environment: Environment = appConfigurations.NODE_ENV) {
-    let datasourceUrl = appConfigurations.DATABASE_URL;
+    let datasourceUrl = appConfigurations.SHADOW_DATABASE_URL;
     if (environment === Environment.TEST) {
       datasourceUrl = appConfigurations.SHADOW_DATABASE_URL;
     }
@@ -41,28 +41,29 @@ export class PrismaProvider
     }
 
     const allModels = [
-      'addresses',
-      'users',
-      'administrators',
-      'administrator_permissions',
-      'gyms',
-      'gym_plans',
-      'ibge_cities',
       'trainers',
-      'ufs',
-      'login_logs',
-      'sport_modalities',
       'user_extra_services',
-      'extra_services',
       'gym_plan_features',
+      'gym_plans',
+      'gyms',
+      'sport_modalities',
+      'extra_services',
       'testimonies',
+      'login_logs',
+      'password_histories',
+      'ibge_cities',
+      'ufs',
+      'addresses',
+      'administrator_permissions',
+      'administrators',
+      'users',
     ];
 
     const modelsToClear = models === 'all' ? allModels : models;
 
     for (const model of modelsToClear) {
       await this.$queryRawUnsafe(
-        `TRUNCATE TABLE "${model}" RESTART IDENTITY CASCADE;`,
+        `TRUNCATE TABLE ${model};`,
       );
     }
   }
