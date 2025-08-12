@@ -13,6 +13,11 @@ export class GymPlanFeatureRepository implements GymPlanFeatureRepositoryInterfa
             where: {
                 id_gym_plan_feature: id,
             },
+            select: {
+                id_gym_plan_feature: true,
+                gym_plan_id: true,
+                feature_name: true,
+            }
         });
 
         if (!gymPlanFeature) 

@@ -9,7 +9,6 @@ import { GymRepository } from '../db/repositories/gym.repository';
 import { CreateGymUsecase } from './create-gym.usecase';
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
 import { PhoneNumberAlreadyRegisteredException } from '../../../user/domain/dtos/errors/PhoneNumberAlreadyRegistered.exception';
-import { CreateGymResponseDTO } from '../../domain/dtos/requests/CreateGym.request.dto';
 import { UfRepository } from '../../../../shared/infra/db/repositories/uf.repository';
 import { UserRepository } from '../../../user/infra/db/repositories/user.repository';
 import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNotFound.exception.dto';
