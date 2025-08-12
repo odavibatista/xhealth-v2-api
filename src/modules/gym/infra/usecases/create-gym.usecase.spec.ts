@@ -104,9 +104,7 @@ describe('Create Gym Usecase Test Suites', () => {
     jest
       .spyOn(mockadministratorRepository, 'findById')
       .mockResolvedValueOnce({ id_administrator: administrator_id });
-    jest
-      .spyOn(mockUFRepository, 'findById')
-      .mockResolvedValueOnce(null);
+    jest.spyOn(mockUFRepository, 'findById').mockResolvedValueOnce(null);
 
     await expect(useCase.execute(data, administrator_id)).rejects.toThrow(
       UFNotFoundException,

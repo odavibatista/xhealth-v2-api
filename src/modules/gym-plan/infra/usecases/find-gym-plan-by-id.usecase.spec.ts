@@ -33,7 +33,7 @@ describe('Find Gym Plan By ID Use Case', () => {
     description: faker.commerce.productDescription(),
     price: faker.commerce.price(),
     duration: '3 months',
-    features: []
+    features: [],
   };
 
   it('should return null when no gym plan is found for the given ID', async () => {
@@ -53,7 +53,9 @@ describe('Find Gym Plan By ID Use Case', () => {
       .spyOn(mockRepository, 'findById')
       .mockResolvedValueOnce(mockGymPlan as any);
 
-    jest.spyOn(mockGymPlanFeatRepo, 'findByGymPlanId').mockResolvedValueOnce([]);
+    jest
+      .spyOn(mockGymPlanFeatRepo, 'findByGymPlanId')
+      .mockResolvedValueOnce([]);
 
     const result = await usecase.execute(validId);
 

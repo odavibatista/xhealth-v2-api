@@ -66,7 +66,9 @@ describe('Browse Gym Plans Use Case Test Suites', () => {
       .spyOn(mockRepository, 'findAll')
       .mockResolvedValueOnce(mockPlans as any);
 
-    jest.spyOn(mockGymPlanFeatRepo, 'findByGymPlanId').mockResolvedValueOnce([]);
+    jest
+      .spyOn(mockGymPlanFeatRepo, 'findByGymPlanId')
+      .mockResolvedValueOnce([]);
 
     const result = await usecase.execute();
 

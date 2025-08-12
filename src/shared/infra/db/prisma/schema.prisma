@@ -126,8 +126,8 @@ model GymPlan {
   id_gym_plan String @id @default(cuid())
   name String
   description String
-  price Float
-  duration Int
+  price String
+  duration String
   created_by String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { GymPlan } from '../../../../../shared/infra/db/generated/prisma';
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 import { GymPlanRepositoryInterface } from '../../../domain/dtos/repositories/gym-plan.repository';
+import { GymPlan } from '@prisma/client';
 
 @Injectable()
 export class GymPlanRepository implements GymPlanRepositoryInterface {
-  public encryptedFields: (keyof GymPlan)[] = ['price', 'duration'];
+  public encryptedFields: (keyof GymPlan)[] = [
+    'name',
+    'description',
+    'price',
+    'duration',
+  ];
 
-  constructor(
-    private readonly encrypterProvider: EncrypterProvider,
-  ) {}
+  constructor(private readonly encrypterProvider: EncrypterProvider) {}
 
   /* This method will find all gym plans */
   async findAll(): Promise<Partial<GymPlan>[]> {

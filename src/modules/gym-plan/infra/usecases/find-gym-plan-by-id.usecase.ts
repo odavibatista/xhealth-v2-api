@@ -17,7 +17,8 @@ export class FindGymPlanByIdUsecase {
 
     if (!gymPlan) throw new GymPlanNotFoundException();
 
-    const gymPlanFeatures = await this.gymPlanFeatureRepository.findByGymPlanId(cuid);
+    const gymPlanFeatures =
+      await this.gymPlanFeatureRepository.findByGymPlanId(cuid);
 
     return {
       id_gym_plan: gymPlan.id_gym_plan,
@@ -26,7 +27,7 @@ export class FindGymPlanByIdUsecase {
       price: gymPlan.price,
       duration: gymPlan.duration,
       createdAt: gymPlan.createdAt,
-      features: gymPlanFeatures.map(feature => ({
+      features: gymPlanFeatures.map((feature) => ({
         id_gym_plan_feature: feature.id_gym_plan_feature,
         feature_name: feature.feature_name,
       })),
