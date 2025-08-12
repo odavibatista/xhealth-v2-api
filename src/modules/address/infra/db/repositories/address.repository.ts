@@ -38,4 +38,14 @@ export class AddressRepository implements AddressRepositoryInterface {
 
     return decryptedAddress;
   }
+
+  /* Soft deleting an address */
+  async delete(id: string): Promise<boolean> {
+    const address = await prisma.address.update({
+      where: { id_address: id },
+      data: { deletedAt: new Date() },
+    });
+
+    return !!address;
+  }
 }

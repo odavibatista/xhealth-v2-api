@@ -18,6 +18,7 @@ import { AuthenticationMiddleware } from '../../../user/http/middlewares/Auth.mi
 import { JWTProvider } from '../../../user/infra/providers/jwt.provider';
 import { UserRepository } from '../../../user/infra/db/repositories/user.repository';
 import { UfRepository } from '../../../../shared/infra/db/repositories/uf.repository';
+import { DeleteGymUsecase } from '../usecases/delete-gym.usecase';
 
 @Module({
   controllers: [GymController],
@@ -27,6 +28,7 @@ import { UfRepository } from '../../../../shared/infra/db/repositories/uf.reposi
     FindGymByIdUsecase,
     EncrypterProvider,
     CreateGymUsecase,
+    DeleteGymUsecase,
     AddressRepository,
     AdministratorRepository,
     AdminPermissionRepository,
@@ -38,9 +40,15 @@ import { UfRepository } from '../../../../shared/infra/db/repositories/uf.reposi
 })
 export class GymModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticationMiddleware).forRoutes({
-      path: 'gyms/create',
-      method: RequestMethod.POST,
-    });
+    consumer.apply(AuthenticationMiddleware).forRoutes(
+      {
+        path: 'gyms/create',
+        method: RequestMethod.POST,
+      },
+      {
+        path: 'gyms/delete/:cuid',
+        method: RequestMethod.DELETE,
+      },
+    );
   }
 }

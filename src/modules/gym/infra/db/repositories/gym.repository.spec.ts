@@ -1,5 +1,6 @@
 import { EncrypterProvider } from '../../../../../shared/infra/providers/Encrypter.provider';
 import { AddressRepository } from '../../../../address/infra/db/repositories/address.repository';
+import { CreateGymBodyDTO } from '../../../domain/dtos/requests/CreateGym.request.dto';
 import { GymRepository } from './gym.repository';
 import { faker } from '@faker-js/faker';
 
@@ -117,6 +118,32 @@ describe('Gym Repository Test Suites', () => {
         validPhoneNumber,
       );
       expect(repository.findByPhoneNumber).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('create method test suites', () => {
+    it('should create a new gym successfully', async () => {
+      const createGymDto: CreateGymBodyDTO = {
+        name: 'New Gym',
+        phone_number: '123456789',
+        address: {
+          cep: '12345-678',
+          street: 'Main St',
+          number: '123',
+          complement: 'Apt 1',
+          city: 'Anytown',
+          uf_id: 'SP',
+        },
+        imageUrl: 'http://example.com/image.jpg',
+      };
+
+      jest.spyOn(repository, 'create').mockResolvedValueOnce(mockGym as any);
+
+      const result = await repository.create(createGymDto, 'admin-id');
+
+      expect(result).toEqual(mockGym);
+      expect(repository.create).toHaveBeenCalledWith(createGymDto, 'admin-id');
+      expect(repository.create).toHaveBeenCalledTimes(1);
     });
   });
 
