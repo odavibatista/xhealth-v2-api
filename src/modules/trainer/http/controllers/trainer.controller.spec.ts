@@ -71,6 +71,27 @@ describe('Trainer Controller - /trainers', () => {
   });
 
   describe('GET /trainers/find/:cuid', () => {
+    it('should return 200 and a trainer object if trainer is found', async () => {
+      const cuidResponse = await request(app.getHttpServer())
+        .get(browseTrainersRoute)
+        .expect(200);
+
+      const trainerCuid = cuidResponse.body[0].id_trainer;
+
+      expect(async () => {
+        const response = await request(app.getHttpServer())
+          .get(findTrainerByIdRoute.replace(':cuid', trainerCuid))
+          .expect(200);
+
+        expect(response.body).toBeInstanceOf(Object);
+        expect(response.body).toHaveProperty('id_trainer');
+        expect(response.body).toHaveProperty('imageUrl');
+        expect(response.body).toHaveProperty('name');
+        expect(response.body).toHaveProperty('instagramUrl');
+        expect(response.body).toHaveProperty('twitterUrl');
+        expect(response.body).toHaveProperty('youtubeUrl');
+      });
+    });
     it('should return 404 and TrainerNotFoundException if trainer is not found', async () => {
       const response = await request(app.getHttpServer())
         .get(findTrainerByIdRoute.replace(':cuid', 'non-existing-cuid'))

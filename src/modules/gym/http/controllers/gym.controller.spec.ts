@@ -82,7 +82,30 @@ describe('GymController - /gyms', () => {
 
   describe('GET /gyms/find/:cuid', () => {
     it('should return a gym by cuid', async () => {
-      // Still to be implemented
+      const cuidResponse = await request(app.getHttpServer())
+        .get(browseGymsRoute)
+        .expect(200);
+
+      const gymCuid = cuidResponse.body[0].id_gym;
+
+      expect(async () => {
+        const response = await request(app.getHttpServer())
+          .get(findGymByIdRoute.replace(':cuid', gymCuid))
+          .expect(200);
+
+        expect(response.body).toBeInstanceOf(Object);
+        expect(response.body).toHaveProperty('id_gym');
+        expect(response.body).toHaveProperty('name');
+        expect(response.body).toHaveProperty('address');
+        expect(response.body).toHaveProperty('phone_number');
+        expect(response.body).toHaveProperty('imageUrl');
+        expect(response.body).toHaveProperty('created_at');
+        expect(response.body.address).toHaveProperty('id_address');
+        expect(response.body.address).toHaveProperty('cep');
+        expect(response.body.address).toHaveProperty('street');
+        expect(response.body.address).toHaveProperty('city');
+        expect(response.body.address).toHaveProperty('uf_id');
+      });
     });
 
     it('should return 404 if gym not found', async () => {
