@@ -92,8 +92,8 @@ describe('User Register Use Case Test Suites', () => {
 
   data = mockdata;
 
-  describe('unsuccessful cases', () =>{
-      it('should not create an user if the UF does not exist', async () => {
+  describe('unsuccessful cases', () => {
+    it('should not create an user if the UF does not exist', async () => {
       data.address.uf_id = '1';
 
       jest.spyOn(mockUfRepository, 'findById').mockResolvedValueOnce(null);
@@ -102,7 +102,9 @@ describe('User Register Use Case Test Suites', () => {
     });
 
     it('should not create an user if the email is already in use', async () => {
-      jest.spyOn(mockUfRepository, 'findById').mockResolvedValueOnce(data as any);
+      jest
+        .spyOn(mockUfRepository, 'findById')
+        .mockResolvedValueOnce(data as any);
 
       jest
         .spyOn(mockUserRepository, 'findByEmail')
@@ -114,7 +116,9 @@ describe('User Register Use Case Test Suites', () => {
     });
 
     it('should not create an user if the gym plan does not exist', async () => {
-      jest.spyOn(mockUfRepository, 'findById').mockResolvedValueOnce(data as any);
+      jest
+        .spyOn(mockUfRepository, 'findById')
+        .mockResolvedValueOnce(data as any);
 
       jest.spyOn(mockUserRepository, 'findByEmail').mockResolvedValueOnce(null);
 
@@ -126,7 +130,9 @@ describe('User Register Use Case Test Suites', () => {
     });
 
     it('should not create an user if the e-mail is in use by an admin', async () => {
-      jest.spyOn(mockUfRepository, 'findById').mockResolvedValueOnce(data as any);
+      jest
+        .spyOn(mockUfRepository, 'findById')
+        .mockResolvedValueOnce(data as any);
 
       jest.spyOn(mockUserRepository, 'findByEmail').mockResolvedValueOnce(null);
 
@@ -144,7 +150,9 @@ describe('User Register Use Case Test Suites', () => {
     });
 
     it('should not create an user if the phone number is already in use by another user', async () => {
-      jest.spyOn(mockUfRepository, 'findById').mockResolvedValueOnce(data as any);
+      jest
+        .spyOn(mockUfRepository, 'findById')
+        .mockResolvedValueOnce(data as any);
 
       jest.spyOn(mockUserRepository, 'findByEmail').mockResolvedValueOnce(null);
 
@@ -152,7 +160,9 @@ describe('User Register Use Case Test Suites', () => {
         .spyOn(mockGymPlanRepository, 'findById')
         .mockResolvedValueOnce(data as any);
 
-      jest.spyOn(mockAdminRepository, 'findByEmail').mockResolvedValueOnce(null);
+      jest
+        .spyOn(mockAdminRepository, 'findByEmail')
+        .mockResolvedValueOnce(null);
 
       jest
         .spyOn(mockUserRepository, 'findByPhoneNumber')
@@ -164,7 +174,9 @@ describe('User Register Use Case Test Suites', () => {
     });
 
     it('should not create an user if the phone number is already in use by a gym', async () => {
-      jest.spyOn(mockUfRepository, 'findById').mockResolvedValueOnce(data as any);
+      jest
+        .spyOn(mockUfRepository, 'findById')
+        .mockResolvedValueOnce(data as any);
 
       jest.spyOn(mockUserRepository, 'findByEmail').mockResolvedValueOnce(null);
 
@@ -172,7 +184,9 @@ describe('User Register Use Case Test Suites', () => {
         .spyOn(mockGymPlanRepository, 'findById')
         .mockResolvedValueOnce(data as any);
 
-      jest.spyOn(mockAdminRepository, 'findByEmail').mockResolvedValueOnce(null);
+      jest
+        .spyOn(mockAdminRepository, 'findByEmail')
+        .mockResolvedValueOnce(null);
 
       jest
         .spyOn(mockUserRepository, 'findByPhoneNumber')
@@ -187,10 +201,12 @@ describe('User Register Use Case Test Suites', () => {
       );
     });
 
-    it('should not create an user if the passwords do not match', async ()  =>  {
+    it('should not create an user if the passwords do not match', async () => {
       data.password_confirmation = '';
 
-          jest.spyOn(mockUfRepository, 'findById').mockResolvedValueOnce(data as any);
+      jest
+        .spyOn(mockUfRepository, 'findById')
+        .mockResolvedValueOnce(data as any);
 
       jest.spyOn(mockUserRepository, 'findByEmail').mockResolvedValueOnce(null);
 
@@ -198,7 +214,9 @@ describe('User Register Use Case Test Suites', () => {
         .spyOn(mockGymPlanRepository, 'findById')
         .mockResolvedValueOnce(data as any);
 
-      jest.spyOn(mockAdminRepository, 'findByEmail').mockResolvedValueOnce(null);
+      jest
+        .spyOn(mockAdminRepository, 'findByEmail')
+        .mockResolvedValueOnce(null);
 
       jest
         .spyOn(mockUserRepository, 'findByPhoneNumber')
@@ -211,7 +229,7 @@ describe('User Register Use Case Test Suites', () => {
       await expect(useCase.execute(data)).rejects.toThrow(
         UnprocessableEntityException,
       );
-    })
+    });
 
     it('should not create an user if the cep is invalid', async () => {
       data.address.cep = '1';
@@ -295,30 +313,32 @@ describe('User Register Use Case Test Suites', () => {
 
       data = mockdata;
     });
-  })
+  });
 
-  describe('successful cases', () =>  {
-    it('should create an user given valid data', async () =>  {
+  describe('successful cases', () => {
+    it('should create an user given valid data', async () => {
       data = {
-            name: 'Fulano de Tal',
-    email: faker.internet.email(),
-    password: password,
-    phone_number: '11999999999',
-    birth_date: '2000-01-01',
-    check_privacy: true,
-    password_confirmation: password,
-    address: {
-      cep: '12345678',
-      street: 'Valid Street',
-      number: '123',
-      complement: 'Apt 1',
-      city: 'Valid City',
-      uf_id: faker.string.uuid(),
-    },
-    gym_plan_id: 'valid-gym-plan-id',
-      }
+        name: 'Fulano de Tal',
+        email: faker.internet.email(),
+        password: password,
+        phone_number: '11999999999',
+        birth_date: '2000-01-01',
+        check_privacy: true,
+        password_confirmation: password,
+        address: {
+          cep: '12345678',
+          street: 'Valid Street',
+          number: '123',
+          complement: 'Apt 1',
+          city: 'Valid City',
+          uf_id: faker.string.uuid(),
+        },
+        gym_plan_id: 'valid-gym-plan-id',
+      };
 
-      jest.spyOn(mockUfRepository, 'findById').mockResolvedValueOnce(data as any);
+      jest
+        .spyOn(mockUfRepository, 'findById')
+        .mockResolvedValueOnce(data as any);
 
       jest.spyOn(mockUserRepository, 'findByEmail').mockResolvedValueOnce(null);
 
@@ -326,29 +346,32 @@ describe('User Register Use Case Test Suites', () => {
         .spyOn(mockGymPlanRepository, 'findById')
         .mockResolvedValueOnce(data as any);
 
-      jest.spyOn(mockAdminRepository, 'findByEmail').mockResolvedValueOnce(null);
+      jest
+        .spyOn(mockAdminRepository, 'findByEmail')
+        .mockResolvedValueOnce(null);
 
       jest
         .spyOn(mockUserRepository, 'findByPhoneNumber')
         .mockResolvedValueOnce(null);
 
-      jest.spyOn(hashProvider, 'hash')
-      .mockResolvedValue(data.password as any)
+      jest.spyOn(hashProvider, 'hash').mockResolvedValue(data.password as any);
 
       jest
         .spyOn(mockGymRepository, 'findByPhoneNumber')
         .mockResolvedValueOnce(null);
 
-        jest.spyOn(mockUserRepository, 'create').mockResolvedValue(mockdata as any)
+      jest
+        .spyOn(mockUserRepository, 'create')
+        .mockResolvedValue(mockdata as any);
 
-          jest.spyOn(jwtProvider, 'generate').mockReturnValue('valid-token');
+      jest.spyOn(jwtProvider, 'generate').mockReturnValue('valid-token');
 
-          const result = await useCase.execute(data)
+      const result = await useCase.execute(data);
 
-        expect(result).toEqual({
-          token: 'valid-token',
-          id: mockdata.id_user
-    })
-  })
-  })
+      expect(result).toEqual({
+        token: 'valid-token',
+        id: mockdata.id_user,
+      });
+    });
+  });
 });
