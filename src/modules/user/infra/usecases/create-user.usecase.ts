@@ -24,6 +24,7 @@ import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNot
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
 import { GymPlanRepository } from '../../../gym-plan/infra/db/repositories/gym-plan.repository';
 import { GymPlanNotFoundException } from '../../../gym-plan/domain/dtos/errors/GymPlanNotFound.exception';
+import { InvalidCredentialsException } from '../../domain/dtos/errors/InvalidCredentials.exception';
 
 export class CreateUserUseCase implements UseCaseInterface {
   constructor(
@@ -89,14 +90,14 @@ export class CreateUserUseCase implements UseCaseInterface {
       data.email,
     );
 
+    if (emailAlreadyRegisteredByUser)
+      throw new EmailAlreadyRegisteredException();
+
     const isGymPlanValid = await this.gymPlanRepository.findById(
       data.gym_plan_id,
     );
 
     if (!isGymPlanValid) throw new GymPlanNotFoundException();
-
-    if (emailAlreadyRegisteredByUser)
-      throw new EmailAlreadyRegisteredException();
 
     const emailAlreadyRegisteredByAdmin =
       await this.adminRepository.findByEmail(data.email);
@@ -128,10 +129,6 @@ export class CreateUserUseCase implements UseCaseInterface {
     data.password = await this.hashProvider.hash(data.password);
 
     const user = await this.userRepository.create(data);
-
-    if (!user.id_user) {
-      throw new UnprocessableEntityException('Error creating user');
-    }
 
     const token = this.jwtProvider.generate({
       payload: {
