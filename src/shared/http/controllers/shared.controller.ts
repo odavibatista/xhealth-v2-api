@@ -1,3 +1,4 @@
+import * as request from 'supertest';
 import {
   Controller,
   Get,
