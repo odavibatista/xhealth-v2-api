@@ -11,6 +11,7 @@ import {
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
   ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -25,6 +26,10 @@ import {
 } from '../../domain/dtos/requests/CreateUser.request.dto';
 import { Request, Response } from 'express';
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
+import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNotFound.exception.dto';
+import { GymPlanNotFoundException } from '../../../gym-plan/domain/dtos/errors/GymPlanNotFound.exception';
+import { PhoneNumberAlreadyRegisteredException } from '../../domain/dtos/errors/PhoneNumberAlreadyRegistered.exception';
+import { EmailAlreadyRegisteredException } from '../../domain/dtos/errors/EmailAlreadyRegistered.exception';
 
 @Controller('user')
 @ApiTags('Usuário')
@@ -36,6 +41,14 @@ export class UserController implements UserControllerInterface {
     description: 'Usuário cadastrado com sucesso!',
     type: CreateUserResponseDTO,
   })
+  @ApiNotFoundResponse({
+    description: new UFNotFoundException().message,
+    type: AllExceptionsFilterDTO,
+  })
+  @ApiNotFoundResponse({
+    description: new GymPlanNotFoundException().message,
+    type: AllExceptionsFilterDTO,
+  })
   @ApiUnauthorizedResponse({
     description: 'Usuário não autorizado.',
     type: AllExceptionsFilterDTO,
@@ -45,11 +58,11 @@ export class UserController implements UserControllerInterface {
     type: AllExceptionsFilterDTO,
   })
   @ApiConflictResponse({
-    description: 'Número de telefone já cadastrado.',
+    description: new PhoneNumberAlreadyRegisteredException().message,
     type: AllExceptionsFilterDTO,
   })
   @ApiConflictResponse({
-    description: 'E-mail já cadastrado.',
+    description: new EmailAlreadyRegisteredException().message,
     type: AllExceptionsFilterDTO,
   })
   @ApiInternalServerErrorResponse({
