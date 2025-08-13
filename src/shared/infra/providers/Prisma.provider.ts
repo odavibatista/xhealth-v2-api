@@ -8,7 +8,7 @@ export class PrismaProvider
   implements OnModuleInit, OnModuleDestroy
 {
   constructor(private environment: Environment = appConfigurations.NODE_ENV) {
-    let datasourceUrl = appConfigurations.SHADOW_DATABASE_URL;
+    let datasourceUrl = appConfigurations.DATABASE_URL;
     if (environment === Environment.TEST) {
       datasourceUrl = appConfigurations.SHADOW_DATABASE_URL;
     }
@@ -63,7 +63,13 @@ export class PrismaProvider
 
     for (const model of modelsToClear) {
       await this.$queryRawUnsafe(
-        `TRUNCATE TABLE ${model};`,
+        `SET FOREIGN_KEY_CHECKS = 0;`,
+      );
+      await this.$executeRawUnsafe(
+        `TRUNCATE TABLE \`${model}\`;`,
+      );
+      await this.$queryRawUnsafe(
+        `SET FOREIGN_KEY_CHECKS = 1;`,
       );
     }
   }

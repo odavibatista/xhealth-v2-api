@@ -3,7 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GymController } from './gym.controller';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { PrismaProvider } from '../../../../shared/infra/providers/Prisma.provider';
-import { AllExceptionsFilter } from '../../../../shared/domain/errors/AllException.filter';
 import { GymModule } from '../../infra/modules/gym.module';
 import { SharedModule } from '../../../../shared/infra/modules/Shared.module';
 import { Environment } from '../../../../shared/config/app.config';
@@ -56,7 +55,7 @@ describe('GymController - /gyms', () => {
   });
 
   afterEach(async () => {
-    await prisma.clear(['gyms']);
+    await prisma.clear('all');
   });
 
   describe('GET /gyms/browse', ()  => {

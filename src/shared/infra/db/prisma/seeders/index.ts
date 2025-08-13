@@ -17,14 +17,7 @@ const prisma = new PrismaProvider();
 const seed = async () => {
   console.log('Running seed: ');
 
-  prisma.seed([ufsSeeder]);
-  prisma.seed([citySeeder]);
-  prisma.seed([administratorSeeder])
-  prisma.seed([adminPermissionSeeder]);
-  prisma.seed([trainerSeeder]);
-  prisma.seed([gymSeeder]);
-  prisma.seed([gymPlanSeeder]);
-  prisma.seed([gymPlanFeaturesSeeder]);
+  prisma.seed([ufsSeeder, citySeeder, administratorSeeder, adminPermissionSeeder, trainerSeeder, gymSeeder, gymPlanSeeder, gymPlanFeaturesSeeder]);
 };
 
 const seedTest = async () => {
@@ -32,10 +25,10 @@ const seedTest = async () => {
   await mainSeeder();
 };
 
-if (appConfigurations.NODE_ENV === 'development') {
-  seedTest();
+if (appConfigurations.NODE_ENV === 'development' || appConfigurations.NODE_ENV === 'test' || appConfigurations.NODE_ENV === 'local') {
+  seed();
 }
 
-if (appConfigurations.NODE_ENV === 'local') {
+if (appConfigurations.NODE_ENV === 'local' ) {
   mainSeeder();
 }
