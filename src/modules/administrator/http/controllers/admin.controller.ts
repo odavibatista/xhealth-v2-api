@@ -1,3 +1,4 @@
+import * as request from 'supertest';
 import {
   Body,
   Controller,
@@ -55,7 +56,7 @@ export class AdminController implements AdminControllerInterface {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response> {
-    if (req.user) {
+    if (req.user || req.administrator) {
       throw new UnauthorizedException('Usuário já autenticado.');
     }
 

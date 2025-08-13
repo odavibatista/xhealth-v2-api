@@ -21,6 +21,8 @@ import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNot
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
 import { EmailAlreadyRegisteredException } from '../../domain/dtos/errors/EmailAlreadyRegistered.exception';
 import ufsSeeder from '../../../../shared/infra/db/prisma/seeders/uf.seed';
+import { PhoneNumberAlreadyRegisteredException } from '../../domain/dtos/errors/PhoneNumberAlreadyRegistered.exception';
+import { GymPlanNotFoundException } from '../../../gym-plan/domain/dtos/errors/GymPlanNotFound.exception';
 
 describe('User Controller - /user', () => {
   const controllerRoute = '/user';
@@ -93,6 +95,49 @@ describe('User Controller - /user', () => {
   });
 
   describe('POST /register', () => {
+    describe('\nSuccessful cases:', () => {
+      it('should register a new user successfully', async () => {
+        await prisma.uF
+          .findFirst({
+            where: {
+              acronym: 'SP',
+            },
+          })
+          .then(async (uf) => {
+            //@ts-ignore
+            let validUfid = uf.id_uf;
+
+            await prisma.gymPlan.findFirst().then((gymPlan) => {
+              //@ts-ignore
+              let validGymPlanId = gymPlan.id_gym_plan;
+
+              expect(async () => {
+                const response = await request(app.getHttpServer())
+                  .post(registerUserRoute)
+                  .send({
+                    ...data,
+                    gym_plan_id: validGymPlanId,
+                    address: {
+                      uf_id: validUfid,
+                      cep: '12345678',
+                      street: 'Valid Street',
+                      number: '123',
+                      complement: 'Apt 1',
+                      city: 'Valid City',
+                    },
+                  })
+                  .set('Accept', 'application/json');
+
+                expect(response.status).toBe(201);
+                expect(response.body).toHaveProperty('token');
+                expect(response.body).toHaveProperty('user');
+                expect(response.body.user).toHaveProperty('id_user');
+                expect(response.body.user.name).toBe('Fulano de Tal');
+              });
+            });
+          });
+      });
+    });
     describe('\nUnsuccessful cases:', () => {
       describe('\nInvalid address data', () => {
         it('should return UFNotFoundException if the uf id is invalid', async () => {
@@ -163,10 +208,16 @@ describe('User Controller - /user', () => {
           );
         });
 
-        it('should return UnprocessableDataException if the complement is misformatted', async () =>  {
-                    const response = await request(app.getHttpServer())
+        it('should return UnprocessableDataException if the complement is misformatted', async () => {
+          const response = await request(app.getHttpServer())
             .post(registerUserRoute)
-            .send({ ...data, address: { ...data.address, complement: faker.string.alphanumeric(101) } })
+            .send({
+              ...data,
+              address: {
+                ...data.address,
+                complement: faker.string.alphanumeric(101),
+              },
+            })
             .set('Accept', 'application/json');
 
           expect(response.status).toBe(
@@ -175,7 +226,7 @@ describe('User Controller - /user', () => {
           expect(response.body?.message).toContain(
             new UnprocessableDataException().message,
           );
-        })
+        });
       });
 
       describe('\nInvalid user data', () => {
@@ -252,42 +303,124 @@ describe('User Controller - /user', () => {
         });
 
         describe('\nConflictuous Insertions', () => {
-          /*
-        it('should return EmailAlreadyRegisteredException if the given email is already in use by another user', async () => {
+          it('should return EmailAlreadyRegisteredException if the given email is already in use by another user', async () => {
             //@ts-ignore
-          await prisma.uF.findFirst({
-              where: {
-                acronym: 'SP'
-              }
-            }).then(async (uf) => {
-            //@ts-ignore
-            let validUfid = uf.id_uf;
-
-            const response = await request(app.getHttpServer())
-              .post(registerUserRoute)
-              .send({
-                ...data,
-                email: 'admin@xhealth.com',
-                address: {
-                  uf_id: validUfid,
-                  cep: '12345678',
-                  street: 'Valid Street',
-                  number: '123',
-                  complement: 'Apt 1',
-                  city: 'Valid City',
+            await prisma.uF
+              .findFirst({
+                where: {
+                  acronym: 'SP',
                 },
               })
-              .set('Accept', 'application/json');
+              .then(async (uf) => {
+                //@ts-ignore
+                let validUfid = uf.id_uf;
 
-            expect(response.status).toBe(
-              new EmailAlreadyRegisteredException().getStatus(),
-            );
-            expect(response.body?.message).toContain(
-              new EmailAlreadyRegisteredException().message,
-            );
-            })
+                expect(async () => {
+                  const response = await request(app.getHttpServer())
+                    .post(registerUserRoute)
+                    .send({
+                      ...data,
+                      email: 'admin@xhealth.com',
+                      address: {
+                        uf_id: validUfid,
+                        cep: '12345678',
+                        street: 'Valid Street',
+                        number: '123',
+                        complement: 'Apt 1',
+                        city: 'Valid City',
+                      },
+                    })
+                    .set('Accept', 'application/json');
+
+                  expect(response.status).toBe(
+                    new EmailAlreadyRegisteredException().getStatus(),
+                  );
+                  expect(response.body?.message).toContain(
+                    new EmailAlreadyRegisteredException().message,
+                  );
+                });
+              });
           });
-          */
+
+          it('should return PhoneNumberAlreadyRegisteredException if the given phone number is already in use by another user or gym', async () => {
+            //@ts-ignore
+            await prisma.uF
+              .findFirst({
+                where: {
+                  acronym: 'SP',
+                },
+              })
+              .then(async (uf) => {
+                //@ts-ignore
+                let validUfid = uf.id_uf;
+
+                expect(async () => {
+                  const response = await request(app.getHttpServer())
+                    .post(registerUserRoute)
+                    .send({
+                      ...data,
+                      phone_number: '11999999999',
+                      email: 'fulanodetal@gmail.com',
+                      address: {
+                        uf_id: validUfid,
+                        cep: '12345678',
+                        street: 'Valid Street',
+                        number: '123',
+                        complement: 'Apt 1',
+                        city: 'Valid City',
+                      },
+                    })
+                    .set('Accept', 'application/json');
+
+                  expect(response.status).toBe(
+                    new PhoneNumberAlreadyRegisteredException().getStatus(),
+                  );
+                  expect(response.body?.message).toContain(
+                    new PhoneNumberAlreadyRegisteredException().message,
+                  );
+                });
+              });
+          });
+
+          it('should return GymPlanNotFoundException if the gym plan id is invalid', async () => {
+            //@ts-ignore
+            await prisma.uF
+              .findFirst({
+                where: {
+                  acronym: 'SP',
+                },
+              })
+              .then(async (uf) => {
+                //@ts-ignore
+                let validUfid = uf.id_uf;
+
+                expect(async () => {
+                  const response = await request(app.getHttpServer())
+                    .post(registerUserRoute)
+                    .send({
+                      ...data,
+                      gym_plan_id: 'invalid-gym-plan-id',
+                      email: faker.internet.email(),
+                      address: {
+                        uf_id: validUfid,
+                        cep: '12345678',
+                        street: 'Valid Street',
+                        number: '123',
+                        complement: 'Apt 1',
+                        city: 'Valid City',
+                      },
+                    })
+                    .set('Accept', 'application/json');
+
+                  expect(response.status).toBe(
+                    new GymPlanNotFoundException().getStatus(),
+                  );
+                  expect(response.body?.message).toContain(
+                    new GymPlanNotFoundException().message,
+                  );
+                });
+              });
+          });
         });
       });
     });
