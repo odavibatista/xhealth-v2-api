@@ -23,7 +23,7 @@ import { BrowseExtraServicesUsecase } from '../../infra/usecases/browse-extra-se
 import { Cache } from '@nestjs/cache-manager';
 
 @ApiTags('Serviços Extras')
-@Controller('service')
+@Controller('services')
 export class ExtraServiceController implements ExtraServiceControllerInterface {
   constructor(
     private readonly browseExtraServicesUsecase: BrowseExtraServicesUsecase,
