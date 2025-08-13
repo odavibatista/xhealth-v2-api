@@ -15,7 +15,7 @@ export const mainSeeder = async () => {
 
   prisma.seed([ufsSeeder]);
   prisma.seed([citySeeder]);
-  prisma.seed([administratorSeeder])
+  prisma.seed([administratorSeeder]);
   prisma.seed([adminPermissionSeeder]);
   prisma.seed([trainerSeeder]);
   prisma.seed([gymSeeder]);

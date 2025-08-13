@@ -29,10 +29,9 @@ describe('GymController - /gyms', () => {
   let jwtToken: string;
 
   beforeAll(async () => {
-
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule, GymModule, SharedModule],
-      providers: [PrismaProvider]
+      providers: [PrismaProvider],
     })
       .overrideProvider(PrismaProvider)
       .useValue(new PrismaProvider(Environment.TEST))
@@ -58,7 +57,7 @@ describe('GymController - /gyms', () => {
     await prisma.clear('all');
   });
 
-  describe('GET /gyms/browse', ()  => {
+  describe('GET /gyms/browse', () => {
     it('should return a list of gyms', async () => {
       const response = await request(app.getHttpServer())
         .get(browseGymsRoute)
@@ -81,7 +80,7 @@ describe('GymController - /gyms', () => {
     });
   });
 
-  describe('GET /gyms/find/:cuid', ()  => {
+  describe('GET /gyms/find/:cuid', () => {
     it('should return a gym by cuid', async () => {
       // Still to be implemented
     });
@@ -92,14 +91,16 @@ describe('GymController - /gyms', () => {
         .expect(404);
 
       expect(response.body).toHaveProperty('statusCode', 404);
-      expect(response.body).toHaveProperty('message', new GymNotFoundException().message);
-      
+      expect(response.body).toHaveProperty(
+        'message',
+        new GymNotFoundException().message,
+      );
+
       jwtToken = response.body.access_token;
     });
   });
 
-  describe('POST /gyms/create', ()  => {
-
+  describe('POST /gyms/create', () => {
     it('should return 401 and NotAuthenticatedException if no token is provided', async () => {
       const response = await request(app.getHttpServer())
         .post(createGymRoute)
@@ -109,19 +110,22 @@ describe('GymController - /gyms', () => {
             cep: '12345678',
             street: 'Test Street',
             city: 'Test City',
-            uf_id: 'SP'
+            uf_id: 'SP',
           },
-          phone_number: '1234567890'
+          phone_number: '1234567890',
         })
         .expect(401)
         .set('Accept', 'application/json');
 
       expect(response.body).toHaveProperty('statusCode', 401);
-      expect(response.body).toHaveProperty('message', new NotAuthenticatedException().message);
+      expect(response.body).toHaveProperty(
+        'message',
+        new NotAuthenticatedException().message,
+      );
     });
   });
 
-  describe('PATCH /gyms/edit/:cuid', ()  => {
+  describe('PATCH /gyms/edit/:cuid', () => {
     it('should return 401 and NotAuthenticatedException if no token is provided', async () => {
       const response = await request(app.getHttpServer())
         .patch(editGymRoute.replace(':cuid', 'some-cuid'))
@@ -131,19 +135,22 @@ describe('GymController - /gyms', () => {
             cep: '87654321',
             street: 'Updated Street',
             city: 'Updated City',
-            uf_id: 'RJ'
+            uf_id: 'RJ',
           },
-          phone_number: '0987654321'
+          phone_number: '0987654321',
         })
         .expect(401)
         .set('Accept', 'application/json');
 
       expect(response.body).toHaveProperty('statusCode', 401);
-      expect(response.body).toHaveProperty('message', new NotAuthenticatedException().message);
+      expect(response.body).toHaveProperty(
+        'message',
+        new NotAuthenticatedException().message,
+      );
     });
   });
 
-  describe('DELETE /gyms/delete/:cuid', ()  => {
+  describe('DELETE /gyms/delete/:cuid', () => {
     it('should delete a gym by cuid', async () => {
       // Still to be implemented
     });
@@ -155,7 +162,10 @@ describe('GymController - /gyms', () => {
         .set('Accept', 'application/json');
 
       expect(response.body).toHaveProperty('statusCode', 401);
-      expect(response.body).toHaveProperty('message', new NotAuthenticatedException().message);
+      expect(response.body).toHaveProperty(
+        'message',
+        new NotAuthenticatedException().message,
+      );
     });
   });
 });

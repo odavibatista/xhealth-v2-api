@@ -62,15 +62,9 @@ export class PrismaProvider
     const modelsToClear = models === 'all' ? allModels : models;
 
     for (const model of modelsToClear) {
-      await this.$queryRawUnsafe(
-        `SET FOREIGN_KEY_CHECKS = 0;`,
-      );
-      await this.$executeRawUnsafe(
-        `TRUNCATE TABLE \`${model}\`;`,
-      );
-      await this.$queryRawUnsafe(
-        `SET FOREIGN_KEY_CHECKS = 1;`,
-      );
+      await this.$queryRawUnsafe(`SET FOREIGN_KEY_CHECKS = 0;`);
+      await this.$executeRawUnsafe(`TRUNCATE TABLE \`${model}\`;`);
+      await this.$queryRawUnsafe(`SET FOREIGN_KEY_CHECKS = 1;`);
     }
   }
 }

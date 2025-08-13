@@ -228,12 +228,10 @@ describe('Edit Gym Use Case Test Suites', () => {
       phone_number: '11999999999',
     };
 
-    jest
-      .spyOn(mockGymRepository, 'findById')
-      .mockResolvedValue({
-        id_gym: 'valid-gym-id',
-        phone_number: '11999999998',
-      } as any);
+    jest.spyOn(mockGymRepository, 'findById').mockResolvedValue({
+      id_gym: 'valid-gym-id',
+      phone_number: '11999999998',
+    } as any);
     jest
       .spyOn(mockadministratorRepository, 'findById')
       .mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
@@ -268,12 +266,10 @@ describe('Edit Gym Use Case Test Suites', () => {
       phone_number: '11999999999',
     };
 
-    jest
-      .spyOn(mockGymRepository, 'findById')
-      .mockResolvedValue({
-        id_gym: 'valid-gym-id',
-        phone_number: '11999999998',
-      } as any);
+    jest.spyOn(mockGymRepository, 'findById').mockResolvedValue({
+      id_gym: 'valid-gym-id',
+      phone_number: '11999999998',
+    } as any);
     jest
       .spyOn(mockadministratorRepository, 'findById')
       .mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
@@ -309,12 +305,10 @@ describe('Edit Gym Use Case Test Suites', () => {
       phone_number: '11999999999',
     };
 
-    jest
-      .spyOn(mockGymRepository, 'findById')
-      .mockResolvedValue({
-        id_gym: 'valid-gym-id',
-        name: 'Old Gym Name',
-      } as any);
+    jest.spyOn(mockGymRepository, 'findById').mockResolvedValue({
+      id_gym: 'valid-gym-id',
+      name: 'Old Gym Name',
+    } as any);
     jest
       .spyOn(mockadministratorRepository, 'findById')
       .mockResolvedValue({ id_admin: 'valid-admin-id' } as any);
@@ -388,12 +382,10 @@ describe('Edit Gym Use Case Test Suites', () => {
       ...mockGym,
       ...validData,
     });
-    jest
-      .spyOn(mockUFRepository, 'findById')
-      .mockResolvedValue({
-        id_uf: validData.address.uf_id,
-        name: validData.address.city,
-      });
+    jest.spyOn(mockUFRepository, 'findById').mockResolvedValue({
+      id_uf: validData.address.uf_id,
+      name: validData.address.city,
+    });
 
     const result = await useCase.execute(
       'valid-gym-id',

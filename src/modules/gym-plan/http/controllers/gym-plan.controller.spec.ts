@@ -26,10 +26,9 @@ describe('Gym Plan Controller - /gym-plans', () => {
   let jwtToken: string;
 
   beforeAll(async () => {
-
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule, GymPlanModule, SharedModule],
-      providers: [PrismaProvider]
+      providers: [PrismaProvider],
     })
       .overrideProvider(PrismaProvider)
       .useValue(new PrismaProvider(Environment.TEST))
@@ -47,12 +46,17 @@ describe('Gym Plan Controller - /gym-plans', () => {
   });
 
   beforeEach(async () => {
-    await prisma.seed([administratorSeeder, adminPermissionSeeder, gymPlanSeeder, gymPlanFeaturesSeeder]);
+    await prisma.seed([
+      administratorSeeder,
+      adminPermissionSeeder,
+      gymPlanSeeder,
+      gymPlanFeaturesSeeder,
+    ]);
     jest.clearAllMocks();
   });
 
   afterEach(async () => {
-     await prisma.clear('all');
+    await prisma.clear('all');
   });
 
   describe('GET /gym-plans/browse', () => {
@@ -73,14 +77,16 @@ describe('Gym Plan Controller - /gym-plans', () => {
   });
 
   describe('GET /gym-plans/find/:cuid', () => {
-
     it('should return 404 and GymPlanNotFoundException if gym plan is not found', async () => {
       const response = await request(app.getHttpServer())
         .get(findGymPlanByIdRoute.replace(':cuid', 'non-existing-cuid'))
         .expect(404);
 
       expect(response.body).toHaveProperty('statusCode', 404);
-      expect(response.body).toHaveProperty('message', new GymPlanNotFoundException().message);
+      expect(response.body).toHaveProperty(
+        'message',
+        new GymPlanNotFoundException().message,
+      );
     });
   });
 });

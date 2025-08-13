@@ -20,15 +20,14 @@ describe('Trainer Controller - /trainers', () => {
 
   let controller: TrainerController;
 
-    let app: INestApplication;
-    let prisma: PrismaProvider;
-    let jwtToken: string;
+  let app: INestApplication;
+  let prisma: PrismaProvider;
+  let jwtToken: string;
 
   beforeAll(async () => {
-
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule, TrainerModule, SharedModule],
-      providers: [PrismaProvider]
+      providers: [PrismaProvider],
     })
       .overrideProvider(PrismaProvider)
       .useValue(new PrismaProvider(Environment.TEST))
@@ -51,35 +50,37 @@ describe('Trainer Controller - /trainers', () => {
   });
 
   afterEach(async () => {
-     await prisma.clear('all');
+    await prisma.clear('all');
   });
 
-    describe('GET /trainers/browse', () => {
-      it('should return a list of trainers', async () => {
-        const response = await request(app.getHttpServer())
-          .get(browseTrainersRoute)
-          .expect(200);
-  
-        expect(response.body).toBeInstanceOf(Array);
-        expect(response.body[0]).toBeInstanceOf(Object);
-        expect(response.body[0]).toHaveProperty('id_trainer');
-        expect(response.body[0]).toHaveProperty('name');
-        expect(response.body[0]).toHaveProperty('imageUrl');
-        expect(response.body[0]).toHaveProperty('instagramUrl');
-        expect(response.body[0]).toHaveProperty('twitterUrl');
-        expect(response.body[0]).toHaveProperty('youtubeUrl');
-      });
+  describe('GET /trainers/browse', () => {
+    it('should return a list of trainers', async () => {
+      const response = await request(app.getHttpServer())
+        .get(browseTrainersRoute)
+        .expect(200);
+
+      expect(response.body).toBeInstanceOf(Array);
+      expect(response.body[0]).toBeInstanceOf(Object);
+      expect(response.body[0]).toHaveProperty('id_trainer');
+      expect(response.body[0]).toHaveProperty('name');
+      expect(response.body[0]).toHaveProperty('imageUrl');
+      expect(response.body[0]).toHaveProperty('instagramUrl');
+      expect(response.body[0]).toHaveProperty('twitterUrl');
+      expect(response.body[0]).toHaveProperty('youtubeUrl');
     });
+  });
 
   describe('GET /trainers/find/:cuid', () => {
-
     it('should return 404 and TrainerNotFoundException if trainer is not found', async () => {
       const response = await request(app.getHttpServer())
         .get(findTrainerByIdRoute.replace(':cuid', 'non-existing-cuid'))
         .expect(404);
 
       expect(response.body).toHaveProperty('statusCode', 404);
-      expect(response.body).toHaveProperty('message', new TrainerNotFoundException().message);
+      expect(response.body).toHaveProperty(
+        'message',
+        new TrainerNotFoundException().message,
+      );
     });
   });
 });
