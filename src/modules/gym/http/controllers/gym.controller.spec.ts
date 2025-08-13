@@ -86,7 +86,6 @@ describe('GymController - /gyms', () => {
         .get(browseGymsRoute)
         .expect(200);
 
-
       const gymCuid = cuidResponse.body[0].id_gym;
 
       expect(async () => {
@@ -106,7 +105,7 @@ describe('GymController - /gyms', () => {
         expect(response.body.address).toHaveProperty('street');
         expect(response.body.address).toHaveProperty('city');
         expect(response.body.address).toHaveProperty('uf_id');
-      })
+      });
     });
 
     it('should return 404 if gym not found', async () => {

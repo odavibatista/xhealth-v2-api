@@ -30,7 +30,7 @@ describe('Admin Controller - /admin', () => {
   let data: AdminLoginRequestDTO = {
     email: faker.internet.email(),
     password: faker.internet.password(),
-  }
+  };
 
   beforeAll(async () => {
     jwtProvider = new JWTProvider();
@@ -64,7 +64,7 @@ describe('Admin Controller - /admin', () => {
     await prisma.clear('all');
   });
 
-  describe('POST - /login', ()  => {    
+  describe('POST - /login', () => {
     describe('\nSuccessful cases:', () => {
       it('should return 200 and instance of AdminLoginResponseDTO on successful login', async () => {
         const response = await request(app.getHttpServer())
@@ -117,10 +117,14 @@ describe('Admin Controller - /admin', () => {
             .send(data)
             .set('Accept', 'application/json');
 
-          expect(response.status).toBe(new InvalidCredentialsException().getStatus());
-          expect(response.body.message).toBe(new InvalidCredentialsException().message);
+          expect(response.status).toBe(
+            new InvalidCredentialsException().getStatus(),
+          );
+          expect(response.body.message).toBe(
+            new InvalidCredentialsException().message,
+          );
         });
       });
-    })
-  })
+    });
+  });
 });
