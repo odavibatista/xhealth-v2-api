@@ -10,6 +10,8 @@ import { HashProvider } from '../../providers/hash.provider';
 @Injectable()
 export class UserRepository implements UserRepositoryInterface {
   public encryptedFields: (keyof User)[] = [
+    'name',
+    'birth_date',
     'email',
     'password',
     'phone_number',
@@ -283,7 +285,7 @@ export class UserRepository implements UserRepositoryInterface {
   }
 
   /* This method will create a new user */
-  async create(data: CreateUserBodyDTO): Promise<Partial<User>> {
+  async create(data: CreateUserBodyDTO): Promise<User> {
     const { check_privacy, address, gym_plan_id, ...userData } = data;
 
     const userEncryptedData = this.encrypterProvider.encryptData(
