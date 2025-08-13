@@ -57,7 +57,7 @@ export class CreateUserUseCase implements UseCaseInterface {
       number: data.address.number,
       city: data.address.city,
       uf: Number(data.address.uf_id),
-      complement: data.address?.complement
+      complement: data.address?.complement,
     });
 
     const isNameValid = validateName(data.name);

@@ -163,10 +163,16 @@ describe('User Controller - /user', () => {
           );
         });
 
-        it('should return UnprocessableDataException if the complement is misformatted', async () =>  {
-                    const response = await request(app.getHttpServer())
+        it('should return UnprocessableDataException if the complement is misformatted', async () => {
+          const response = await request(app.getHttpServer())
             .post(registerUserRoute)
-            .send({ ...data, address: { ...data.address, complement: faker.string.alphanumeric(101) } })
+            .send({
+              ...data,
+              address: {
+                ...data.address,
+                complement: faker.string.alphanumeric(101),
+              },
+            })
             .set('Accept', 'application/json');
 
           expect(response.status).toBe(
@@ -175,7 +181,7 @@ describe('User Controller - /user', () => {
           expect(response.body?.message).toContain(
             new UnprocessableDataException().message,
           );
-        })
+        });
       });
 
       describe('\nInvalid user data', () => {
