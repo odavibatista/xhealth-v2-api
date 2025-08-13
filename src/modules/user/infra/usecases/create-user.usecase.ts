@@ -22,6 +22,8 @@ import { GymRepository } from '../../../gym/infra/db/repositories/gym.repository
 import { AdministratorRepository } from '../../../administrator/infra/db/repositories/administrator.repository';
 import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNotFound.exception.dto';
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
+import { GymPlanRepository } from '../../../gym-plan/infra/db/repositories/gym-plan.repository';
+import { GymPlanNotFoundException } from '../../../gym-plan/domain/dtos/errors/GymPlanNotFound.exception';
 
 export class CreateUserUseCase implements UseCaseInterface {
   constructor(
@@ -35,12 +37,16 @@ export class CreateUserUseCase implements UseCaseInterface {
     private readonly gymRepository: GymRepository,
     @Inject()
     private readonly adminRepository: AdministratorRepository,
+    @Inject()
+    private readonly gymPlanRepository: GymPlanRepository,
   ) {}
 
   async execute(
     data: CreateUserBodyDTO,
   ): Promise<
     | CreateUserResponseDTO
+    | UFNotFoundException
+    | GymPlanNotFoundException
     | PhoneNumberAlreadyRegisteredException
     | EmailAlreadyRegisteredException
     | UnprocessableEntityException
@@ -82,6 +88,12 @@ export class CreateUserUseCase implements UseCaseInterface {
     const emailAlreadyRegisteredByUser = await this.userRepository.findByEmail(
       data.email,
     );
+
+    const isGymPlanValid = await this.gymPlanRepository.findById(
+      data.gym_plan_id,
+    );
+
+    if (!isGymPlanValid) throw new GymPlanNotFoundException();
 
     if (emailAlreadyRegisteredByUser)
       throw new EmailAlreadyRegisteredException();

@@ -12,6 +12,7 @@ import { CreateUserUseCase } from '../usecases/create-user.usecase';
 import { AdministratorRepository } from '../../../administrator/infra/db/repositories/administrator.repository';
 import { UfRepository } from '../../../../shared/infra/db/repositories/uf.repository';
 import { GymRepository } from '../../../gym/infra/db/repositories/gym.repository';
+import { GymPlanRepository } from '../../../gym-plan/infra/db/repositories/gym-plan.repository';
 
 @Module({
   imports: [],
@@ -28,6 +29,7 @@ import { GymRepository } from '../../../gym/infra/db/repositories/gym.repository
     AdministratorRepository,
     UfRepository,
     GymRepository,
+    GymPlanRepository,
   ],
   exports: [JWTProvider, HashProvider],
 })
