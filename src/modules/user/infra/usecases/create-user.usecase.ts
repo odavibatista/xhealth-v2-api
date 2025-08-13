@@ -24,7 +24,6 @@ import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNot
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
 import { GymPlanRepository } from '../../../gym-plan/infra/db/repositories/gym-plan.repository';
 import { GymPlanNotFoundException } from '../../../gym-plan/domain/dtos/errors/GymPlanNotFound.exception';
-import { InvalidCredentialsException } from '../../domain/dtos/errors/InvalidCredentials.exception';
 
 export class CreateUserUseCase implements UseCaseInterface {
   constructor(
@@ -58,6 +57,7 @@ export class CreateUserUseCase implements UseCaseInterface {
       number: data.address.number,
       city: data.address.city,
       uf: Number(data.address.uf_id),
+      complement: data.address?.complement
     });
 
     const isNameValid = validateName(data.name);

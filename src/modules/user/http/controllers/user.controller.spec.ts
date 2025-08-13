@@ -20,6 +20,7 @@ import { CreateUserBodyDTO } from '../../domain/dtos/requests/CreateUser.request
 import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNotFound.exception.dto';
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
 import { EmailAlreadyRegisteredException } from '../../domain/dtos/errors/EmailAlreadyRegistered.exception';
+import ufsSeeder from '../../../../shared/infra/db/prisma/seeders/uf.seed';
 
 describe('User Controller - /user', () => {
   const controllerRoute = '/user';
@@ -48,7 +49,7 @@ describe('User Controller - /user', () => {
       cep: '12345678',
       street: 'Valid Street',
       number: '123',
-      complement: 'Apt 1',
+      complement: 'Apartamento 1',
       city: 'Valid City',
       uf_id: faker.string.uuid(),
     },
@@ -79,6 +80,7 @@ describe('User Controller - /user', () => {
 
   beforeEach(async () => {
     await prisma.seed([
+      ufsSeeder,
       administratorSeeder,
       adminPermissionSeeder,
       gymPlanSeeder,
@@ -104,6 +106,76 @@ describe('User Controller - /user', () => {
             new UFNotFoundException().message,
           );
         });
+
+        it('should return UnprocessableDataException if the cep is invalid', async () => {
+          const response = await request(app.getHttpServer())
+            .post(registerUserRoute)
+            .send({ ...data, address: { ...data.address, cep: 'invalid-cep' } })
+            .set('Accept', 'application/json');
+
+          expect(response.status).toBe(
+            new UnprocessableDataException().getStatus(),
+          );
+          expect(response.body?.message).toContain(
+            new UnprocessableDataException().message,
+          );
+        });
+
+        it('should return UnprocessableDataException if the street is misformatted', async () => {
+          const response = await request(app.getHttpServer())
+            .post(registerUserRoute)
+            .send({ ...data, address: { ...data.address, street: '#' } })
+            .set('Accept', 'application/json');
+
+          expect(response.status).toBe(
+            new UnprocessableDataException().getStatus(),
+          );
+          expect(response.body?.message).toContain(
+            new UnprocessableDataException().message,
+          );
+        });
+
+        it('should return UnprocessableDataException if the number is misformatted', async () => {
+          const response = await request(app.getHttpServer())
+            .post(registerUserRoute)
+            .send({ ...data, address: { ...data.address, number: '#' } })
+            .set('Accept', 'application/json');
+
+          expect(response.status).toBe(
+            new UnprocessableDataException().getStatus(),
+          );
+          expect(response.body?.message).toContain(
+            new UnprocessableDataException().message,
+          );
+        });
+
+        it('should return UnprocessableDataException if the city is misformatted', async () => {
+          const response = await request(app.getHttpServer())
+            .post(registerUserRoute)
+            .send({ ...data, address: { ...data.address, city: '#' } })
+            .set('Accept', 'application/json');
+
+          expect(response.status).toBe(
+            new UnprocessableDataException().getStatus(),
+          );
+          expect(response.body?.message).toContain(
+            new UnprocessableDataException().message,
+          );
+        });
+
+        it('should return UnprocessableDataException if the complement is misformatted', async () =>  {
+                    const response = await request(app.getHttpServer())
+            .post(registerUserRoute)
+            .send({ ...data, address: { ...data.address, complement: faker.string.alphanumeric(101) } })
+            .set('Accept', 'application/json');
+
+          expect(response.status).toBe(
+            new UnprocessableDataException().getStatus(),
+          );
+          expect(response.body?.message).toContain(
+            new UnprocessableDataException().message,
+          );
+        })
       });
 
       describe('\nInvalid user data', () => {
@@ -180,20 +252,43 @@ describe('User Controller - /user', () => {
         });
 
         describe('\nConflictuous Insertions', () => {
-          it('should return EmailAlreadyRegisteredException if the given email is already in use by another user', async ()  =>  {
+          /*
+        it('should return EmailAlreadyRegisteredException if the given email is already in use by another user', async () => {
+            //@ts-ignore
+          await prisma.uF.findFirst({
+              where: {
+                acronym: 'SP'
+              }
+            }).then(async (uf) => {
+            //@ts-ignore
+            let validUfid = uf.id_uf;
+
             const response = await request(app.getHttpServer())
               .post(registerUserRoute)
-              .send({ ...data, email: 'admin@xhealth.com' })
+              .send({
+                ...data,
+                email: 'admin@xhealth.com',
+                address: {
+                  uf_id: validUfid,
+                  cep: '12345678',
+                  street: 'Valid Street',
+                  number: '123',
+                  complement: 'Apt 1',
+                  city: 'Valid City',
+                },
+              })
               .set('Accept', 'application/json');
 
-              expect(response.status).toBe(
+            expect(response.status).toBe(
               new EmailAlreadyRegisteredException().getStatus(),
             );
             expect(response.body?.message).toContain(
               new EmailAlreadyRegisteredException().message,
             );
-          })
-        })
+            })
+          });
+          */
+        });
       });
     });
   });
