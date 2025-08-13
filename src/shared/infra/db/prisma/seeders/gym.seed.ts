@@ -1,7 +1,8 @@
+import { PrismaClient } from '@prisma/client';
 import { prisma } from '..';
 import { EncrypterProvider } from '../../../providers/Encrypter.provider';
 
-export const gymSeeder = async () => {
+export const gymSeeder = async (prisma: PrismaClient) => {
   console.log('Running Gyms seeder...');
 
   const encrypterProvider = new EncrypterProvider();
