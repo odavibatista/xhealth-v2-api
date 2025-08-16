@@ -6,7 +6,7 @@ import { UserRepository } from './user.repository';
 
 describe('User Repository Test Suites', () => {
   let repository: UserRepository;
-  let addressRepository = new AddressRepository();
+  let addressRepository = new AddressRepository(new EncrypterProvider());
 
   beforeEach(() => {
     jest.useFakeTimers({ doNotFake: ['nextTick'] });
@@ -211,7 +211,7 @@ describe('User Repository Test Suites', () => {
         },
       };
 
-      jest.spyOn(repository, 'create').mockResolvedValueOnce(mockUser);
+      jest.spyOn(repository, 'create').mockResolvedValueOnce(mockUser as any);
 
       const result = await repository.create(createUserDTO);
 
