@@ -39,7 +39,6 @@ let appConfigurations: z.infer<typeof appConfigurationsSchema>;
 
 try {
   appConfigurations = appConfigurationsSchema.parse({
-
     FRONTEND_URL: process.env.FRONTEND_URL,
 
     DATABASE_URL: process.env.DATABASE_URL,
