@@ -11,6 +11,7 @@ import { gymSeeder } from './gym.seed';
 import { gymPlanSeeder } from './gym-plan.seed';
 import { gymPlanFeaturesSeeder } from './gym-plan-feature.seed';
 import { PrismaProvider } from '../../../providers/Prisma.provider';
+import { extraServiceSeeder } from './extra-service.seed';
 
 const prisma = new PrismaProvider();
 
@@ -26,6 +27,7 @@ const seed = async () => {
     gymSeeder,
     gymPlanSeeder,
     gymPlanFeaturesSeeder,
+    extraServiceSeeder,
   ]);
 };
 

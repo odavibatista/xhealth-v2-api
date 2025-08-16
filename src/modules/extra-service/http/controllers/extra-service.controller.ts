@@ -68,7 +68,7 @@ export class ExtraServiceController implements ExtraServiceControllerInterface {
     description: 'Erro interno do servidor.',
     type: AllExceptionsFilterDTO,
   })
-  @Get(':cuid')
+  @Get('find/:cuid')
   async findExtraServiceById(
     @Param('cuid') id: string,
     @Req() req: Request,
