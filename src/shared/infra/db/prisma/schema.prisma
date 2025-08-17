@@ -209,7 +209,7 @@ model ExtraService {
   id_extra_service String @id @default(cuid())
   name String
   description String
-  price Float
+  price String
   imageUrl String
   created_by String
   createdAt DateTime @default(now())

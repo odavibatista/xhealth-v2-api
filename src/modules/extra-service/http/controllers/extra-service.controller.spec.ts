@@ -62,6 +62,28 @@ describe('Extra Services Controller - /services', () => {
   });
 
   describe('GET /services/find/:cuid', () => {
+    it('should return an extra service by its cuid', async () => {
+      const cuidResponse = await request(app.getHttpServer())
+        .get(browseExtraServicesRoute)
+        .expect(200);
+
+      const extraServiceCuid = cuidResponse.body[0].id_extra_service;
+
+      expect(async () => {
+        const response = await request(app.getHttpServer())
+          .get(findExtraServiceByIdRoute.replace(':cuid', extraServiceCuid))
+          .expect(200);
+
+        expect(response.body).toBeInstanceOf(Object);
+        expect(response.body).toHaveProperty('id_extra_service');
+        expect(response.body).toHaveProperty('name');
+        expect(response.body).toHaveProperty('description');
+        expect(response.body).toHaveProperty('price');
+        expect(response.body).toHaveProperty('imageUrl');
+        expect(response.body).toHaveProperty('created_at');
+      });
+    });
+
     it('should return 404 and ServiceNotFoundException if service is not found', async () => {
       const response = await request(app.getHttpServer())
         .get(findExtraServiceByIdRoute.replace(':cuid', 'non-existing-cuid'))
