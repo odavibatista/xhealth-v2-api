@@ -1,15 +1,15 @@
 import { CreateLoginLogDTO } from '../../../domain/dtos/repositories/dtos/LoginLogs.repository.dto';
-import { LoginLogsRepository } from './LoginLog.repository';
+import { UserLoginLogsRepository } from './UserLoginLog.repository';
 
 describe('Login Logs Repository Test Suites', () => {
-  let repository: LoginLogsRepository;
+  let repository: UserLoginLogsRepository;
 
   beforeEach(() => {
     jest.useFakeTimers({ doNotFake: ['nextTick'] });
   });
 
   beforeEach(() => {
-    repository = new LoginLogsRepository();
+    repository = new UserLoginLogsRepository();
   });
 
   afterEach(() => {

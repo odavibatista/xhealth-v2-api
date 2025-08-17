@@ -1,24 +1,25 @@
 import { LoginLog } from '../../../../../shared/infra/db/generated/prisma';
-import { LoginLogRepositoryInterface } from '../../../domain/dtos/repositories/LoginLog.repository';
+import { UserLoginLogRepositoryInterface } from '../../../domain/dtos/repositories/LoginLog.repository';
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { Injectable } from '@nestjs/common';
 import {
   CreateLoginLogDTO,
   UpdateLastLoginAttemptDTO,
 } from '../../../domain/dtos/repositories/dtos/LoginLogs.repository.dto';
+import { UserLoginLog } from '@prisma/client';
 
 @Injectable()
-export class LoginLogsRepository implements LoginLogRepositoryInterface {
+export class UserLoginLogsRepository implements UserLoginLogRepositoryInterface {
   async getLastLoginAttempt(
     user_id: string,
-  ): Promise<Partial<LoginLog> | null> {
-    const loginLog = await prisma.loginLog.findFirst({
+  ): Promise<Partial<UserLoginLog> | null> {
+    const loginLog = await prisma.userLoginLog.findFirst({
       where: { user_id },
       orderBy: { created_at: 'desc' },
     });
     return loginLog
       ? {
-          id: loginLog.id,
+          id_user_login_log: loginLog.id_user_login_log,
           user_id: loginLog.user_id,
           created_at: loginLog.created_at,
         }
@@ -26,7 +27,7 @@ export class LoginLogsRepository implements LoginLogRepositoryInterface {
   }
 
   async create(data: CreateLoginLogDTO): Promise<void> {
-    await prisma.loginLog.create({
+    await prisma.userLoginLog.create({
       data: {
         user_id: data.user_id,
         ip: Array.isArray(data.ip) ? data.ip.join(', ') : data.ip,
@@ -37,9 +38,9 @@ export class LoginLogsRepository implements LoginLogRepositoryInterface {
   }
 
   async updateLastLoginAttempt(data: UpdateLastLoginAttemptDTO): Promise<void> {
-    await prisma.loginLog.update({
+    await prisma.userLoginLog.update({
       where: {
-        id: data.last_login_attempt_id,
+        id_user_login_log: data.last_login_attempt_id,
       },
       data: {
         login_attempt: data.login_attempt,

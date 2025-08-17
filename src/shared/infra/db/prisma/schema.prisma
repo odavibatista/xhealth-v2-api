@@ -32,14 +32,14 @@ model User {
   address             Address              @relation(fields: [address_id], references: [id_address])
   user_gym_plan GymPlan @relation(fields: [gym_plan_id], references: [id_gym_plan])
   user_extra_services UserExtraService[]
-  login_logs     LoginLog[]
+  login_logs     UserLoginLog[]
   passwordHistories   PasswordHistory[]
 
   @@map("users")
 }
 
-model LoginLog {
-  id            String   @id @default(cuid())
+model UserLoginLog {
+  id_user_login_log            String   @id @default(cuid())
   user_id       String
   ip            String
   login_attempt Int
@@ -51,6 +51,21 @@ model LoginLog {
 
   @@map("login_logs")
 }
+
+model AdminLoginLog {
+  id_admin_login_log            String   @id @default(cuid())
+  administrator_id String
+  ip            String
+  login_attempt Int
+  is_blocked    Boolean
+  updated_at    DateTime @default(now()) @updatedAt
+  created_at    DateTime @default(now())
+
+  administrator Administrator @relation(fields: [administrator_id], references: [id_administrator])
+
+  @@map("admin_login_logs")
+}
+
 model PasswordHistory {
   id         String @id @default(cuid())
   user_id    String
@@ -253,6 +268,7 @@ model Administrator {
   ExtraService ExtraService[]
   CreatorAdmin Administrator? @relation("CreatorAdmin", fields: [created_by], references: [id_administrator])
   CreatedAdministrators Administrator[] @relation("CreatorAdmin")
+  AdminLoginLogs AdminLoginLog[]
   Gym          Gym[]
   SportModality SportModality[]
   Testimony    Testimony[]
