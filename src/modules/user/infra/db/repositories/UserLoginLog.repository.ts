@@ -9,7 +9,9 @@ import {
 import { UserLoginLog } from '@prisma/client';
 
 @Injectable()
-export class UserLoginLogsRepository implements UserLoginLogRepositoryInterface {
+export class UserLoginLogsRepository
+  implements UserLoginLogRepositoryInterface
+{
   async getLastLoginAttempt(
     user_id: string,
   ): Promise<Partial<UserLoginLog> | null> {

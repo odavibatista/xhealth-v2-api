@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { SportModalityController } from '../../http/controllers/sport-modality.controller';
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
 import { AdministratorRepository } from '../../../administrator/infra/db/repositories/administrator.repository';
@@ -15,7 +20,7 @@ import { HashProvider } from '../../../user/infra/providers/hash.provider';
     AdminPermissionRepository,
     JWTProvider,
   ],
-    controllers: [SportModalityController]
+  controllers: [SportModalityController],
 })
 export class SportModalityModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

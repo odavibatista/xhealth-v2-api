@@ -1,14 +1,16 @@
-import { AdminLoginLog } from "@prisma/client";
-import { AdminLoginLogRepositoryInterface } from "../../../domain/dtos/repositories/admin-login-log.repository.interface";
-import { CreateAdminLoginLogDTO } from "../../../domain/dtos/repositories/dtos/LoginLogs.repository.dto";
-import { prisma } from "../../../../../shared/infra/db/prisma";
-import { UpdateLastLoginAttemptDTO } from "../../../../user/domain/dtos/repositories/dtos/LoginLogs.repository.dto";
+import { AdminLoginLog } from '@prisma/client';
+import { AdminLoginLogRepositoryInterface } from '../../../domain/dtos/repositories/admin-login-log.repository.interface';
+import { CreateAdminLoginLogDTO } from '../../../domain/dtos/repositories/dtos/LoginLogs.repository.dto';
+import { prisma } from '../../../../../shared/infra/db/prisma';
+import { UpdateLastLoginAttemptDTO } from '../../../../user/domain/dtos/repositories/dtos/LoginLogs.repository.dto';
 
-export class AdminLoginLogRepository implements AdminLoginLogRepositoryInterface {
+export class AdminLoginLogRepository
+  implements AdminLoginLogRepositoryInterface
+{
   async create(data: CreateAdminLoginLogDTO): Promise<void> {
-    await prisma.userLoginLog.create({
+    await prisma.adminLoginLog.create({
       data: {
-        user_id: data.admin_id,
+        administrator_id: data.admin_id,
         ip: Array.isArray(data.ip) ? data.ip.join(', ') : data.ip,
         login_attempt: data.login_attempt ?? 0,
         is_blocked: data.is_blocked,

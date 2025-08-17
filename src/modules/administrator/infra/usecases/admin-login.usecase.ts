@@ -8,16 +8,20 @@ import {
 } from '../../domain/dtos/requests/AdminLogin.request.dto';
 import { InvalidCredentialsException } from '../../../user/domain/dtos/errors/InvalidCredentials.exception';
 import { UnprocessableDataException } from '../../../../shared/domain/errors/UnprocessableData.exception';
+import { AdminLoginLogRepository } from '../db/repositories/admin-login-log.repository';
 
 export class AdminLoginUsecase implements UseCaseInterface {
   constructor(
     @Inject()
     private userRepository: AdministratorRepository,
+    @Inject()
+    private readonly adminLoginLogRepository: AdminLoginLogRepository,
     private readonly jwtProvider: JWTProvider,
   ) {}
 
   async execute(
     data: AdminLoginRequestDTO,
+    ip: string,
   ): Promise<
     | AdminLoginResponseDTO
     | InvalidCredentialsException
@@ -42,6 +46,13 @@ export class AdminLoginUsecase implements UseCaseInterface {
           administrator_name: admin.name,
         },
       },
+    });
+
+    await this.adminLoginLogRepository.create({
+      admin_id: admin?.id_administrator,
+      ip,
+      login_attempt: 1,
+      is_blocked: false,
     });
 
     return {
