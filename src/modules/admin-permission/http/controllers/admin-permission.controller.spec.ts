@@ -256,22 +256,150 @@ describe('Admin Permissions Controller - /permissions', () => {
   describe('POST /permissions/change', () => {
     let body: ChangePermissionRequestDTO;
 
-    it('should return 401 and NotAuthenticatedException if no token is provided', async () => {
-      const response = await request(app.getHttpServer())
-        .post(changePermissionRoute)
-        .send({
-          admin: 'admin-cuid',
-          permission: 'existing-permission',
-          newPermission: 'new-permission',
-        })
-        .expect(401)
-        .set('Accept', 'application/json');
+    describe('\nUnauthenticated cases', () => {
+      it('should return 401 and NotAuthenticatedException if no token is provided', async () => {
+        const response = await request(app.getHttpServer())
+          .post(changePermissionRoute)
+          .send({
+            admin: 'admin-cuid',
+            permission: 'existing-permission',
+            newPermission: 'new-permission',
+          })
+          .expect(401)
+          .set('Accept', 'application/json');
 
-      expect(response.body).toHaveProperty('statusCode', 401);
-      expect(response.body).toHaveProperty(
-        'message',
-        new NotAuthenticatedException().message,
-      );
+        expect(response.body).toHaveProperty('statusCode', 401);
+        expect(response.body).toHaveProperty(
+          'message',
+          new NotAuthenticatedException().message,
+        );
+      });
+    });
+
+    describe('\nAuthenticated failed cases', () => {
+      it('should throw AccountNotFoundException if admin is authenticated and the given admin ID does not exist', async () => {
+        let jwtToken: string;
+        const loginResponse = await request(app.getHttpServer())
+          .post(`${adminRoute}/login`)
+          .send(mainAdminLoginDTO)
+          .expect(200);
+
+        jwtToken = loginResponse.body.access_token;
+        mainAdminId = loginResponse.body.admin.id_admin;
+
+        expect(async () => {
+          const response = await request(app.getHttpServer())
+            .get(changePermissionRoute)
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${jwtToken}`);
+
+          expect(response).toBeInstanceOf(AccountNotFoundException);
+        });
+      });
+
+      it('should throw UnauthorizedException if the requesting admin is trying to change a permission for themselves', async () => {
+        let jwtToken: string;
+        let adminId: string;
+        const loginResponse = await request(app.getHttpServer())
+          .post(`${adminRoute}/login`)
+          .send(mainAdminLoginDTO)
+          .expect(200);
+
+        jwtToken = loginResponse.body.access_token;
+        adminId = loginResponse.body.admin.id_admin;
+
+        expect(async () => {
+          const response = await request(app.getHttpServer())
+            .post(changePermissionRoute)
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${jwtToken}`)
+            .send({
+              admin_id: adminId,
+              permission: 'can_create_gyms',
+            });
+
+          expect(response).toBeInstanceOf(UnauthorizedException);
+        });
+      });
+
+      it('should throw UnauthorizedException if the requesting admin does not have permission to change permissions', async () => {
+        let jwtToken: string;
+        const loginResponse = await request(app.getHttpServer())
+          .post(`${adminRoute}/login`)
+          .send(secondaryAdminLoginDTO)
+          .expect(200);
+
+        jwtToken = loginResponse.body.access_token;
+        secondaryAdminId = loginResponse.body.admin.id_admin;
+
+        expect(async () => {
+          const response = await request(app.getHttpServer())
+            .post(changePermissionRoute)
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${jwtToken}`)
+            .send({
+              admin_id: mainAdminId,
+              permission: 'can_create_gyms',
+            });
+
+          expect(response).toBeInstanceOf(UnauthorizedException);
+        });
+      });
+
+      it('should throw PermissionDoesNotExistException if the sent permission does not exist', async () => {
+        let jwtToken: string;
+        const loginResponse = await request(app.getHttpServer())
+          .post(`${adminRoute}/login`)
+          .send(mainAdminLoginDTO)
+          .expect(200);
+
+        jwtToken = loginResponse.body.access_token;
+
+        expect(async () => {
+          const response = await request(app.getHttpServer())
+            .post(changePermissionRoute)
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${jwtToken}`)
+            .send({
+              admin_id: secondaryAdminId,
+              permission: 'non_existent_permission',
+            });
+
+          expect(response).toBeInstanceOf(PermissionDoesNotExistException);
+        });
+      });
+    });
+
+    describe('\nAuthenticated success cases', () => {
+      it('should change the permission of the admin and return the admin data and changed permission', async () => {
+        let jwtToken: string;
+        const loginResponse = await request(app.getHttpServer())
+          .post(`${adminRoute}/login`)
+          .send(mainAdminLoginDTO)
+          .expect(200);
+
+        jwtToken = loginResponse.body.access_token;
+
+        body = {
+          admin_id: secondaryAdminId,
+          permission: 'can_create_gyms',
+        };
+
+        expect(async () => {
+          const response = await request(app.getHttpServer())
+            .post(changePermissionRoute)
+            .set('Accept', 'application/json')
+            .set('Authorization', `Bearer ${jwtToken}`)
+            .send({
+              admin_id: secondaryAdminId,
+              permission: 'can_edit_gyms',
+            });
+
+          expect(response).toBeInstanceOf(Object);
+          expect(response.body).toHaveProperty('admin_id');
+          expect(response.body).toHaveProperty('changed_permission');
+        });
+      });
     });
   });
 
