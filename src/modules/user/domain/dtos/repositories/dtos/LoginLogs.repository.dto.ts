@@ -1,4 +1,4 @@
-export interface CreateLoginLogDTO {
+export interface CreateUserLoginLogDTO {
   user_id: string;
   ip: string | string[];
   login_attempt?: number;

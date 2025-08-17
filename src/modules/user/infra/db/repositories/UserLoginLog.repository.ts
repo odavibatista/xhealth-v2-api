@@ -1,9 +1,9 @@
 import { LoginLog } from '../../../../../shared/infra/db/generated/prisma';
-import { UserLoginLogRepositoryInterface } from '../../../domain/dtos/repositories/LoginLog.repository';
+import { UserLoginLogRepositoryInterface } from '../../../domain/dtos/repositories/UserLoginLog.repository';
 import { prisma } from '../../../../../shared/infra/db/prisma';
 import { Injectable } from '@nestjs/common';
 import {
-  CreateLoginLogDTO,
+  CreateUserLoginLogDTO,
   UpdateLastLoginAttemptDTO,
 } from '../../../domain/dtos/repositories/dtos/LoginLogs.repository.dto';
 import { UserLoginLog } from '@prisma/client';
@@ -26,7 +26,7 @@ export class UserLoginLogsRepository implements UserLoginLogRepositoryInterface 
       : null;
   }
 
-  async create(data: CreateLoginLogDTO): Promise<void> {
+  async create(data: CreateUserLoginLogDTO): Promise<void> {
     await prisma.userLoginLog.create({
       data: {
         user_id: data.user_id,
