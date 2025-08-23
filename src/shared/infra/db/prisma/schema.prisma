@@ -49,7 +49,7 @@ model UserLoginLog {
 
   user User @relation(fields: [user_id], references: [id_user])
 
-  @@map("login_logs")
+  @@map("user_login_logs")
 }
 
 model AdminLoginLog {
