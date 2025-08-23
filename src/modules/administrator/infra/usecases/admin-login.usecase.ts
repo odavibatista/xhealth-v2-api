@@ -14,7 +14,7 @@ import { DateProvider } from '../../../../shared/infra/providers/Date.provider';
 export class AdminLoginUsecase implements UseCaseInterface {
   constructor(
     @Inject()
-    private userRepository: AdministratorRepository,
+    private adminrepository: AdministratorRepository,
     @Inject()
     private readonly adminLoginLogRepository: AdminLoginLogRepository,
     private readonly jwtProvider: JWTProvider,
@@ -29,12 +29,12 @@ export class AdminLoginUsecase implements UseCaseInterface {
     | InvalidCredentialsException
     | UnprocessableDataException
   > {
-    const admin = await this.userRepository.findByEmail(data.email);
+    const admin = await this.adminrepository.findByEmail(data.email);
 
     if (!admin || !admin.id_administrator || !admin.name)
       throw new InvalidCredentialsException();
 
-    const isPasswordValid = await this.userRepository.comparePassword(
+    const isPasswordValid = await this.adminrepository.comparePassword(
       admin.id_administrator,
       data.password,
     );
