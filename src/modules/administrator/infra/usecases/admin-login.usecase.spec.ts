@@ -1,3 +1,4 @@
+import { DateProvider } from '../../../../shared/infra/providers/Date.provider';
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
 import { InvalidCredentialsException } from '../../../user/domain/dtos/errors/InvalidCredentials.exception';
 import { HashProvider } from '../../../user/infra/providers/hash.provider';
@@ -14,6 +15,7 @@ describe('Admin Login Usecase Test Suites', () => {
   let encrypterProvider: EncrypterProvider;
   let hashProvider: HashProvider;
   let jwtProvider: JWTProvider;
+  let dateProvider: DateProvider;
 
   beforeEach(() => {
     jest.useFakeTimers({ doNotFake: ['nextTick'] });
@@ -22,6 +24,7 @@ describe('Admin Login Usecase Test Suites', () => {
   beforeEach(async () => {
     encrypterProvider = new EncrypterProvider();
     hashProvider = new HashProvider();
+    dateProvider = new DateProvider();
     mockAdminLoginLogRepository = new AdminLoginLogRepository();
     mockRepository = new AdministratorRepository(
       encrypterProvider,
@@ -32,6 +35,7 @@ describe('Admin Login Usecase Test Suites', () => {
       mockRepository,
       mockAdminLoginLogRepository,
       jwtProvider,
+      dateProvider,
     );
     jest.clearAllMocks();
   });

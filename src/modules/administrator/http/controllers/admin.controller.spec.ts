@@ -111,7 +111,7 @@ describe('Admin Controller - /admin', () => {
       */
 
       describe('\nInvalid Credentials', () => {
-        it('should return InvalidCredentialsException if user data is invalid', async () => {
+        it('should return InvalidCredentialsException if admin login data is invalid', async () => {
           const response = await request(app.getHttpServer())
             .post(loginRoute)
             .send(data)

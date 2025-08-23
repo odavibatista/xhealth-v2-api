@@ -4,6 +4,7 @@ import { UserController } from './user.controller';
 import {
   HttpException,
   INestApplication,
+  UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { PrismaProvider } from '../../../../shared/infra/providers/Prisma.provider';
@@ -23,10 +24,13 @@ import { EmailAlreadyRegisteredException } from '../../domain/dtos/errors/EmailA
 import ufsSeeder from '../../../../shared/infra/db/prisma/seeders/uf.seed';
 import { PhoneNumberAlreadyRegisteredException } from '../../domain/dtos/errors/PhoneNumberAlreadyRegistered.exception';
 import { GymPlanNotFoundException } from '../../../gym-plan/domain/dtos/errors/GymPlanNotFound.exception';
+import { InvalidCredentialsException } from '../../domain/dtos/errors/InvalidCredentials.exception';
+import { userSeeder } from '../../../../shared/infra/db/prisma/seeders/user.seed';
 
 describe('User Controller - /user', () => {
   const controllerRoute = '/user';
   const registerUserRoute = `${controllerRoute}/register`;
+  const loginUserRoute = `${controllerRoute}/login`;
 
   let controller: UserController;
 
@@ -86,6 +90,7 @@ describe('User Controller - /user', () => {
       administratorSeeder,
       adminPermissionSeeder,
       gymPlanSeeder,
+      userSeeder,
     ]);
     jest.clearAllMocks();
   });
@@ -420,6 +425,112 @@ describe('User Controller - /user', () => {
                   );
                 });
               });
+          });
+        });
+      });
+    });
+  });
+
+  describe('POST /login', () => {
+    describe('\nSuccessful cases:', () => {
+      it('should return 200 and instance of UserLoginResponseDTO on successful login', async () => {
+        const response = await request(app.getHttpServer())
+          .post(loginUserRoute)
+          .send({
+            email: 'usuario_da_xhealth@gmail.com',
+            password: 'senha123',
+          })
+          .set('Accept', 'application/json');
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('token');
+        expect(response.body).toHaveProperty('user');
+        jwtToken = response.body.token;
+      });
+    });
+
+    describe('\nUnsuccessful cases:', () => {
+      describe('\nInvalid Credentials', () => {
+        it('should return InvalidCredentialsException if user login data is invalid', async () => {
+          const response = await request(app.getHttpServer())
+            .post(loginUserRoute)
+            .send(data)
+            .set('Accept', 'application/json');
+
+          expect(response.status).toBe(
+            new InvalidCredentialsException().getStatus(),
+          );
+          expect(response.body.message).toBe(
+            new InvalidCredentialsException().message,
+          );
+        });
+      });
+
+      describe('\nBlocked access due to multiple misinsertions', () => {
+        it('should return UnauthorizedException if the user has misplaced their password five times or more', async () => {
+          await request(app.getHttpServer())
+            .post(loginUserRoute)
+            .send({
+              ...data,
+              password: 'wrong-password',
+            })
+            .set('Accept', 'application/json');
+
+          await request(app.getHttpServer())
+            .post(loginUserRoute)
+            .send({
+              ...data,
+              password: 'wrong-password',
+            })
+            .set('Accept', 'application/json');
+
+          await request(app.getHttpServer())
+            .post(loginUserRoute)
+            .send({
+              ...data,
+              password: 'wrong-password',
+            })
+            .set('Accept', 'application/json');
+
+          await request(app.getHttpServer())
+            .post(loginUserRoute)
+            .send({
+              ...data,
+              password: 'wrong-password',
+            })
+            .set('Accept', 'application/json');
+
+          await request(app.getHttpServer())
+            .post(loginUserRoute)
+            .send({
+              ...data,
+              password: 'wrong-password',
+            })
+            .set('Accept', 'application/json');
+
+          await request(app.getHttpServer())
+            .post(loginUserRoute)
+            .send({
+              ...data,
+              password: 'wrong-password',
+            })
+            .set('Accept', 'application/json');
+
+          expect(async () => {
+            const response = await request(app.getHttpServer())
+              .post(loginUserRoute)
+              .send({
+                ...data,
+                password: 'senha123',
+              })
+              .set('Accept', 'application/json');
+
+            expect(response.status).toBe(
+              new UnauthorizedException().getStatus(),
+            );
+            expect(response.body.message).toBe(
+              new UnauthorizedException().message,
+            );
           });
         });
       });
