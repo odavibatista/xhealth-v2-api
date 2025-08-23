@@ -20,18 +20,23 @@ export class AdminLoginLogRepository
 
   async getLastLoginAttempt(
     administrator_id: string,
-  ): Promise<Partial<AdminLoginLog> | null> {
-    const loginLog = await prisma.adminLoginLog.findFirst({
-      where: { administrator_id },
-      orderBy: { created_at: 'desc' },
+  ): Promise<Partial<AdminLoginLog>> {
+    const lastAttempt = await prisma.adminLoginLog.findFirst({
+      where: {
+        administrator_id,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
     });
-    return loginLog
-      ? {
-          id_admin_login_log: loginLog.id_admin_login_log,
-          administrator_id: loginLog.administrator_id,
-          created_at: loginLog.created_at,
-        }
-      : null;
+
+    return {
+      administrator_id: lastAttempt?.administrator_id,
+      id_admin_login_log: lastAttempt?.id_admin_login_log,
+      login_attempt: lastAttempt?.login_attempt,
+      is_blocked: lastAttempt?.is_blocked,
+      updated_at: lastAttempt?.updated_at,
+    };
   }
 
   async updateLastLoginAttempt(data: UpdateLastLoginAttemptDTO): Promise<void> {
