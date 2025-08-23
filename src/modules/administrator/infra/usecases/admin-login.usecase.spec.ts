@@ -2,6 +2,7 @@ import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.
 import { InvalidCredentialsException } from '../../../user/domain/dtos/errors/InvalidCredentials.exception';
 import { HashProvider } from '../../../user/infra/providers/hash.provider';
 import { JWTProvider } from '../../../user/infra/providers/jwt.provider';
+import { AdminLoginLogRepository } from '../db/repositories/admin-login-log.repository';
 import { AdministratorRepository } from '../db/repositories/administrator.repository';
 import { AdminLoginUsecase } from './admin-login.usecase';
 import { faker } from '@faker-js/faker';
@@ -9,6 +10,7 @@ import { faker } from '@faker-js/faker';
 describe('Admin Login Usecase Test Suites', () => {
   let usecase: AdminLoginUsecase;
   let mockRepository: AdministratorRepository;
+  let mockAdminLoginLogRepository: AdminLoginLogRepository;
   let encrypterProvider: EncrypterProvider;
   let hashProvider: HashProvider;
   let jwtProvider: JWTProvider;
@@ -20,12 +22,17 @@ describe('Admin Login Usecase Test Suites', () => {
   beforeEach(async () => {
     encrypterProvider = new EncrypterProvider();
     hashProvider = new HashProvider();
+    mockAdminLoginLogRepository = new AdminLoginLogRepository();
     mockRepository = new AdministratorRepository(
       encrypterProvider,
       hashProvider,
     );
     jwtProvider = new JWTProvider();
-    usecase = new AdminLoginUsecase(mockRepository, jwtProvider);
+    usecase = new AdminLoginUsecase(
+      mockRepository,
+      mockAdminLoginLogRepository,
+      jwtProvider,
+    );
     jest.clearAllMocks();
   });
 
@@ -41,6 +48,8 @@ describe('Admin Login Usecase Test Suites', () => {
     created_at: new Date(),
   };
 
+  const ip = faker.internet.ip();
+
   it('should throw InvalidCredentialsException if admin not found', async () => {
     const data = {
       email: faker.internet.email(),
@@ -49,7 +58,7 @@ describe('Admin Login Usecase Test Suites', () => {
 
     jest.spyOn(mockRepository, 'findByEmail').mockResolvedValueOnce(null);
 
-    await expect(usecase.execute(data)).rejects.toThrow(
+    await expect(usecase.execute(data, ip)).rejects.toThrow(
       InvalidCredentialsException,
     );
   });
@@ -65,7 +74,7 @@ describe('Admin Login Usecase Test Suites', () => {
       .mockResolvedValueOnce(mockAdmin as any);
     jest.spyOn(mockRepository, 'comparePassword').mockResolvedValueOnce(false);
 
-    await expect(usecase.execute(data)).rejects.toThrow(
+    await expect(usecase.execute(data, ip)).rejects.toThrow(
       InvalidCredentialsException,
     );
   });
@@ -80,9 +89,10 @@ describe('Admin Login Usecase Test Suites', () => {
       .spyOn(mockRepository, 'findByEmail')
       .mockResolvedValueOnce(mockAdmin as any);
     jest.spyOn(mockRepository, 'comparePassword').mockResolvedValueOnce(true);
+    jest.spyOn(mockAdminLoginLogRepository, 'create').mockResolvedValueOnce();
     jest.spyOn(jwtProvider, 'generate').mockReturnValue('valid-token');
 
-    const result = await usecase.execute(data);
+    const result = await usecase.execute(data, ip);
 
     expect(result).toEqual({
       token: 'valid-token',

@@ -1,15 +1,15 @@
-import { CreateLoginLogDTO } from '../../../domain/dtos/repositories/dtos/LoginLogs.repository.dto';
-import { LoginLogsRepository } from './LoginLog.repository';
+import { CreateUserLoginLogDTO } from '../../../domain/dtos/repositories/dtos/LoginLogs.repository.dto';
+import { UserLoginLogsRepository } from './UserLoginLog.repository';
 
 describe('Login Logs Repository Test Suites', () => {
-  let repository: LoginLogsRepository;
+  let repository: UserLoginLogsRepository;
 
   beforeEach(() => {
     jest.useFakeTimers({ doNotFake: ['nextTick'] });
   });
 
   beforeEach(() => {
-    repository = new LoginLogsRepository();
+    repository = new UserLoginLogsRepository();
   });
 
   afterEach(() => {
@@ -54,7 +54,7 @@ describe('Login Logs Repository Test Suites', () => {
 
   describe('create method tests', () => {
     it('should create a new login log entry', async () => {
-      const mockData: CreateLoginLogDTO = {
+      const mockData: CreateUserLoginLogDTO = {
         user_id: 'valid-user-id',
         ip: '192.168.0.1',
         is_blocked: false,
@@ -71,7 +71,7 @@ describe('Login Logs Repository Test Suites', () => {
     });
 
     it('should handle multiple IP addresses correctly', async () => {
-      const mockData: CreateLoginLogDTO = {
+      const mockData: CreateUserLoginLogDTO = {
         user_id: 'valid-user-id',
         ip: ['192.168.0.1', '192.168.0.2'],
         is_blocked: false,
@@ -88,7 +88,7 @@ describe('Login Logs Repository Test Suites', () => {
     });
 
     it('should handle optional login_attempt correctly', async () => {
-      const mockData: CreateLoginLogDTO = {
+      const mockData: CreateUserLoginLogDTO = {
         user_id: 'valid-user-id',
         ip: ['192.168.0.1'],
         is_blocked: false,
