@@ -27,6 +27,7 @@ export class UserLoginUsecase implements UseCaseInterface {
   ): Promise<
     | UserLoginResponseDTO
     | InvalidCredentialsException
+    | UnauthorizedException
     | UnprocessableDataException
   > {
     const user = await this.userRepository.findByEmail(data.email);

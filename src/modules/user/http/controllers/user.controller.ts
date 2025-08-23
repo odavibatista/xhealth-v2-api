@@ -12,6 +12,7 @@ import {
   ApiCreatedResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -30,11 +31,20 @@ import { UFNotFoundException } from '../../../../shared/domain/dtos/errors/UFNot
 import { GymPlanNotFoundException } from '../../../gym-plan/domain/dtos/errors/GymPlanNotFound.exception';
 import { PhoneNumberAlreadyRegisteredException } from '../../domain/dtos/errors/PhoneNumberAlreadyRegistered.exception';
 import { EmailAlreadyRegisteredException } from '../../domain/dtos/errors/EmailAlreadyRegistered.exception';
+import {
+  UserLoginRequestDTO,
+  UserLoginResponseDTO,
+} from '../../domain/dtos/requests/UserLogin.request.dto';
+import { UserLoginUsecase } from '../../infra/usecases/user-login.usecase';
+import { InvalidCredentialsException } from '../../domain/dtos/errors/InvalidCredentials.exception';
 
 @Controller('user')
 @ApiTags('Usuário')
 export class UserController implements UserControllerInterface {
-  constructor(private readonly createUserUseCase: CreateUserUseCase) {}
+  constructor(
+    private readonly createUserUseCase: CreateUserUseCase,
+    private readonly userLoginUseCase: UserLoginUsecase,
+  ) {}
 
   @Post('register')
   @ApiCreatedResponse({
@@ -87,6 +97,51 @@ export class UserController implements UserControllerInterface {
       });
     } else {
       return res.status(201).json(result);
+    }
+  }
+
+  @Post('login')
+  @ApiOkResponse({
+    description: 'Usuário logado com sucesso!',
+    type: UserLoginResponseDTO,
+  })
+  @ApiUnprocessableEntityResponse({
+    description: 'Dados não processáveis.',
+    type: AllExceptionsFilterDTO,
+  })
+  @ApiUnauthorizedResponse({
+    description: new UnauthorizedException().message,
+    type: AllExceptionsFilterDTO,
+  })
+  @ApiUnauthorizedResponse({
+    description: new InvalidCredentialsException().message,
+    type: AllExceptionsFilterDTO,
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Erro interno do servidor.',
+    type: AllExceptionsFilterDTO,
+  })
+  async login(
+    @Body() data: UserLoginRequestDTO,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<Response> {
+    if (req.user || req.administrator) {
+      throw new UnauthorizedException('Usuário já autenticado.');
+    }
+
+    const userIp = (req.headers['x-forwarded-for'] ||
+      req.socket.remoteAddress) as string;
+
+    const result = await this.userLoginUseCase.execute(data, userIp);
+
+    if (result instanceof HttpException) {
+      return res.status(result.getStatus()).json({
+        message: result.message,
+        status: result.getStatus(),
+      });
+    } else {
+      return res.status(200).json(result);
     }
   }
 }
