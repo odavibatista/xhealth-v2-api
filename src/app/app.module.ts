@@ -18,6 +18,7 @@ import { GymModule } from '../modules/gym/infra/modules/gym.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { RedisOptions } from '../shared/config/redis.config';
 import { AdminPermissionModule } from '../modules/admin-permission/infra/modules/admin-permission.module';
+import { SportModalityModule } from '../modules/sport-modality/infra/modules/sport-modality.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AdminPermissionModule } from '../modules/admin-permission/infra/modules
     TrainerModule,
     ExtraServiceModule,
     AddressModule,
+    SportModalityModule,
     GymModule,
   ],
   controllers: [],

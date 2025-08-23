@@ -60,7 +60,10 @@ export class AdminController implements AdminControllerInterface {
       throw new UnauthorizedException('Usuário já autenticado.');
     }
 
-    const result = await this.adminLoginUseCase.execute(data);
+    const userIp = (req.headers['x-forwarded-for'] ||
+      req.socket.remoteAddress) as string;
+
+    const result = await this.adminLoginUseCase.execute(data, userIp);
 
     if (result instanceof HttpException) {
       return res.status(result.getStatus()).json({

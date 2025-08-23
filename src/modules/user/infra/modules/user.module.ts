@@ -3,7 +3,7 @@ import { JWTProvider } from '../providers/jwt.provider';
 import { HashProvider } from '../providers/hash.provider';
 import { EncrypterProvider } from '../../../../shared/infra/providers/Encrypter.provider';
 import { UserRepository } from '../db/repositories/user.repository';
-import { LoginLogsRepository } from '../db/repositories/LoginLog.repository';
+import { UserLoginLogsRepository } from '../db/repositories/UserLoginLog.repository';
 import { PasswordRepository } from '../db/repositories/Password.repository';
 import { AddressRepository } from '../../../address/infra/db/repositories/address.repository';
 import { AuthenticationMiddleware } from '../../http/middlewares/Auth.middleware';
@@ -22,7 +22,7 @@ import { GymPlanRepository } from '../../../gym-plan/infra/db/repositories/gym-p
     HashProvider,
     EncrypterProvider,
     UserRepository,
-    LoginLogsRepository,
+    UserLoginLogsRepository,
     PasswordRepository,
     AddressRepository,
     CreateUserUseCase,
